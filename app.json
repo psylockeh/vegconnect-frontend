@@ -7,12 +7,6 @@
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
-    },
     "plugins": [
       "expo-router",
       [
@@ -23,6 +17,9 @@
           "backgroundColor": "#ffffff"
         }
       ]
-    ]
+    ],
+    "android": {
+      "package": "com.anonymous.vegconnectfrontend"
+    }
   }
 }
