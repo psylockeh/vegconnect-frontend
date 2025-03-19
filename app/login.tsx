@@ -18,6 +18,7 @@ export default function LoginScreen() {
   const [senha, setSenha] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [manterConectado, setManterConectado] = useState(false);
 
   const handleLogin = async () => {
     setLoading(true);
@@ -26,9 +27,8 @@ export default function LoginScreen() {
     try {
       console.log("🔹 Enviando para API:", { email, senha });
 
-      await login(email, senha);
+      await login(email, senha, manterConectado); // 🔹 Passamos a opção para a função login
 
-      // Aguarda a autenticação e navega para a home (dentro das abas)
       setTimeout(() => {
         router.replace("/(tabs)/home");
       }, 500);
@@ -63,7 +63,22 @@ export default function LoginScreen() {
         secureTextEntry
       />
 
+      {/* Link para recuperação de senha */}
+      <TouchableOpacity onPress={() => router.push("/recuperarSenha")}>
+        <Text style={styles.link}>Esqueceu sua senha?</Text>
+      </TouchableOpacity>
+
       {error ? <Text style={styles.error}>{error}</Text> : null}
+
+      <View style={styles.checkboxContainer}>
+        <TouchableOpacity
+          onPress={() => setManterConectado(!manterConectado)}
+          style={styles.checkbox}
+        >
+          {manterConectado && <Text style={styles.checkboxMark}>✔</Text>}
+        </TouchableOpacity>
+        <Text style={styles.checkboxLabel}>Manter-me conectado</Text>
+      </View>
 
       {/* Botão de Login */}
       <TouchableOpacity

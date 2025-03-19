@@ -12,16 +12,28 @@ import { API_URL } from "../config/api";
 interface AuthContextProps {
   userToken: string | null;
   perfilUsuario: any;
-  login: (email: string, senha: string) => Promise<void>;
+  login: (
+    email: string,
+    senha: string,
+    manterConectado: boolean
+  ) => Promise<void>;
   logout: () => Promise<void>;
   carregarPerfil: () => Promise<void>;
   isAuthenticated: boolean;
   editarPerfil: (dadosAtualizados: {
     nome?: string;
     pref_alim?: string;
+    senha?: string;
   }) => Promise<void>;
+  register: (
+    nome: string,
+    email: string,
+    senha: string,
+    tp_user: string,
+    data_nascimento: string,
+    pref_alim: string
+  ) => Promise<void>;
 }
-
 const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
@@ -43,14 +55,23 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     carregarToken();
   }, []);
 
-  const login = async (email: string, senha: string) => {
+  const login = async (
+    email: string,
+    senha: string,
+    manterConectado: boolean
+  ) => {
     try {
       const response = await axios.post(`${API_URL}/auth/signin`, {
         email,
         senha,
       });
+
       const { token } = response.data;
-      await AsyncStorage.setItem("@token", token);
+
+      if (manterConectado) {
+        await AsyncStorage.setItem("@token", token);
+      }
+
       setUserToken(token);
       setIsAuthenticated(true);
     } catch (error: any) {
@@ -117,6 +138,38 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const register = async (
+    nome: string,
+    email: string,
+    senha: string,
+    tp_user: string,
+    data_nascimento: string,
+    pref_alim: string
+  ) => {
+    try {
+      const response = await axios.post(`${API_URL}/auth/signup`, {
+        nome,
+        email,
+        senha,
+        tp_user,
+        data_nascimento,
+        pref_alim,
+      });
+
+      if (response.status === 201) {
+        console.log("✅ Cadastro realizado com sucesso!");
+      }
+    } catch (error: any) {
+      console.error(
+        "❌ Erro ao cadastrar usuário:",
+        error.response?.data || error.message
+      );
+      throw new Error(
+        "Erro ao cadastrar usuário. Verifique os dados e tente novamente."
+      );
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -127,6 +180,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         perfilUsuario,
         isAuthenticated,
         editarPerfil,
+        register,
       }}
     >
       {children}

@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 
-export const LoginStyles = StyleSheet.create({
+export const CadastroStyles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
@@ -25,6 +25,13 @@ export const LoginStyles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#DDD",
   },
+  picker: {
+    width: "100%",
+    height: 50,
+    backgroundColor: "#FFF",
+    borderRadius: 8,
+    marginBottom: 15,
+  },
   button: {
     width: "100%",
     height: 50,
@@ -48,28 +55,37 @@ export const LoginStyles = StyleSheet.create({
     color: "red",
     marginBottom: 10,
   },
-
-  checkboxContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: 10,
-  },
-  checkbox: {
-    width: 20,
-    height: 20,
-    borderWidth: 2,
-    borderColor: "#2f95dc",
-    borderRadius: 4,
+  dateButton: {
+    width: "100%",
+    height: 50,
     justifyContent: "center",
     alignItems: "center",
-    marginRight: 8,
+    backgroundColor: "#FFF",
+    borderRadius: 8,
+    marginBottom: 15,
+    borderWidth: 1,
+    borderColor: "#DDD",
   },
-  checkboxMark: {
-    fontSize: 16,
-    color: "#2f95dc",
-  },
-  checkboxLabel: {
+  dateButtonText: {
     fontSize: 16,
     color: "#333",
+  },
+
+  infoText: {
+    fontSize: 14,
+    textAlign: "center",
+    marginBottom: 10,
+    color: "#555",
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: "500",
+    marginBottom: 10,
+    color: "#555",
+  },
+  success: {
+    fontSize: 16,
+    color: "green",
+    marginVertical: 10,
   },
 });
