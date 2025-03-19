@@ -1,36 +1,23 @@
-import { Tabs } from "expo-router";
-import React from "react";
-import { Platform } from "react-native";
-import { HapticTab } from "@/components/HapticTab";
+import { Stack, useRouter } from "expo-router";
+import { useAuth } from "@/context/AuthContext";
 
-const TabBarBackground = undefined;
-const Colors = { light: { tint: "#2f95dc" }, dark: { tint: "#fff" } };
-const useColorScheme = () => "light";
-
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
+export default function Layout() {
+  const { isAuthenticated } = useAuth();
+  const router = useRouter();
 
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme as "light" | "dark"].tint,
-        headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
-        tabBarStyle: Platform.select({
-          ios: { position: "absolute" },
-          default: {},
-        }),
-      }}
-    >
-      {/* A única aba ativa será a Home */}
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: "Home",
-          tabBarIcon: ({ color }) => null,
-        }}
-      />
-    </Tabs>
+    <Stack screenOptions={{ headerShown: false }}>
+      {isAuthenticated ? (
+        // Se estiver autenticado, carrega a navegação principal (abas)
+        <Stack.Screen name="(tabs)" />
+      ) : (
+        // Se NÃO estiver autenticado, carrega Login, Cadastro e Recuperação de Senha
+        <>
+          <Stack.Screen name="index" />
+          <Stack.Screen name="login" />
+          <Stack.Screen name="cadastro" />
+        </>
+      )}
+    </Stack>
   );
 }

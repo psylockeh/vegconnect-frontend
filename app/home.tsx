@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { View, Text, Button } from "react-native";
 import { useRouter } from "expo-router";
 import { useAuth } from "@/context/AuthContext";
+import { styles } from "@/styles/HomeStyles";
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -18,10 +19,10 @@ export default function HomeScreen() {
   }
 
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text style={{ fontSize: 22, fontWeight: "bold" }}>
-        Home do VegConnect
-      </Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>🏡 Home do VegConnect</Text>
+
+      <Button title="Meu Perfil" onPress={() => router.push("/perfil")} />
       <Button title="Sair" onPress={logout} />
     </View>
   );

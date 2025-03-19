@@ -1,8 +1,17 @@
-import { View, Text, Button } from "react-native";
+import { useEffect } from "react";
 import { useRouter } from "expo-router";
+import { useAuth } from "@/context/AuthContext";
+import { View, Text, Button } from "react-native";
 
 export default function WelcomeScreen() {
   const router = useRouter();
+  const { isAuthenticated } = useAuth();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.replace("/(tabs)/home");
+    }
+  }, [isAuthenticated]);
 
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>

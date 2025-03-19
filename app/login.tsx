@@ -5,16 +5,17 @@ import {
   TextInput,
   TouchableOpacity,
   ActivityIndicator,
-  Alert,
 } from "react-native";
 import { useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useAuth } from "@/context/AuthContext";
 import { LoginStyles as styles } from "@/styles/LoginStyles";
 
 export default function LoginScreen() {
   const router = useRouter();
+  const { login } = useAuth();
   const [email, setEmail] = useState("");
-  const [senha, setPassword] = useState("");
+  const [senha, setSenha] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -23,31 +24,17 @@ export default function LoginScreen() {
     setError("");
 
     try {
-      const response = await fetch("http://localhost:28147/auth/signin", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, senha }),
-      });
+      console.log("🔹 Enviando para API:", { email, senha });
 
-      const data = await response.json();
+      await login(email, senha);
 
-      if (response.ok) {
-        await AsyncStorage.setItem("token", data.token);
-
-        console.log("✅ Token JWT recebido:", data.token);
-        Alert.alert("✅ Sucesso", "Token recebido e armazenado com sucesso!");
-
-        // Remova temporariamente a navegação abaixo para apenas testar a autenticação
-        // router.push("/home");
-      } else {
-        setError(data.message || "Credenciais inválidas.");
-        console.log("Erro na resposta da API:", data);
-      }
-    } catch (error) {
-      console.error("Erro ao conectar ao servidor:", error);
-      setError("Erro ao conectar ao servidor.");
+      // Aguarda a autenticação e navega para a home (dentro das abas)
+      setTimeout(() => {
+        router.replace("/(tabs)/home");
+      }, 500);
+    } catch (error: any) {
+      setError("Credenciais inválidas ou erro de conexão.");
+      console.error("❌ Erro ao fazer login:", error);
     }
 
     setLoading(false);
@@ -55,43 +42,45 @@ export default function LoginScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.logo}>🌱 VegConnect</Text>
-      <Text style={styles.subtitle}>
-        Bem-vindo! Insira suas credenciais para acessar sua conta.
-      </Text>
+      <Text style={styles.title}>Login</Text>
 
-      <Text style={styles.label}>E-mail</Text>
+      {/* Campo de E-mail */}
       <TextInput
         style={styles.input}
-        placeholder="Seu e-mail"
-        keyboardType="email-address"
-        autoCapitalize="none"
+        placeholder="E-mail"
         value={email}
         onChangeText={setEmail}
+        keyboardType="email-address"
+        autoCapitalize="none"
       />
 
-      <Text style={styles.label}>Senha</Text>
+      {/* Campo de Senha */}
       <TextInput
         style={styles.input}
-        placeholder="Sua senha"
-        secureTextEntry
-        autoCapitalize="none"
+        placeholder="Senha"
         value={senha}
-        onChangeText={setPassword}
+        onChangeText={setSenha}
+        secureTextEntry
       />
 
-      {error ? <Text style={styles.errorMessage}>{error}</Text> : null}
+      {error ? <Text style={styles.error}>{error}</Text> : null}
 
+      {/* Botão de Login */}
       <TouchableOpacity
-        style={styles.loginButton}
+        style={styles.button}
         onPress={handleLogin}
         disabled={loading}
       >
         {loading ? (
-          <ActivityIndicator color="white" />
+          <ActivityIndicator color="#FFF" />
         ) : (
-          <Text style={styles.loginButtonText}>Entrar</Text>
+          <Text style={styles.buttonText}>Entrar</Text>
         )}
+      </TouchableOpacity>
+
+      {/* Link para Cadastro */}
+      <TouchableOpacity onPress={() => router.push("/cadastro")}>
+        <Text style={styles.link}>Criar uma conta</Text>
       </TouchableOpacity>
     </View>
   );

@@ -16,6 +16,10 @@ interface AuthContextProps {
   logout: () => Promise<void>;
   carregarPerfil: () => Promise<void>;
   isAuthenticated: boolean;
+  editarPerfil: (dadosAtualizados: {
+    nome?: string;
+    pref_alim?: string;
+  }) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
@@ -77,6 +81,42 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setIsAuthenticated(false);
   };
 
+  const editarPerfil = async (dadosAtualizados: {
+    nome?: string;
+    pref_alim?: string;
+  }) => {
+    try {
+      const token = await AsyncStorage.getItem("@token");
+
+      if (!token) {
+        console.error("Token não encontrado!");
+        return;
+      }
+
+      const response = await axios.put(
+        `${API_URL}/usuario/perfil`,
+        dadosAtualizados,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      if (response.status === 200) {
+        setPerfilUsuario(response.data);
+        console.log("Perfil atualizado com sucesso!");
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error(
+          "Erro ao atualizar perfil:",
+          error.response?.data || error.message
+        );
+      } else {
+        console.error("Erro desconhecido:", error);
+      }
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -86,6 +126,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         carregarPerfil,
         perfilUsuario,
         isAuthenticated,
+        editarPerfil,
       }}
     >
       {children}
