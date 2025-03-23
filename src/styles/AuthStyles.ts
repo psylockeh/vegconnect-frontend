@@ -7,18 +7,6 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     padding: 20,
   },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
-    color: "#333",
-  },
-  message: {
-    fontSize: 16,
-    color: "red",
-    marginBottom: 10,
-    textAlign: "center",
-  },
   input: {
     width: "100%",
     height: 50,
@@ -33,18 +21,28 @@ export const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 5,
     alignItems: "center",
-    width: "100%",
-    marginTop: 10,
   },
   buttonText: {
     color: "#fff",
     fontSize: 16,
     fontWeight: "bold",
   },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#333",
+    marginBottom: 10,
+    textAlign: "center",
+  },
+  message: {
+    fontSize: 16,
+    color: "#666",
+    textAlign: "center",
+    marginBottom: 15,
+  },
   link: {
-    marginTop: 15,
+    fontSize: 16,
     color: "#3498db",
-    fontSize: 14,
     textDecorationLine: "underline",
   },
 });

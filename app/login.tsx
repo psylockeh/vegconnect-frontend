@@ -64,8 +64,10 @@ export default function LoginScreen() {
       />
 
       {/* Link para recuperação de senha */}
-      <TouchableOpacity onPress={() => router.push("/recuperarSenha")}>
-        <Text style={styles.link}>Esqueceu sua senha?</Text>
+      <TouchableOpacity onPress={() => router.push("/forgot-password")}>
+        <Text style={{ color: "#3498db", marginTop: 10, textAlign: "center" }}>
+          Esqueci minha senha
+        </Text>
       </TouchableOpacity>
 
       {error ? <Text style={styles.error}>{error}</Text> : null}

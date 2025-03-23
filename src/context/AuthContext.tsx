@@ -33,7 +33,10 @@ interface AuthContextProps {
     data_nascimento: string,
     pref_alim: string
   ) => Promise<void>;
+  forgotPassword: (email: string) => Promise<void>;
+  resetPassword: (token: string, novaSenha: string) => Promise<void>;
 }
+
 const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
@@ -170,6 +173,35 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const forgotPassword = async (email: string) => {
+    try {
+      await axios.post(`${API_URL}/auth/recuperar-senha`, { email });
+      console.log("✅ E-mail de recuperação enviado com sucesso!");
+    } catch (error) {
+      console.error("❌ Erro ao solicitar recuperação de senha:", error);
+      throw new Error("Erro ao enviar e-mail. Tente novamente.");
+    }
+  };
+
+  const resetPassword = async (token: string, novaSenha: string) => {
+    try {
+      const response = await axios.post(`${API_URL}/auth/redefinir-senha`, {
+        token,
+        novaSenha,
+      });
+
+      if (response.status === 200) {
+        console.log("✅ Senha redefinida com sucesso.");
+      }
+    } catch (error: any) {
+      console.error(
+        "❌ Erro ao redefinir senha:",
+        error.response?.data || error.message
+      );
+      throw new Error("Erro ao redefinir senha.");
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -181,6 +213,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         isAuthenticated,
         editarPerfil,
         register,
+        forgotPassword,
+        resetPassword,
       }}
     >
       {children}

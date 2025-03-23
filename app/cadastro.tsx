@@ -170,7 +170,7 @@ export default function CadastroScreen() {
         <Picker.Item label="Selecione sua preferência alimentar" value="" />
         <Picker.Item label="Vegano" value="Vegano" />
         <Picker.Item label="Vegetariano" value="Vegetariano" />
-        <Picker.Item label="Dieta Restritiva" value="Dieta Restritiva" />
+        <Picker.Item label="Dieta Restritiva" value="Dieta restritiva" />
       </Picker>
 
       {/* Botão de Cadastro */}

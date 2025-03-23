@@ -9,31 +9,30 @@ import {
 import { useRouter } from "expo-router";
 import axios from "axios";
 import { API_URL } from "@/config/api";
-import { CadastroStyles as styles } from "@/styles/CadastroStyles";
+import { styles } from "@/styles/AuthStyles";
 
-export default function RecuperarSenhaScreen() {
+export default function ForgotPasswordScreen() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
+  const [mensagem, setMensagem] = useState("");
 
-  const handleRecuperacao = async () => {
+  const handleRecuperarSenha = async () => {
     setLoading(true);
-    setMessage("");
+    setMensagem("");
 
     try {
-      const response = await axios.post(`${API_URL}/auth/forgot-password`, {
+      const response = await axios.post(`${API_URL}/auth/recuperar-senha`, {
         email,
       });
-
       if (response.status === 200) {
-        setMessage("📩 Verifique seu e-mail para redefinir sua senha.");
-      } else {
-        setMessage("⚠️ E-mail não encontrado.");
+        setMensagem("Enviamos um link de recuperação para seu e-mail.");
       }
-    } catch (error) {
-      console.error("❌ Erro ao recuperar senha:", error);
-      setMessage("Erro ao processar solicitação. Tente novamente.");
+    } catch (error: any) {
+      console.error("Erro ao recuperar senha:", error);
+      setMensagem(
+        "Não foi possível enviar o link de recuperação. Verifique o e-mail."
+      );
     }
 
     setLoading(false);
@@ -43,7 +42,6 @@ export default function RecuperarSenhaScreen() {
     <View style={styles.container}>
       <Text style={styles.title}>Recuperar Senha</Text>
 
-      {/* Campo E-mail */}
       <TextInput
         style={styles.input}
         placeholder="Digite seu e-mail"
@@ -53,24 +51,21 @@ export default function RecuperarSenhaScreen() {
         autoCapitalize="none"
       />
 
-      {/* Mensagem de Feedback */}
-      {message ? <Text style={styles.success}>{message}</Text> : null}
+      {mensagem ? <Text style={styles.message}>{mensagem}</Text> : null}
 
-      {/* Botão de Recuperação */}
       <TouchableOpacity
         style={styles.button}
-        onPress={handleRecuperacao}
+        onPress={handleRecuperarSenha}
         disabled={loading}
       >
         {loading ? (
           <ActivityIndicator color="#FFF" />
         ) : (
-          <Text style={styles.buttonText}>Recuperar Senha</Text>
+          <Text style={styles.buttonText}>Enviar Link</Text>
         )}
       </TouchableOpacity>
 
-      {/* Voltar para Login */}
-      <TouchableOpacity onPress={() => router.replace("/login")}>
+      <TouchableOpacity onPress={() => router.push("/login")}>
         <Text style={styles.link}>Voltar para o Login</Text>
       </TouchableOpacity>
     </View>
