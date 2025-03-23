@@ -19,7 +19,8 @@
       ]
     ],
     "android": {
-      "package": "com.anonymous.vegconnectfrontend"
+      "package": "com.anonymous.vegconnectfrontend",
+      "permissions": ["CAMERA", "MEDIA_LIBRARY"]
     }
   }
 }

@@ -27,10 +27,10 @@ export default function LoginScreen() {
     try {
       console.log("🔹 Enviando para API:", { email, senha });
 
-      await login(email, senha, manterConectado); // 🔹 Passamos a opção para a função login
+      await login(email, senha, manterConectado);
 
       setTimeout(() => {
-        router.replace("/(tabs)/home");
+        router.replace("/home");
       }, 500);
     } catch (error: any) {
       setError("Credenciais inválidas ou erro de conexão.");

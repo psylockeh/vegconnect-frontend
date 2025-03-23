@@ -1,15 +1,12 @@
-import { useEffect, useState } from "react";
-import { View, Text, TextInput, Button } from "react-native";
+import React, { useEffect } from "react";
+import { View, Text, Image, Button, ScrollView } from "react-native";
 import { useRouter } from "expo-router";
 import { useAuth } from "@/context/AuthContext";
-import { styles } from "@/styles/PerfilStyles"; // Importando estilos
+import { styles } from "@/styles/PerfilStyles";
 
 export default function PerfilScreen() {
   const router = useRouter();
-  const { isAuthenticated, perfilUsuario, editarPerfil, carregarPerfil } =
-    useAuth();
-  const [nome, setNome] = useState(perfilUsuario?.nome || "");
-  const [prefAlim, setPrefAlim] = useState(perfilUsuario?.pref_alim || "");
+  const { isAuthenticated, perfilUsuario, carregarPerfil } = useAuth();
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -17,38 +14,52 @@ export default function PerfilScreen() {
     } else {
       carregarPerfil();
     }
-  }, [isAuthenticated, router]);
+  }, [isAuthenticated]);
 
-  useEffect(() => {
-    if (perfilUsuario) {
-      setNome(perfilUsuario.nome);
-      setPrefAlim(perfilUsuario.pref_alim);
-    }
-  }, [perfilUsuario]);
-
-  const handleSalvar = async () => {
-    await editarPerfil({ nome, pref_alim: prefAlim });
-  };
-
-  if (!isAuthenticated) {
-    return null;
-  }
+  if (!perfilUsuario) return null;
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>👤 Meu Perfil</Text>
+    <ScrollView contentContainerStyle={styles.container}>
+      {perfilUsuario.foto_perfil ? (
+        <Image
+          source={{ uri: perfilUsuario.foto_perfil }}
+          style={styles.avatar}
+        />
+      ) : (
+        <View style={styles.avatarPlaceholder}>
+          <Text style={styles.avatarText}>Sem foto</Text>
+        </View>
+      )}
 
-      <Text style={styles.label}>Nome:</Text>
-      <TextInput style={styles.input} value={nome} onChangeText={setNome} />
+      <Text style={styles.title}>{perfilUsuario.nome}</Text>
+      <Text style={styles.nickname}>@{perfilUsuario.nickname}</Text>
+      <Text style={styles.bio}>{perfilUsuario.bio}</Text>
 
-      <Text style={styles.label}>Preferência Alimentar:</Text>
-      <TextInput
-        style={styles.input}
-        value={prefAlim}
-        onChangeText={setPrefAlim}
+      {perfilUsuario.tp_user === "Comerciante" && (
+        <>
+          <Text style={styles.info}>
+            Comércio: {perfilUsuario.nome_comercio}
+          </Text>
+          <Text style={styles.info}>Tel: {perfilUsuario.tel_com}</Text>
+        </>
+      )}
+
+      {perfilUsuario.tp_user === "Chef" && (
+        <Text style={styles.info}>
+          Especialidade: {perfilUsuario.especialidade}
+        </Text>
+      )}
+
+      {perfilUsuario.tp_user === "Comum" && (
+        <Text style={styles.info}>
+          Preferência alimentar: {perfilUsuario.pref_alim}
+        </Text>
+      )}
+
+      <Button
+        title="Editar Perfil"
+        onPress={() => router.push("/editar-perfil")}
       />
-
-      <Button title="Salvar" onPress={handleSalvar} />
-    </View>
+    </ScrollView>
   );
 }
