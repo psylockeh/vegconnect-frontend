@@ -5,15 +5,38 @@ export const LoginStyles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#F5F5F5",
-    paddingHorizontal: 20,
+    backgroundColor: "#f3f4f6",
+    padding: 20,
   },
+ 
+  box: {
+    backgroundColor: "white",
+    padding: 30,
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    width: "100%",
+    maxWidth: 400,
+  },
+  logo: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#166534",
+  },
+ 
   title: {
     fontSize: 24,
     fontWeight: "bold",
-    marginBottom: 20,
-    color: "#333",
+    color: "#166534",
   },
+
+  bemVindo:{
+    fontSize: 18,
+    color: "#166534",
+  },
+
   input: {
     width: "100%",
     height: 50,
@@ -26,26 +49,28 @@ export const LoginStyles = StyleSheet.create({
     borderColor: "#DDD",
   },
   button: {
-    width: "100%",
-    height: 50,
-    backgroundColor: "#2f95dc",
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundColor: "#166534",
+    padding: 15,
     borderRadius: 8,
+    alignItems: "center",
+    marginTop: 10,
+    width: "100%",
   },
   buttonText: {
     color: "#FFF",
     fontSize: 18,
-    fontWeight: "bold",
   },
+  
   link: {
-    marginTop: 15,
-    fontSize: 16,
-    color: "#2f95dc",
-    textDecorationLine: "underline",
+    color: "#166534",
+    fontSize: 18,
+    textAlign: "center",
+    marginTop: 10,
   },
   error: {
     color: "red",
+    fontSize: 14,
+    textAlign: "center",
     marginBottom: 10,
   },
 
@@ -58,7 +83,7 @@ export const LoginStyles = StyleSheet.create({
     width: 20,
     height: 20,
     borderWidth: 2,
-    borderColor: "#2f95dc",
+    borderColor: "#166534",
     borderRadius: 4,
     justifyContent: "center",
     alignItems: "center",
@@ -66,10 +91,10 @@ export const LoginStyles = StyleSheet.create({
   },
   checkboxMark: {
     fontSize: 16,
-    color: "#2f95dc",
+    color: "#166534",
   },
   checkboxLabel: {
     fontSize: 16,
-    color: "#333",
+    color: "#166534",
   },
 });
