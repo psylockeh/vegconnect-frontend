@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { useAuth } from "@/context/AuthContext";
-import { styles } from "@/styles/PerfilStyles";
+import { styles } from "@/styles/EditarPerfilStyles";
 import { uploadImageToCloudinary } from "../src/utils/cloudinary";
 import axios from "axios";
 import { API_URL } from "@/config/api";
@@ -157,7 +157,7 @@ export default function EditarPerfilScreen() {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <View style={styles.container}>
       <TouchableOpacity onPress={escolherFoto}>
         {foto_perfil ? (
           <Image source={{ uri: foto_perfil }} style={styles.avatar} />
@@ -168,126 +168,50 @@ export default function EditarPerfilScreen() {
         )}
       </TouchableOpacity>
 
+      <Text style={styles.label}>Nome Completo</Text>
       <TextInput
         style={styles.input}
-        placeholder="Nome completo"
+        placeholder="Digite seu nome"
         value={nome}
         onChangeText={setNome}
       />
 
+      <Text style={styles.label}>Telefone</Text>
       <TextInput
         style={styles.input}
-        placeholder="Telefone"
+        placeholder="Digite seu telefone"
         value={telefone}
         onChangeText={setTelefone}
         keyboardType="phone-pad"
       />
 
+      <Text style={styles.label}>Nickname (único)</Text>
       <TextInput
         style={styles.input}
-        placeholder="Nickname (único)"
+        placeholder="Digite seu nickname"
         value={nickname}
         onChangeText={setNickname}
       />
 
+      <Text style={styles.label}>Biografia</Text>
       <TextInput
         style={styles.input}
-        placeholder="Biografia"
+        placeholder="Digite uma breve descrição"
         value={bio}
         onChangeText={setBio}
         multiline
       />
 
-      {tipo === "Comerciante" && (
-        <>
-          <TextInput
-            style={styles.input}
-            placeholder="Nome do comércio"
-            value={nomeComercio}
-            onChangeText={setNomeComercio}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Telefone comercial"
-            value={telCom}
-            onChangeText={setTelCom}
-            keyboardType="phone-pad"
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Tipo de produto"
-            value={tipoProd}
-            onChangeText={setTipoProd}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Tipo de comércio"
-            value={tipoCom}
-            onChangeText={setTipoCom}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Endereço do comércio"
-            value={enderCom}
-            onChangeText={setEnderCom}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="CNPJ"
-            value={cnpj}
-            onChangeText={setCnpj}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="CEP do comércio"
-            value={cepCom}
-            onChangeText={setCepCom}
-          />
-        </>
-      )}
-
-      {tipo === "Chef" && (
-        <>
-          <TextInput
-            style={styles.input}
-            placeholder="Especialidade"
-            value={especialidade}
-            onChangeText={setEspecialidade}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Certificações"
-            value={certificacoes}
-            onChangeText={setCertificacoes}
-            multiline
-          />
-        </>
-      )}
-
-      {tipo === "Administrador" && (
-        <>
-          <TextInput
-            style={styles.input}
-            placeholder="Cargo"
-            value={cargo}
-            onChangeText={setCargo}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Matrícula"
-            value={matricula}
-            onChangeText={setMatricula}
-          />
-        </>
-      )}
-
       {tipo === "Comum" && (
-        <TextInput
-          style={styles.input}
-          placeholder="Preferência alimentar"
-          value={prefAlim}
-          onChangeText={setPrefAlim}
-        />
+        <>
+          <Text style={styles.label}>Preferência Alimentar</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Ex.: Dieta restritiva"
+            value={prefAlim}
+            onChangeText={setPrefAlim}
+          />
+        </>
       )}
 
       <TouchableOpacity style={styles.button} onPress={salvarPerfil}>
@@ -297,6 +221,6 @@ export default function EditarPerfilScreen() {
           <Text style={styles.buttonText}>Salvar</Text>
         )}
       </TouchableOpacity>
-    </ScrollView>
+    </View>
   );
 }
