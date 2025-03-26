@@ -20,15 +20,31 @@ export default function EditarPerfilScreen() {
   const { carregarPerfil, perfilUsuario } = useAuth();
 
   const [nome, setNome] = useState("");
-  const [telefone, setTelefone] = useState("");
   const [nickname, setNickname] = useState("");
   const [bio, setBio] = useState("");
-  const [fotoPerfil, setFotoPerfil] = useState<string | null>(null);
-  const [especialidade, setEspecialidade] = useState("");
+  const [telefone, setTelefone] = useState("");
+  const [foto_perfil, setFotoPerfil] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  // Comerciante
   const [nomeComercio, setNomeComercio] = useState("");
   const [telCom, setTelCom] = useState("");
+  const [tipoProd, setTipoProd] = useState("");
+  const [tipoCom, setTipoCom] = useState("");
+  const [enderCom, setEnderCom] = useState("");
+  const [cnpj, setCnpj] = useState("");
+  const [cepCom, setCepCom] = useState("");
+
+  // Chef
+  const [especialidade, setEspecialidade] = useState("");
+  const [certificacoes, setCertificacoes] = useState("");
+
+  // Administrador
+  const [cargo, setCargo] = useState("");
+  const [matricula, setMatricula] = useState("");
+
+  // Comum
   const [prefAlim, setPrefAlim] = useState("");
-  const [loading, setLoading] = useState(false);
 
   const tipo = perfilUsuario?.tp_user;
 
@@ -38,7 +54,7 @@ export default function EditarPerfilScreen() {
 
   useEffect(() => {
     if (perfilUsuario) {
-      setNome(perfilUsuario.nome);
+      setNome(perfilUsuario.nome || "");
       setNickname(perfilUsuario.nickname || "");
       setBio(perfilUsuario.bio || "");
       setTelefone(perfilUsuario.telefone || "");
@@ -47,10 +63,16 @@ export default function EditarPerfilScreen() {
       if (tipo === "Comerciante") {
         setNomeComercio(perfilUsuario.nome_comercio || "");
         setTelCom(perfilUsuario.tel_com || "");
+        setTipoProd(perfilUsuario.tipo_prod || "");
+        setTipoCom(perfilUsuario.tipo_com || "");
+        setEnderCom(perfilUsuario.ender_com || "");
+        setCnpj(perfilUsuario.cnpj || "");
+        setCepCom(perfilUsuario.cep_com || "");
       }
 
       if (tipo === "Chef") {
         setEspecialidade(perfilUsuario.especialidade || "");
+        setCertificacoes(perfilUsuario.certificacoes || "");
       }
 
       if (tipo === "Comum") {
@@ -89,23 +111,32 @@ export default function EditarPerfilScreen() {
     setLoading(true);
 
     try {
-      const formData = {
+      const formData: any = {
         nome,
         telefone,
         nickname,
         bio,
-        foto_perfil: fotoPerfil,
-        ...(tipo === "Comerciante" && {
-          nome_comercio: nomeComercio,
-          tel_com: telCom,
-        }),
-        ...(tipo === "Chef" && {
-          especialidade,
-        }),
-        ...(tipo === "Comum" && {
-          pref_alim: prefAlim,
-        }),
+        foto_perfil,
       };
+
+      if (tipo === "Comerciante") {
+        formData.nome_com = nomeComercio;
+        formData.tel_com = telCom;
+        formData.tipo_com = tipoCom;
+        formData.ender_com = enderCom;
+        formData.cnpj = cnpj;
+        formData.cep_com = cepCom;
+        formData.tipo_prod = tipoProd;
+      }
+
+      if (tipo === "Chef") {
+        formData.especialidade = especialidade;
+        formData.certificacoes = certificacoes;
+      }
+
+      if (tipo === "Comum") {
+        formData.pref_alim = prefAlim;
+      }
 
       const token = await AsyncStorage.getItem("@token");
       await axios.put(`${API_URL}/usuario/perfil`, formData, {
@@ -115,6 +146,7 @@ export default function EditarPerfilScreen() {
       });
 
       console.log("Enviando dados:", formData);
+      await carregarPerfil();
       alert("Perfil atualizado com sucesso!");
     } catch (error) {
       console.error("Erro ao atualizar perfil:", error);
@@ -127,8 +159,8 @@ export default function EditarPerfilScreen() {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <TouchableOpacity onPress={escolherFoto}>
-        {fotoPerfil ? (
-          <Image source={{ uri: fotoPerfil }} style={styles.avatar} />
+        {foto_perfil ? (
+          <Image source={{ uri: foto_perfil }} style={styles.avatar} />
         ) : (
           <View style={styles.avatarPlaceholder}>
             <Text style={styles.avatarText}>Adicionar Foto</Text>
@@ -181,16 +213,72 @@ export default function EditarPerfilScreen() {
             onChangeText={setTelCom}
             keyboardType="phone-pad"
           />
+          <TextInput
+            style={styles.input}
+            placeholder="Tipo de produto"
+            value={tipoProd}
+            onChangeText={setTipoProd}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Tipo de comércio"
+            value={tipoCom}
+            onChangeText={setTipoCom}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Endereço do comércio"
+            value={enderCom}
+            onChangeText={setEnderCom}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="CNPJ"
+            value={cnpj}
+            onChangeText={setCnpj}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="CEP do comércio"
+            value={cepCom}
+            onChangeText={setCepCom}
+          />
         </>
       )}
 
       {tipo === "Chef" && (
-        <TextInput
-          style={styles.input}
-          placeholder="Especialidade"
-          value={especialidade}
-          onChangeText={setEspecialidade}
-        />
+        <>
+          <TextInput
+            style={styles.input}
+            placeholder="Especialidade"
+            value={especialidade}
+            onChangeText={setEspecialidade}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Certificações"
+            value={certificacoes}
+            onChangeText={setCertificacoes}
+            multiline
+          />
+        </>
+      )}
+
+      {tipo === "Administrador" && (
+        <>
+          <TextInput
+            style={styles.input}
+            placeholder="Cargo"
+            value={cargo}
+            onChangeText={setCargo}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Matrícula"
+            value={matricula}
+            onChangeText={setMatricula}
+          />
+        </>
       )}
 
       {tipo === "Comum" && (
