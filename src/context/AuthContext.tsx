@@ -71,12 +71,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       const { token } = response.data;
 
+      await AsyncStorage.setItem("@token", token);
+
+      setUserToken(token);
+      setIsAuthenticated(true);
+
       if (manterConectado) {
         await AsyncStorage.setItem("@token", token);
       }
 
-      setUserToken(token);
-      setIsAuthenticated(true);
+      setTimeout(() => {
+        carregarPerfil();
+      }, 300);
     } catch (error: any) {
       console.error(
         "Erro ao fazer login:",
@@ -88,10 +94,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const carregarPerfil = async () => {
     try {
-      const token = await AsyncStorage.getItem("@token");
-      const response = await axios.get(`${API_URL}/auth/perfil`, {
-        headers: { Authorization: `Bearer ${token}` },
+      const token = userToken || (await AsyncStorage.getItem("@token"));
+
+      if (!token) {
+        console.error("Token não encontrado");
+        return;
+      }
+
+      const response = await axios.get(`${API_URL}/usuario/perfil`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
+
       setPerfilUsuario(response.data);
     } catch (error) {
       console.error("Erro ao carregar perfil:", error);

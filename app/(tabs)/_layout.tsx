@@ -1,23 +1,11 @@
-import { Stack, useRouter } from "expo-router";
-import { useAuth } from "@/context/AuthContext";
+import { Tabs } from "expo-router";
 
-export default function Layout() {
-  const { isAuthenticated } = useAuth();
-  const router = useRouter();
-
+export default function TabsLayout() {
   return (
-    <Stack screenOptions={{ headerShown: false }}>
-      {isAuthenticated ? (
-        // Se estiver autenticado, carrega a navegação principal (abas)
-        <Stack.Screen name="(tabs)" />
-      ) : (
-        // Se NÃO estiver autenticado, carrega Login, Cadastro e Recuperação de Senha
-        <>
-          <Stack.Screen name="index" />
-          <Stack.Screen name="login" />
-          <Stack.Screen name="cadastro" />
-        </>
-      )}
-    </Stack>
+    <Tabs>
+      <Tabs.Screen name="home" options={{ title: "Início" }} />
+      <Tabs.Screen name="perfil" options={{ title: "Perfil" }} />
+      <Tabs.Screen name="configuracoes" options={{ title: "Config" }} />
+    </Tabs>
   );
 }

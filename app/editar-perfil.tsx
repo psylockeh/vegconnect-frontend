@@ -114,6 +114,7 @@ export default function EditarPerfilScreen() {
         },
       });
 
+      console.log("Enviando dados:", formData);
       alert("Perfil atualizado com sucesso!");
     } catch (error) {
       console.error("Erro ao atualizar perfil:", error);
