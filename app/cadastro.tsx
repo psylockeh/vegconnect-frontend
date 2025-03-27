@@ -102,99 +102,94 @@ export default function CadastroScreen() {
 
   return (
     <View style={styles.container}>
-      <div style={styles.box}>
-        {/* <Text style={styles.logo}>LOGO - VegConnect</Text><br /> */}
-        <Text style={styles.title}>Register</Text><br />
-        <Text style={styles.textoInicio}>Bem-vindo! Insira seus dados para realizar o cadastro!!!</Text><br />
+      <Text style={styles.title}>Cadastro</Text>
 
-        {/* Campo Nome */}
+      {/* Campo Nome */}
+      <TextInput
+        style={styles.input}
+        placeholder="Nome"
+        value={nome}
+        onChangeText={setNome}
+        autoCapitalize="words"
+      />
 
-        <Text style={{ color: "#191d23", fontSize: 18 }}>Nome</Text>
-        <TextInput
-          style={styles.input}
-          value={nome}
-          onChangeText={setNome}
-          autoCapitalize="words"
-        />
+      {/* Campo E-mail */}
+      <TextInput
+        style={styles.input}
+        placeholder="E-mail"
+        value={email}
+        onChangeText={setEmail}
+        keyboardType="email-address"
+        autoCapitalize="none"
+      />
 
-        {/* Campo E-mail */}
-        <Text style={{ color: "#191d23", fontSize: 18 }}>E-mail</Text>
-        <TextInput
-          style={styles.input}
-          value={email}
-          onChangeText={setEmail}
-          keyboardType="email-address"
-          autoCapitalize="none"
-        />
+      {/* Campo Senha */}
+      <TextInput
+        style={styles.input}
+        placeholder="Senha"
+        value={senha}
+        onChangeText={setSenha}
+        secureTextEntry
+      />
 
-        {/* Campo Senha */}
-        <Text style={{ color: "#191d23", fontSize: 18 }}>Senha</Text>
-        <TextInput
-          style={styles.input}
-          value={senha}
-          onChangeText={setSenha}
-          secureTextEntry
-        />
+      {/* Campo Data de Nascimento */}
+      <TextInput
+        style={styles.input}
+        placeholder="Data de Nascimento (DD/MM/AAAA)"
+        value={dataNascimento}
+        onChangeText={setDataNascimento}
+        keyboardType="numeric"
+      />
 
-        {/* Campo Data de Nascimento */}
-        <Text style={{ color: "#191d23", fontSize: 18 }}>Data de Nascimento</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Ex. (DD/MM/AAAA)"
-          value={dataNascimento}
-          onChangeText={setDataNascimento}
-          keyboardType="numeric"
-        />
+      {/* Mensagem antes da seleção do tipo de usuário */}
+      <Text style={styles.infoText}>
+        Você é um comerciante ou Chef? Conta pra gente selecionando abaixo! Se
+        não, este campo não precisa ser preenchido
+      </Text>
 
-        {/* Mensagem antes da seleção do tipo de usuário */}
-        <Text style={styles.infoText}>
-          Você é um comerciante ou Chef? Não obrigatório
-        </Text>
+      {/* Campo Tipo de Usuário */}
+      <Picker
+        selectedValue={tipoUsuario}
+        onValueChange={(itemValue) => setTipoUsuario(itemValue)}
+        style={styles.picker}
+      >
+        <Picker.Item label="Selecione um tipo de usuário" value="" />
+        <Picker.Item label="Comerciante" value="comerciante" />
+        <Picker.Item label="Chef" value="chef" />
+      </Picker>
 
-        {/* Campo Tipo de Usuário */}
-        <Picker
-          selectedValue={tipoUsuario}
-          onValueChange={(itemValue) => setTipoUsuario(itemValue)}
-          style={styles.picker}
-        >
-          <Picker.Item label="Selecione um tipo de usuário" value="" />
-          <Picker.Item label="Comerciante" value="comerciante" />
-          <Picker.Item label="Chef" value="chef" />
-        </Picker>
+      {error ? <Text style={styles.error}>{error}</Text> : null}
 
-        {error ? <Text style={styles.error}>{error}</Text> : null}
+      {/* Seleção de Preferência Alimentar */}
+      <Text style={styles.label}>Sua preferência alimentar:</Text>
+      <Picker
+        selectedValue={prefAlim}
+        onValueChange={(itemValue) => setPrefAlim(itemValue)}
+        style={styles.picker}
+      >
+        <Picker.Item label="Selecione sua preferência alimentar" value="" />
+        <Picker.Item label="Vegano" value="Vegano" />
+        <Picker.Item label="Vegetariano" value="Vegetariano" />
+        <Picker.Item label="Dieta Restritiva" value="Dieta restritiva" />
+      </Picker>
 
-        {/* Seleção de Preferência Alimentar */}
-        <Text style={styles.label}>Sua preferência alimentar:</Text>
-        <Picker
-          selectedValue={prefAlim}
-          onValueChange={(itemValue) => setPrefAlim(itemValue)}
-          style={styles.picker}
-        >
-          <Picker.Item label="Selecione sua preferência alimentar" value="" />
-          <Picker.Item label="Vegano" value="Vegano" />
-          <Picker.Item label="Vegetariano" value="Vegetariano" />
-          <Picker.Item label="Dieta Restritiva" value="Dieta restritiva" />
-        </Picker>
+      {/* Botão de Cadastro */}
+      <TouchableOpacity
+        style={styles.button}
+        onPress={handleCadastro}
+        disabled={loading}
+      >
+        {loading ? (
+          <ActivityIndicator color="#FFF" />
+        ) : (
+          <Text style={styles.buttonText}>Criar Conta</Text>
+        )}
+      </TouchableOpacity>
 
-        {/* Botão de Cadastro */}
-        <TouchableOpacity
-          style={styles.button}
-          onPress={handleCadastro}
-          disabled={loading}
-        >
-          {loading ? (
-            <ActivityIndicator color="#FFF" />
-          ) : (
-            <Text style={styles.buttonText}>Criar Conta</Text>
-          )}
-        </TouchableOpacity>
-
-        {/* Link para Login */}
-        <TouchableOpacity onPress={() => router.push("/login")}>
-          <Text style={styles.link}>Já tem conta? Faça Login</Text>
-        </TouchableOpacity>
-      </div>
+      {/* Link para Login */}
+      <TouchableOpacity onPress={() => router.push("/login")}>
+        <Text style={styles.link}>Já tem conta? Faça Login</Text>
+      </TouchableOpacity>
     </View>
   );
 }
