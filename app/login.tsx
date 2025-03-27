@@ -42,63 +42,70 @@ export default function LoginScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
+      <div style={styles.box}>
+        <Text style={styles.logo}>LOGO - VegConnect</Text><br /><br /><br />
+        <Text style={styles.title}>User Login</Text><br /><br />
+        <Text style={styles.bemVindo}>Bem-vindo! Insira suas credenciais para acessar sua conta.</Text><br /><br /><br />
 
-      {/* Campo de E-mail */}
-      <TextInput
-        style={styles.input}
-        placeholder="E-mail"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        autoCapitalize="none"
-      />
+        {/* Campo de E-mail */}
+        <Text style={{ color: "#191d23", fontSize: 18 }}>
+          E-mail<TextInput
+            style={styles.input}
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
+          /></Text>
 
-      {/* Campo de Senha */}
-      <TextInput
-        style={styles.input}
-        placeholder="Senha"
-        value={senha}
-        onChangeText={setSenha}
-        secureTextEntry
-      />
+        {/* Campo de Senha */}
+        <Text style={{ color: "#191d23", fontSize: 18 }}>
+          Senha<TextInput
+            style={styles.input}
+            placeholder="Senha"
+            value={senha}
+            onChangeText={setSenha}
+            secureTextEntry
+          /></Text>
 
-      {/* Link para recuperação de senha */}
-      <TouchableOpacity onPress={() => router.push("/forgot-password")}>
-        <Text style={{ color: "#3498db", marginTop: 10, textAlign: "center" }}>
-          Esqueci minha senha
-        </Text>
-      </TouchableOpacity>
-
-      {error ? <Text style={styles.error}>{error}</Text> : null}
-
-      <View style={styles.checkboxContainer}>
-        <TouchableOpacity
-          onPress={() => setManterConectado(!manterConectado)}
-          style={styles.checkbox}
-        >
-          {manterConectado && <Text style={styles.checkboxMark}>✔</Text>}
+        {/* Link para recuperação de senha */}
+        <TouchableOpacity onPress={() => router.push("/forgot-password")}>
+          <Text style={{ color: "#166534", marginLeft: 250, textAlign: "center", fontSize: 15, fontWeight: "bold" }}>
+            Esqueci minha senha
+          </Text>
         </TouchableOpacity>
-        <Text style={styles.checkboxLabel}>Manter-me conectado</Text>
-      </View>
 
-      {/* Botão de Login */}
-      <TouchableOpacity
-        style={styles.button}
-        onPress={handleLogin}
-        disabled={loading}
-      >
-        {loading ? (
-          <ActivityIndicator color="#FFF" />
-        ) : (
-          <Text style={styles.buttonText}>Entrar</Text>
-        )}
-      </TouchableOpacity>
+        {error ? <Text style={styles.error}>{error}</Text> : null}
 
-      {/* Link para Cadastro */}
-      <TouchableOpacity onPress={() => router.push("/cadastro")}>
-        <Text style={styles.link}>Criar uma conta</Text>
-      </TouchableOpacity>
+        <View style={styles.checkboxContainer}>
+          <TouchableOpacity
+            onPress={() => setManterConectado(!manterConectado)}
+            style={styles.checkbox}
+          >
+            {manterConectado && <Text style={styles.checkboxMark}>✔</Text>}
+          </TouchableOpacity>
+          <Text style={styles.checkboxLabel}>Manter-me conectado</Text>
+        </View><br />
+
+        {/* Botão de Login */}
+        <TouchableOpacity
+          style={styles.button}
+          onPress={handleLogin}
+          disabled={loading}
+        >
+          {loading ? (
+            <ActivityIndicator color="#FFF" />
+          ) : (
+            <Text style={styles.buttonText}>Entrar</Text>
+          )}
+        </TouchableOpacity><br />
+
+
+        {/* Link para Cadastro */}
+
+        <TouchableOpacity onPress={() => router.push("/cadastro")}>
+          <Text style={styles.link}>Não tem uma conta? <b>Criar uma conta</b></Text>
+        </TouchableOpacity>
+      </div>
     </View>
   );
 }

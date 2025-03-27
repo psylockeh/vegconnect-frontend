@@ -40,34 +40,40 @@ export default function ForgotPasswordScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Recuperar Senha</Text>
+      <div style={styles.box}>
+        <Text style={styles.logo}>LOGO - VegConnect</Text><br /><br /><br />
+        <Text style={styles.title}>Forgot password</Text><br /><br />
+        <Text style={styles.textoInicio}>Insira seu e-mail para recuperar sua senha!</Text><br /><br /><br />
 
-      <TextInput
-        style={styles.input}
-        placeholder="Digite seu e-mail"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        autoCapitalize="none"
-      />
 
-      {mensagem ? <Text style={styles.message}>{mensagem}</Text> : null}
+        <Text style={{ color: "#191d23", fontSize: 18 }}>
+          E-mai<TextInput
+            style={styles.input}
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
+          /></Text>
+        <br /><br />
+        {mensagem ? <Text style={styles.message}>{mensagem}</Text> : null}
 
-      <TouchableOpacity
-        style={styles.button}
-        onPress={handleRecuperarSenha}
-        disabled={loading}
-      >
-        {loading ? (
-          <ActivityIndicator color="#FFF" />
-        ) : (
-          <Text style={styles.buttonText}>Enviar Link</Text>
-        )}
-      </TouchableOpacity>
-
-      <TouchableOpacity onPress={() => router.push("/login")}>
-        <Text style={styles.link}>Voltar para o Login</Text>
-      </TouchableOpacity>
+        <br /><br />
+        <TouchableOpacity
+          style={styles.button}
+          onPress={handleRecuperarSenha}
+          disabled={loading}
+        >
+          {loading ? (
+            <ActivityIndicator color="#FFF" />
+          ) : (
+            <Text style={styles.buttonText}>Enviar</Text>
+          )}
+        </TouchableOpacity>
+        <br /><br />
+        <TouchableOpacity onPress={() => router.push("/login")}>
+          <Text style={styles.link}>Voltar para o Login</Text>
+        </TouchableOpacity>
+      </div>
     </View>
   );
 }
