@@ -116,14 +116,17 @@ export default function CadastroScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Substitua a div por View e remova <br/> */}
-      <View style={styles.box}>
+      <div style={styles.box}>
+        {/* <Text style={styles.logo}>LOGO - VegConnect</Text><br /> */}
         <Text style={styles.title}>Register</Text>
+        <br />
         <Text style={styles.textoInicio}>
           Bem-vindo! Insira seus dados para realizar o cadastro!!!
         </Text>
+        <br />
 
         {/* Campo Nome */}
+
         <Text style={{ color: "#191d23", fontSize: 18 }}>Nome</Text>
         <TextInput
           style={styles.input}
@@ -133,26 +136,66 @@ export default function CadastroScreen() {
         />
 
         {/* Campo E-mail */}
-        <Text style={{ color: "#191d23", fontSize: 18 }}>E-mail</Text>
         <TextInput
           style={styles.input}
+          placeholder="E-mail"
           value={email}
           onChangeText={setEmail}
           keyboardType="email-address"
           autoCapitalize="none"
         />
 
-        {/* Campo Telefone (apenas uma versão) */}
-        <Text style={{ color: "#191d23", fontSize: 18 }}>Telefone</Text>
+        {/* Campo Senha */}
+        <Text style={{ color: "#191d23", fontSize: 18 }}>Senha</Text>
         <TextInput
           style={styles.input}
-          value={telefone}
-          onChangeText={setTelefone}
-          keyboardType="phone-pad"
-          autoCapitalize="none"
+          value={senha}
+          onChangeText={setSenha}
+          secureTextEntry
         />
 
-        {/* ... (demais campos mantidos, sem duplicações) ... */}
+        {/* Campo Data de Nascimento */}
+        <Text style={{ color: "#191d23", fontSize: 18 }}>
+          Data de Nascimento
+        </Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Ex. (DD/MM/AAAA)"
+          value={dataNascimento}
+          onChangeText={setDataNascimento}
+          keyboardType="numeric"
+        />
+
+        {/* Mensagem antes da seleção do tipo de usuário */}
+        <Text style={styles.infoText}>
+          Você é um comerciante ou Chef? Não obrigatório
+        </Text>
+
+        {/* Campo Tipo de Usuário */}
+        <Picker
+          selectedValue={tipoUsuario}
+          onValueChange={(itemValue) => setTipoUsuario(itemValue)}
+          style={styles.picker}
+        >
+          <Picker.Item label="Selecione um tipo de usuário" value="" />
+          <Picker.Item label="Comerciante" value="comerciante" />
+          <Picker.Item label="Chef" value="chef" />
+        </Picker>
+
+        {error ? <Text style={styles.error}>{error}</Text> : null}
+
+        {/* Seleção de Preferência Alimentar */}
+        <Text style={styles.label}>Sua preferência alimentar:</Text>
+        <Picker
+          selectedValue={prefAlim}
+          onValueChange={(itemValue) => setPrefAlim(itemValue)}
+          style={styles.picker}
+        >
+          <Picker.Item label="Selecione sua preferência alimentar" value="" />
+          <Picker.Item label="Vegano" value="Vegano" />
+          <Picker.Item label="Vegetariano" value="Vegetariano" />
+          <Picker.Item label="Dieta Restritiva" value="Dieta restritiva" />
+        </Picker>
 
         {/* Botão de Cadastro */}
         <TouchableOpacity
@@ -166,7 +209,12 @@ export default function CadastroScreen() {
             <Text style={styles.buttonText}>Criar Conta</Text>
           )}
         </TouchableOpacity>
-      </View>
+
+        {/* Link para Login */}
+        <TouchableOpacity onPress={() => router.push("/login")}>
+          <Text style={styles.link}>Já tem conta? Faça Login</Text>
+        </TouchableOpacity>
+      </div>
     </View>
   );
 }
