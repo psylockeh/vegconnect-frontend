@@ -31,7 +31,9 @@ interface AuthContextProps {
     senha: string,
     tp_user: string,
     data_nascimento: string,
-    pref_alim: string
+    pref_alim: string,
+    nickname: string,
+    telefone: string
   ) => Promise<void>;
   forgotPassword: (email: string) => Promise<void>;
   resetPassword: (token: string, novaSenha: string) => Promise<void>;
@@ -123,6 +125,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const editarPerfil = async (dadosAtualizados: {
     nome?: string;
     pref_alim?: string;
+    telefone?: string;
+    nickname?: string;
+    bio?: string;
   }) => {
     try {
       const token = await AsyncStorage.getItem("@token");
@@ -162,7 +167,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     senha: string,
     tp_user: string,
     data_nascimento: string,
-    pref_alim: string
+    pref_alim: string,
+    nickname: string,
+    telefone: string
   ) => {
     try {
       const response = await axios.post(`${API_URL}/auth/signup`, {
@@ -172,6 +179,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         tp_user,
         data_nascimento,
         pref_alim,
+        nickname,
+        telefone,
       });
 
       if (response.status === 201) {
