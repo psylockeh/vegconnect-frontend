@@ -24,6 +24,8 @@ export default function CadastroScreen() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [prefAlim, setPrefAlim] = useState("");
+  const [nickname, setNickname] = useState("");
+  const [telefone, setTelefone] = useState("");
 
   const formatarDataParaAPI = (data: string) => {
     const regex = /^(\d{2})\/(\d{2})\/(\d{4})$/;
@@ -35,7 +37,15 @@ export default function CadastroScreen() {
     setLoading(true);
     setError("");
 
-    if (!nome || !email || !senha || !dataNascimento || !prefAlim) {
+    if (
+      !nome ||
+      !email ||
+      !senha ||
+      !dataNascimento ||
+      !prefAlim ||
+      !nickname ||
+      !telefone
+    ) {
       setError("Todos os campos são obrigatórios.");
       setLoading(false);
       return;
@@ -57,6 +67,8 @@ export default function CadastroScreen() {
       nome,
       email,
       senha,
+      nickname,
+      telefone,
       tp_user: tipoUsuario.trim() === "" ? "Comum" : tipoUsuario,
       data_nascimento: dataFormatada,
       pref_alim: prefAlim,
@@ -71,7 +83,9 @@ export default function CadastroScreen() {
         dadosCadastro.senha,
         dadosCadastro.tp_user,
         dadosCadastro.data_nascimento,
-        dadosCadastro.pref_alim
+        dadosCadastro.pref_alim,
+        dadosCadastro.nickname,
+        dadosCadastro.telefone
       );
 
       const showToast = (message: string) => {
@@ -130,6 +144,26 @@ export default function CadastroScreen() {
         value={senha}
         onChangeText={setSenha}
         secureTextEntry
+      />
+
+      {/* Campo Telefone */}
+      <TextInput
+        style={styles.input}
+        placeholder="Telefone"
+        value={telefone}
+        onChangeText={setTelefone}
+        keyboardType="phone-pad"
+        autoCapitalize="none"
+      />
+
+      {/* Campo Nickname */}
+      <TextInput
+        style={styles.input}
+        placeholder="Nickname"
+        value={nickname}
+        onChangeText={setNickname}
+        keyboardType="default"
+        autoCapitalize="none"
       />
 
       {/* Campo Data de Nascimento */}
