@@ -7,7 +7,9 @@
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
-    "plugins": ["expo-router"],
+    "plugins": [
+      "expo-router"
+    ],
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -16,7 +18,10 @@
     "icon": "./assets/icon.png",
     "android": {
       "package": "com.anonymous.vegconnectfrontend",
-      "permissions": ["CAMERA", "MEDIA_LIBRARY"],
+      "permissions": [
+        "CAMERA",
+        "MEDIA_LIBRARY"
+      ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -28,6 +33,12 @@
       },
       "eas": {
         "projectId": "825cc097-f650-4f9b-a7a7-ecea2cf83b94"
+      }
+    },
+    "ios": {
+      "bundleIdentifier": "com.anonymous.vegconnectfrontend",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
       }
     }
   }

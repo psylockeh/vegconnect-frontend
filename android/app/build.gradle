@@ -86,7 +86,7 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "com.vegconnectfrontend"
+    namespace 'com.anonymous.vegconnectfrontend'
     defaultConfig {
         applicationId 'com.anonymous.vegconnectfrontend'
         minSdkVersion rootProject.ext.minSdkVersion
