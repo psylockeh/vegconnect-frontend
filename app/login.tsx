@@ -7,9 +7,9 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { useRouter } from "expo-router";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAuth } from "@/context/AuthContext";
 import { LoginStyles as styles } from "@/styles/LoginStyles";
+import LottieView from "lottie-react-native"; // Importando o Lottie
 
 export default function LoginScreen() {
   const router = useRouter();
@@ -30,6 +30,7 @@ export default function LoginScreen() {
       await login(email, senha, manterConectado);
 
       setTimeout(() => {
+        // Redireciona para a tela principal após login
         router.replace("/home");
       }, 500);
     } catch (error: any) {
@@ -42,36 +43,39 @@ export default function LoginScreen() {
 
   return (
     <View style={styles.container}>
-      <div style={styles.box}>
-        <Text style={styles.logo}>LOGO - VegConnect</Text><br /><br /><br />
-        <Text style={styles.title}>User Login</Text><br /><br />
-        <Text style={styles.bemVindo}>Bem-vindo! Insira suas credenciais para acessar sua conta.</Text><br /><br /><br />
+      <View style={styles.box}>
+        <Text style={styles.title}>Login</Text>
+        <Text style={styles.bemVindo}>
+          Bem-vindo! Insira suas credenciais para acessar sua conta.
+        </Text>
 
         {/* Campo de E-mail */}
         <Text style={{ color: "#191d23", fontSize: 18 }}>
-          E-mail<TextInput
+          E-mail
+          <TextInput
             style={styles.input}
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"
             autoCapitalize="none"
-          /></Text>
+          />
+        </Text>
 
         {/* Campo de Senha */}
         <Text style={{ color: "#191d23", fontSize: 18 }}>
-          Senha<TextInput
+          Senha
+          <TextInput
             style={styles.input}
             placeholder="Senha"
             value={senha}
             onChangeText={setSenha}
             secureTextEntry
-          /></Text>
+          />
+        </Text>
 
         {/* Link para recuperação de senha */}
         <TouchableOpacity onPress={() => router.push("/forgot-password")}>
-          <Text style={{ color: "#166534", marginLeft: 250, textAlign: "center", fontSize: 15, fontWeight: "bold" }}>
-            Esqueci minha senha
-          </Text>
+          <Text style={styles.forgotPasswordText}>Esqueci minha senha</Text>
         </TouchableOpacity>
 
         {error ? <Text style={styles.error}>{error}</Text> : null}
@@ -84,7 +88,7 @@ export default function LoginScreen() {
             {manterConectado && <Text style={styles.checkboxMark}>✔</Text>}
           </TouchableOpacity>
           <Text style={styles.checkboxLabel}>Manter-me conectado</Text>
-        </View><br />
+        </View>
 
         {/* Botão de Login */}
         <TouchableOpacity
@@ -93,19 +97,24 @@ export default function LoginScreen() {
           disabled={loading}
         >
           {loading ? (
-            <ActivityIndicator color="#FFF" />
+            <LottieView
+              source={require("../assets/animations/loading_anim.json")} // Caminho da animação
+              autoPlay
+              loop
+              style={styles.loadingAnimation}
+            />
           ) : (
             <Text style={styles.buttonText}>Entrar</Text>
           )}
-        </TouchableOpacity><br />
-
+        </TouchableOpacity>
 
         {/* Link para Cadastro */}
-
         <TouchableOpacity onPress={() => router.push("/cadastro")}>
-          <Text style={styles.link}>Não tem uma conta? <b>Criar uma conta</b></Text>
+          <Text style={styles.link}>
+            Não tem uma conta? <b>Criar uma conta</b>
+          </Text>
         </TouchableOpacity>
-      </div>
+      </View>
     </View>
   );
 }

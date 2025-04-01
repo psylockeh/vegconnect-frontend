@@ -1,29 +1,31 @@
 import { useEffect } from "react";
+import { View, Text, TouchableOpacity, Image } from "react-native";
 import { useRouter } from "expo-router";
-import { useAuth } from "@/context/AuthContext";
-import { View, Text, Button } from "react-native";
+import { styles } from "@/styles/IndexStyles";
 
-export default function WelcomeScreen() {
+export default function Index() {
   const router = useRouter();
-  const { isAuthenticated } = useAuth();
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      router.replace("/(tabs)/home");
-    }
-  }, [isAuthenticated]);
 
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text style={{ fontSize: 22, fontWeight: "bold" }}>
-        Bem-vindo ao VegConnect
-      </Text>
+    <View style={styles.container}>
+      <View style={styles.card}>
+        <Image source={require("../../assets/logo.png")} style={styles.logo} />
+        <Text style={styles.title}>Bem-vindo ao VegConnect</Text>
 
-      {/* Botão de Login */}
-      <Button title="Fazer Login" onPress={() => router.push("/login")} />
+        <TouchableOpacity
+          style={styles.buttonLogin}
+          onPress={() => router.push("/login")}
+        >
+          <Text style={styles.buttonText}>Fazer Login</Text>
+        </TouchableOpacity>
 
-      {/* Botão de Cadastro */}
-      <Button title="Cadastrar-se" onPress={() => router.push("/cadastro")} />
+        <TouchableOpacity
+          style={styles.buttonCadastro}
+          onPress={() => router.push("/cadastro")}
+        >
+          <Text style={styles.buttonText}>Cadastrar-se</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
