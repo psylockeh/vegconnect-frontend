@@ -69,6 +69,8 @@ services:
     build: ./vegconnect-backend
     ports:
       - "28147:28147"
+    env_file:
+      - .env
     environment:
       DB_HOST: ${DB_HOST}
       DB_PORT: ${DB_PORT}
@@ -76,6 +78,7 @@ services:
       DB_USER: ${DB_USER}
       DB_PASS: ${DB_PASS}
       DB_DIALECT: ${DB_DIALECT}
+
 
 - [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
 - [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
