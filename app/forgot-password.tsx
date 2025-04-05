@@ -41,23 +41,34 @@ export default function ForgotPasswordScreen() {
   return (
     <View style={styles.container}>
       <div style={styles.box}>
-        <Text style={styles.logo}>LOGO - VegConnect</Text><br /><br /><br />
-        <Text style={styles.title}>Forgot password</Text><br /><br />
-        <Text style={styles.textoInicio}>Insira seu e-mail para recuperar sua senha!</Text><br /><br /><br />
-
+        <Text style={styles.logo}>LOGO - VegConnect</Text>
+        <br />
+        <br />
+        <br />
+        <Text style={styles.title}>Forgot password</Text>
+        <br />
+        <br />
+        <Text style={styles.textoInicio}>Insira seu e-mail cadastrado</Text>
+        <br />
+        <br />
+        <br />
 
         <Text style={{ color: "#191d23", fontSize: 18 }}>
-          E-mai<TextInput
+          E-mai
+          <TextInput
             style={styles.input}
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"
             autoCapitalize="none"
-          /></Text>
-        <br /><br />
+          />
+        </Text>
+        <br />
+        <br />
         {mensagem ? <Text style={styles.message}>{mensagem}</Text> : null}
 
-        <br /><br />
+        <br />
+        <br />
         <TouchableOpacity
           style={styles.button}
           onPress={handleRecuperarSenha}
@@ -69,7 +80,8 @@ export default function ForgotPasswordScreen() {
             <Text style={styles.buttonText}>Enviar</Text>
           )}
         </TouchableOpacity>
-        <br /><br />
+        <br />
+        <br />
         <TouchableOpacity onPress={() => router.push("/login")}>
           <Text style={styles.link}>Voltar para o Login</Text>
         </TouchableOpacity>

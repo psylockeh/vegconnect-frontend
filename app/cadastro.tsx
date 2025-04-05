@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Alert,
+  ScrollView,
 } from "react-native";
 import { useRouter } from "expo-router";
 import { useAuth } from "@/context/AuthContext";
@@ -26,6 +27,15 @@ export default function CadastroScreen() {
   const [prefAlim, setPrefAlim] = useState("");
   const [nickname, setNickname] = useState("");
   const [telefone, setTelefone] = useState("");
+  const [especialidade, setEspecialidade] = useState("");
+  const [certificacoes, setCertificacoes] = useState("");
+  const [tipoProduto, setTipoProduto] = useState("");
+  const [tipoComercio, setTipoComercio] = useState("");
+  const [nomeComercio, setNomeComercio] = useState("");
+  const [enderecoComercio, setEnderecoComercio] = useState("");
+  const [cnpj, setCnpj] = useState("");
+  const [cepComercio, setCepComercio] = useState("");
+  const [telefoneComercio, setTelefoneComercio] = useState("");
 
   const formatarDataParaAPI = (data: string) => {
     const regex = /^(\d{2})\/(\d{2})\/(\d{4})$/;
@@ -72,6 +82,15 @@ export default function CadastroScreen() {
       tp_user: tipoUsuario.trim() === "" ? "Comum" : tipoUsuario,
       data_nascimento: dataFormatada,
       pref_alim: prefAlim,
+      especialidade: especialidade,
+      certificacoes: certificacoes,
+      tipo_prod: tipoProduto,
+      tipo_com: tipoComercio,
+      nome_com: nomeComercio,
+      ender_com: enderecoComercio,
+      cnpj,
+      cep_com: cepComercio,
+      tel_com: telefoneComercio,
     };
 
     try {
@@ -85,7 +104,16 @@ export default function CadastroScreen() {
         dadosCadastro.data_nascimento,
         dadosCadastro.pref_alim,
         dadosCadastro.nickname,
-        dadosCadastro.telefone
+        dadosCadastro.telefone,
+        dadosCadastro.especialidade,
+        dadosCadastro.certificacoes,
+        dadosCadastro.tipo_prod,
+        dadosCadastro.tipo_com,
+        dadosCadastro.nome_com,
+        dadosCadastro.ender_com,
+        dadosCadastro.cnpj,
+        dadosCadastro.cep_com,
+        dadosCadastro.tel_com
       );
 
       const showToast = (message: string) => {
@@ -115,17 +143,19 @@ export default function CadastroScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <div style={styles.box}>
-        {/* <Text style={styles.logo}>LOGO - VegConnect</Text><br /> */}
+    <ScrollView
+      contentContainerStyle={{
+        flexGrow: 1,
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      {" "}
+      <View style={styles.box}>
         <Text style={styles.title}>Register</Text>
-        <br />
         <Text style={styles.textoInicio}>
-          Bem-vindo! Insira seus dados para realizar o cadastro!!!
+          Bem-vindo! Insira seus dados para realizar o cadastro.
         </Text>
-        <br />
-
-        {/* Campo Nome */}
 
         <Text style={{ color: "#191d23", fontSize: 18 }}>Nome</Text>
         <TextInput
@@ -135,7 +165,6 @@ export default function CadastroScreen() {
           autoCapitalize="words"
         />
 
-        {/* Campo E-mail */}
         <TextInput
           style={styles.input}
           placeholder="E-mail"
@@ -145,7 +174,24 @@ export default function CadastroScreen() {
           autoCapitalize="none"
         />
 
-        {/* Campo Senha */}
+        <TextInput
+          style={styles.input}
+          placeholder="Nickname"
+          value={nickname}
+          onChangeText={setNickname}
+          keyboardType="default"
+          autoCapitalize="none"
+        />
+
+        <TextInput
+          style={styles.input}
+          placeholder="Telefone"
+          value={telefone}
+          onChangeText={setTelefone}
+          keyboardType="phone-pad"
+          autoCapitalize="none"
+        />
+
         <Text style={{ color: "#191d23", fontSize: 18 }}>Senha</Text>
         <TextInput
           style={styles.input}
@@ -154,7 +200,6 @@ export default function CadastroScreen() {
           secureTextEntry
         />
 
-        {/* Campo Data de Nascimento */}
         <Text style={{ color: "#191d23", fontSize: 18 }}>
           Data de Nascimento
         </Text>
@@ -166,12 +211,9 @@ export default function CadastroScreen() {
           keyboardType="numeric"
         />
 
-        {/* Mensagem antes da seleção do tipo de usuário */}
         <Text style={styles.infoText}>
           Você é um comerciante ou Chef? Não obrigatório
         </Text>
-
-        {/* Campo Tipo de Usuário */}
         <Picker
           selectedValue={tipoUsuario}
           onValueChange={(itemValue) => setTipoUsuario(itemValue)}
@@ -182,9 +224,72 @@ export default function CadastroScreen() {
           <Picker.Item label="Chef" value="chef" />
         </Picker>
 
+        {tipoUsuario === "chef" && (
+          <>
+            <Text style={styles.label}>Especialidade</Text>
+            <TextInput
+              style={styles.input}
+              value={especialidade}
+              onChangeText={setEspecialidade}
+            />
+            <Text style={styles.label}>Certificações</Text>
+            <TextInput
+              style={styles.input}
+              value={certificacoes}
+              onChangeText={setCertificacoes}
+            />
+          </>
+        )}
+
+        {tipoUsuario === "comerciante" && (
+          <>
+            <Text style={styles.label}>Tipo do Produto</Text>
+            <TextInput
+              style={styles.input}
+              value={tipoProduto}
+              onChangeText={setTipoProduto}
+            />
+            <Text style={styles.label}>Tipo de Comércio</Text>
+            <TextInput
+              style={styles.input}
+              value={tipoComercio}
+              onChangeText={setTipoComercio}
+            />
+            <Text style={styles.label}>Nome do Comércio</Text>
+            <TextInput
+              style={styles.input}
+              value={nomeComercio}
+              onChangeText={setNomeComercio}
+            />
+            <Text style={styles.label}>Endereço do Comércio</Text>
+            <TextInput
+              style={styles.input}
+              value={enderecoComercio}
+              onChangeText={setEnderecoComercio}
+            />
+            <Text style={styles.label}>CNPJ</Text>
+            <TextInput
+              style={styles.input}
+              value={cnpj}
+              onChangeText={setCnpj}
+            />
+            <Text style={styles.label}>CEP do Comércio</Text>
+            <TextInput
+              style={styles.input}
+              value={cepComercio}
+              onChangeText={setCepComercio}
+            />
+            <Text style={styles.label}>Telefone do Comércio</Text>
+            <TextInput
+              style={styles.input}
+              value={telefoneComercio}
+              onChangeText={setTelefoneComercio}
+            />
+          </>
+        )}
+
         {error ? <Text style={styles.error}>{error}</Text> : null}
 
-        {/* Seleção de Preferência Alimentar */}
         <Text style={styles.label}>Sua preferência alimentar:</Text>
         <Picker
           selectedValue={prefAlim}
@@ -197,7 +302,6 @@ export default function CadastroScreen() {
           <Picker.Item label="Dieta Restritiva" value="Dieta restritiva" />
         </Picker>
 
-        {/* Botão de Cadastro */}
         <TouchableOpacity
           style={styles.button}
           onPress={handleCadastro}
@@ -210,11 +314,10 @@ export default function CadastroScreen() {
           )}
         </TouchableOpacity>
 
-        {/* Link para Login */}
         <TouchableOpacity onPress={() => router.push("/login")}>
           <Text style={styles.link}>Já tem conta? Faça Login</Text>
         </TouchableOpacity>
-      </div>
-    </View>
+      </View>
+    </ScrollView>
   );
 }

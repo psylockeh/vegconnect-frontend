@@ -9,7 +9,7 @@ import {
 import { useRouter } from "expo-router";
 import { useAuth } from "@/context/AuthContext";
 import { LoginStyles as styles } from "@/styles/LoginStyles";
-import LottieView from "lottie-react-native"; // Importando o Lottie
+import LottieView from "lottie-react-native";
 
 export default function LoginScreen() {
   const router = useRouter();

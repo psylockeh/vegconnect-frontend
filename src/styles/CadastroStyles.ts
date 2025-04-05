@@ -8,7 +8,6 @@ export const CadastroStyles = StyleSheet.create({
     backgroundColor: "#f3f4f6",
     padding: 20,
     flexGrow: 1,
-
   },
   box: {
     backgroundColor: "white",
@@ -21,21 +20,20 @@ export const CadastroStyles = StyleSheet.create({
     width: "100%",
     maxWidth: 400,
   },
-  
+
   logo: {
     fontSize: 20,
     fontWeight: "bold",
     color: "#166534",
   },
-  
+
   title: {
     fontSize: 20,
     fontWeight: "bold",
     color: "#166534",
   },
 
-  
-  textoInicio:{
+  textoInicio: {
     fontSize: 15,
     color: "#166534",
   },
@@ -112,5 +110,10 @@ export const CadastroStyles = StyleSheet.create({
     fontSize: 16,
     color: "green",
     marginVertical: 10,
+  },
+  scrollViewContent: {
+    flexGrow: 1,
+    justifyContent: "center",
+    padding: 20,
   },
 });

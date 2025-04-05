@@ -33,7 +33,16 @@ interface AuthContextProps {
     data_nascimento: string,
     pref_alim: string,
     nickname: string,
-    telefone: string
+    telefone: string,
+    especialidade: string,
+    certificacoes: string,
+    tipo_prod: string,
+    tipo_com: string,
+    nome_comercio: string,
+    endereco_comercio: string,
+    cnpj: string,
+    cep_comercio: string,
+    telefone_comercio: string
   ) => Promise<void>;
   forgotPassword: (email: string) => Promise<void>;
   resetPassword: (token: string, novaSenha: string) => Promise<void>;
@@ -169,7 +178,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     data_nascimento: string,
     pref_alim: string,
     nickname: string,
-    telefone: string
+    telefone: string,
+    especialidade: string,
+    certificacoes: string,
+    tipo_prod: string,
+    tipo_com: string,
+    nome_comercio: string,
+    endereco_comercio: string,
+    cnpj: string,
+    cep_comercio: string,
+    telefone_comercio: string
   ) => {
     try {
       const response = await axios.post(`${API_URL}/auth/signup`, {
@@ -181,6 +199,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         pref_alim,
         nickname,
         telefone,
+        especialidade,
+        certificacoes,
+        tipo_prod,
+        tipo_com,
+        nome_comercio,
+        endereco_comercio,
+        cnpj,
+        cep_comercio,
+        telefone_comercio,
       });
 
       if (response.status === 201) {
