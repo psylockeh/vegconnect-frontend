@@ -88,7 +88,7 @@ export default function CadastroScreen() {
       tipo_com: tipoComercio,
       nome_com: nomeComercio,
       ender_com: enderecoComercio,
-      cnpj,
+      cnpj: cnpj,
       cep_com: cepComercio,
       tel_com: telefoneComercio,
     };
