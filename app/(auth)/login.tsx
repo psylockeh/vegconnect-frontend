@@ -29,10 +29,7 @@ export default function LoginScreen() {
 
       await login(email, senha, manterConectado);
 
-      setTimeout(() => {
-        // Redireciona para a tela principal após login
-        router.replace("/home");
-      }, 500);
+      setTimeout(() => {}, 500);
     } catch (error: any) {
       setError("Credenciais inválidas ou erro de conexão.");
       console.error("❌ Erro ao fazer login:", error);

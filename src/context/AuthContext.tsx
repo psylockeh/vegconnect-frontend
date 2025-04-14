@@ -277,11 +277,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         carregarPerfil,
         perfilUsuario,
         isAuthenticated,
+        isLoading,
         editarPerfil,
         register,
         forgotPassword,
         resetPassword,
-        isLoading,
       }}
     >
       {children}
