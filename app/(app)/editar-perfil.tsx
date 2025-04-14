@@ -11,7 +11,7 @@ import {
 import * as ImagePicker from "expo-image-picker";
 import { useAuth } from "@/context/AuthContext";
 import { styles } from "@/styles/EditarPerfilStyles";
-import { uploadImageToCloudinary } from "../src/utils/cloudinary";
+import { uploadImageToCloudinary } from "../../src/utils/cloudinary";
 import axios from "axios";
 import { API_URL } from "@/config/api";
 import AsyncStorage from "@react-native-async-storage/async-storage";

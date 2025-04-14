@@ -1,2 +1,2 @@
-import ResetPasswordScreen from "../reset-password";
+import ResetPasswordScreen from "../(auth)/reset-password";
 export default ResetPasswordScreen;

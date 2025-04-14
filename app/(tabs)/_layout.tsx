@@ -1,11 +1,10 @@
-import { Stack } from "expo-router";
+import { Slot } from "expo-router";
+import { View } from "react-native";
 
-export default function RootLayout() {
+export default function TabsLayout() {
   return (
-    <Stack>
-      <Stack.Screen name="index" options={{ title: "Home" }} />
-      <Stack.Screen name="login" options={{ title: "Login" }} />
-      <Stack.Screen name="cadastro" options={{ title: "Cadastro" }} />
-    </Stack>
+    <View style={{ flex: 1, backgroundColor: "#FDF6E3" }}>
+      <Slot />
+    </View>
   );
 }

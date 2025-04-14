@@ -98,7 +98,7 @@ export default function LoginScreen() {
         >
           {loading ? (
             <LottieView
-              source={require("../assets/animations/loading_anim.json")} // Caminho da animação
+              source={require("..//../assets/animations/loading_anim.json")} // Caminho da animação
               autoPlay
               loop
               style={styles.loadingAnimation}

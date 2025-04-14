@@ -1,31 +1,25 @@
-import { useEffect } from "react";
-import { View, Text, TouchableOpacity, Image } from "react-native";
 import { useRouter } from "expo-router";
-import { styles } from "@/styles/IndexStyles";
+import { useEffect } from "react";
+import { useAuth } from "@/context/AuthContext";
+import { View, ActivityIndicator } from "react-native";
 
 export default function Index() {
+  const { isAuthenticated, userToken, isLoading } = useAuth();
   const router = useRouter();
 
-  return (
-    <View style={styles.container}>
-      <View style={styles.card}>
-        <Image source={require("../../assets/logo.png")} style={styles.logo} />
-        <Text style={styles.title}>Bem-vindo ao VegConnect</Text>
+  useEffect(() => {
+    if (!isLoading && userToken !== null) {
+      router.replace(isAuthenticated ? "/feed" : "/login");
+    }
+  }, [isLoading, isAuthenticated, userToken]);
 
-        <TouchableOpacity
-          style={styles.buttonLogin}
-          onPress={() => router.push("/login")}
-        >
-          <Text style={styles.buttonText}>Fazer Login</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.buttonCadastro}
-          onPress={() => router.push("/cadastro")}
-        >
-          <Text style={styles.buttonText}>Cadastrar-se</Text>
-        </TouchableOpacity>
+  if (isLoading || userToken === null) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" color="#1A7F55" />
       </View>
-    </View>
-  );
+    );
+  }
+
+  return null;
 }

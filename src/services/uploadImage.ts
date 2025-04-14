@@ -13,13 +13,10 @@ export const uploadImageToCloudinary = async (imageUri: string) => {
   formData.append("upload_preset", "vegconnect_perfil");
 
   try {
-    const response = await fetch(
-      "https://api.cloudinary.com/v1_1/dyhzz5baz/image/upload",
-      {
-        method: "POST",
-        body: formData,
-      }
-    );
+    const response = await fetch("http://localhost:3000/upload", {
+      method: "POST",
+      body: formData,
+    });
 
     const data = await response.json();
 
