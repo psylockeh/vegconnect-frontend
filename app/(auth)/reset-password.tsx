@@ -4,6 +4,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  Image,
   ActivityIndicator,
 } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
@@ -43,36 +44,51 @@ export default function ResetPasswordScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Redefinir Senha</Text>
+      <View style={styles.box}>
+        {/* Campo de Logo */}
+        <View style={styles.logoContainer}>
+          <Image
+            source={require("..//../assets/logo.png")}
+            style={styles.logo}
+          />
+          <Text style={styles.title}>VegConnect</Text>
+        </View>
+        <Text style={styles.instrucoesInicio}>Insira a nova credencial para Redefinir Senha</Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Nova Senha"
-        secureTextEntry
-        value={novaSenha}
-        onChangeText={setNovaSenha}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Confirme a Nova Senha"
-        secureTextEntry
-        value={confirmSenha}
-        onChangeText={setConfirmSenha}
-      />
+        <TextInput
+          style={styles.input}
+          placeholder="Nova Senha"
+          secureTextEntry
+          value={novaSenha}
+          onChangeText={setNovaSenha}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Confirme a Nova Senha"
+          secureTextEntry
+          value={confirmSenha}
+          onChangeText={setConfirmSenha}
+        />
 
-      {message ? <Text style={styles.message}>{message}</Text> : null}
+        {message ? <Text style={styles.message}>{message}</Text> : null}
 
-      <TouchableOpacity
-        style={styles.button}
-        onPress={handleReset}
-        disabled={loading}
-      >
-        {loading ? (
-          <ActivityIndicator color="#fff" />
-        ) : (
-          <Text style={styles.buttonText}>Redefinir</Text>
-        )}
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={handleReset}
+          disabled={loading}
+        >
+          {loading ? (
+            <ActivityIndicator color="#fff" />
+          ) : (
+            <Text style={styles.buttonText}>Redefinir Senha</Text>
+          )}
+        </TouchableOpacity>
+
+        {/* Campo de votar ao Login */}
+        <TouchableOpacity onPress={() => router.push("/login")}>
+          <Text style={styles.link}><b>Voltar para o Login</b></Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }

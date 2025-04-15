@@ -5,82 +5,87 @@ export const CadastroStyles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#f3f4f6",
     padding: 20,
-    flexGrow: 1,
+    backgroundColor: "#fff6da",
   },
   box: {
-    backgroundColor: "white",
-    padding: 30,
-    borderRadius: 10,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
     width: "100%",
     maxWidth: 400,
+    padding: 20,
+    borderRadius: 8,
+    backgroundColor: "#fffcf4",
+    elevation: 3,
+  },
+
+  logoContainer: {
+    marginLeft: -20,
+    marginTop: -20,
+    flexDirection: "row", 
+    alignItems: "center",  
   },
 
   logo: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#166534",
+    width: 100,
+    height: 100,
   },
 
   title: {
-    fontSize: 20,
-    fontWeight: "bold",
+    marginLeft: -12,
+    fontSize: 24,
+    fontWeight: "bold", 
     color: "#166534",
   },
 
-  textoInicio: {
-    fontSize: 15,
+  instrucoesInicio: {
+    fontSize: 16,
+    textAlign: "center",
+    marginBottom: 30,
     color: "#166534",
   },
 
   input: {
     width: "100%",
-    height: 50,
-    backgroundColor: "#FFF",
-    borderRadius: 8,
-    paddingHorizontal: 15,
-    marginBottom: 15,
-    fontSize: 16,
+    padding: 12,
+    marginBottom: 20,
+    borderRadius: 5,
     borderWidth: 1,
-    borderColor: "#DDD",
+    borderColor: "#ccc",
   },
+
   picker: {
     width: "100%",
     height: 50,
-    backgroundColor: "#FFF",
+    backgroundColor: "#fffcf4",
     borderRadius: 8,
     marginBottom: 15,
     borderColor: "#DDD",
+    padding: 5,
   },
 
   button: {
-    backgroundColor: "#166534",
+    marginTop: 20,
     padding: 15,
-    borderRadius: 8,
+    backgroundColor: "#166534",
+    borderRadius: 5,
+    justifyContent: "center",
     alignItems: "center",
-    marginTop: 10,
-    width: "100%",
   },
   buttonText: {
-    color: "#FFF",
+    color: "#fff",
     fontSize: 18,
+    fontWeight: "bold",
   },
   link: {
-    color: "#166534",
-    fontSize: 18,
+    marginTop: 20,
     textAlign: "center",
-    marginTop: 10,
+    color: "#166534",
+    fontSize: 16,
   },
   error: {
     color: "red",
     fontSize: 14,
+    marginTop: 10,
     textAlign: "center",
-    marginBottom: 10,
   },
   dateButton: {
     width: "100%",
@@ -98,19 +103,19 @@ export const CadastroStyles = StyleSheet.create({
     fontSize: 18,
   },
 
-  infoText: {
-    fontSize: 18,
-    color: "#191d23",
-  },
   label: {
-    fontSize: 18,
-    color: "#191d23",
+    marginBottom: 10,
+    fontSize: 15,
+    color: "#166534",
+    fontWeight: "bold",
   },
+
   success: {
     fontSize: 16,
     color: "green",
     marginVertical: 10,
   },
+
   scrollViewContent: {
     flexGrow: 1,
     justifyContent: "center",

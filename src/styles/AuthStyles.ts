@@ -1,74 +1,76 @@
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#f3f4f6",
-    padding: 20,
-  },
-  box: {
-    backgroundColor: "white",
-    padding: 30,
-    borderRadius: 10,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    width: "100%",
-    maxWidth: 400,
-    
-  },
-  logo: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#166534",
-  },
+    container: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        padding: 20,
+        backgroundColor: "#fff6da",
+    },
+    box: {
+        width: "100%",
+        maxWidth: 400,
+        padding: 20,
+        borderRadius: 8,
+        backgroundColor: "#fffcf4",
+        elevation: 3,
+    },
+    logoContainer: {
+        marginLeft: -20,
+        marginTop: -20,
+        flexDirection: "row",
+        alignItems: "center",
+    },
 
-  textoInicio:{
-    fontSize: 18,
-    color: "#166534",
-  },
+    logo: {
+        width: 100,
+        height: 100,
+    },
 
-  input: {
-    width: "100%",
-    height: 50,
-    backgroundColor: "#FFF",
-    borderRadius: 8,
-    paddingHorizontal: 15,
-    marginBottom: 15,
-    fontSize: 16,
-    borderWidth: 1,
-    borderColor: "#DDD",
-  },
-  button: {
-    backgroundColor: "#166534",
-    padding: 15,
-    borderRadius: 8,
-    alignItems: "center",
-    marginTop: 10,
-    width: "100%",
-  },
-  buttonText: {
-    color: "#FFF",
-    fontSize: 18,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#166534",
-  },
-  message: {
-    color: "red",
-    fontSize: 14,
-    textAlign: "center",
-    marginBottom: 10,
-  },
-  link: {
-    color: "#166534",
-    fontSize: 18,
-    textAlign: "center",
-    marginTop: 10,
-  },
+    title: {
+        marginLeft: -12,
+        fontSize: 24,
+        fontWeight: "bold",
+        color: "#166534",
+    },
+    instrucoesInicio: {
+        fontSize: 16,
+        textAlign: "center",
+        marginBottom: 30,
+        color: "#166534",
+    },
+    message: {
+        color: "red",
+        fontSize: 14,
+        marginTop: 10,
+        textAlign: "center",
+    },
+    input: {
+        width: "100%",
+        padding: 12,
+        marginBottom: 20,
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor: "#ccc",
+    },
+    button: {
+        marginTop: 20,
+        padding: 15,
+        backgroundColor: "#166534",
+        borderRadius: 5,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    buttonText: {
+        color: "#fff",
+        fontSize: 18,
+        fontWeight: "bold",
+    },
+    link: {
+        marginTop: 20,
+        textAlign: "center",
+        color: "#166534",
+        fontSize: 16,
+    },
 });

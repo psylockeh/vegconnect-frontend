@@ -4,12 +4,14 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  Image,
   ActivityIndicator,
 } from "react-native";
 import { useRouter } from "expo-router";
 import axios from "axios";
 import { API_URL } from "@/config/api";
-import { styles } from "@/styles/AuthStyles";
+import { styles } from "@/styles/ForgotPasswordStyles";
+import LottieView from "lottie-react-native";
 
 export default function ForgotPasswordScreen() {
   const router = useRouter();
@@ -40,52 +42,61 @@ export default function ForgotPasswordScreen() {
 
   return (
     <View style={styles.container}>
-      <div style={styles.box}>
-        <Text style={styles.logo}>LOGO - VegConnect</Text>
-        <br />
-        <br />
-        <br />
-        <Text style={styles.title}>Forgot password</Text>
-        <br />
-        <br />
-        <Text style={styles.textoInicio}>Insira seu e-mail cadastrado</Text>
-        <br />
-        <br />
-        <br />
-
-        <Text style={{ color: "#191d23", fontSize: 18 }}>
-          E-mai
-          <TextInput
-            style={styles.input}
-            value={email}
-            onChangeText={setEmail}
-            keyboardType="email-address"
-            autoCapitalize="none"
+      <View style={styles.box}>
+        {/* Campo de Logo */}
+        <View style={styles.logoContainer}>
+          <Image
+            source={require("..//../assets/logo.png")}
+            style={styles.logo}
           />
-        </Text>
-        <br />
-        <br />
+          <Text style={styles.title}>VegConnect</Text>
+        </View>
+
+        <Text style={styles.instrucoesInicio}>Insira o e-mail cadastrado para recuperar a senha.</Text>
+
+        {/* Campo de Recuperar E-mail */}
+        <TextInput
+          style={styles.input}
+          placeholder="E-mail"
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          autoCapitalize="none"
+        />
+
         {mensagem ? <Text style={styles.message}>{mensagem}</Text> : null}
 
-        <br />
-        <br />
+        {/* Campo de Button */}
         <TouchableOpacity
           style={styles.button}
           onPress={handleRecuperarSenha}
           disabled={loading}
         >
+          {/* Animação de Login */}
           {loading ? (
-            <ActivityIndicator color="#FFF" />
+            <LottieView
+              source={require("..//../assets/animations/loading_anim.json")} // Caminho da animação
+              autoPlay
+              loop
+              style={styles.loadingAnimation}
+            />
           ) : (
-            <Text style={styles.buttonText}>Enviar</Text>
+            <Text style={styles.buttonText}>Recuperar Senha</Text>
           )}
+        </TouchableOpacity><br />
+
+        {/* Link para Cadastro */}
+        <TouchableOpacity onPress={() => router.push("/cadastro")}>
+          <Text style={styles.link}>
+            Não tem uma conta? <b>Criar uma Conta</b>
+          </Text>
         </TouchableOpacity>
-        <br />
-        <br />
+
+        {/* Campo de votar ao Login */}
         <TouchableOpacity onPress={() => router.push("/login")}>
-          <Text style={styles.link}>Voltar para o Login</Text>
+          <Text style={styles.link}><b>Voltar para o Login</b></Text>
         </TouchableOpacity>
-      </div>
+      </View>
     </View>
   );
 }

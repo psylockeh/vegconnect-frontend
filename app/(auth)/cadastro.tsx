@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Alert,
+  Image,
   ScrollView,
 } from "react-native";
 import { useRouter } from "expo-router";
@@ -148,23 +149,34 @@ export default function CadastroScreen() {
         flexGrow: 1,
         justifyContent: "center",
         alignItems: "center",
+        backgroundColor: "#fff6da",
       }}
     >
-      {" "}
+   r
       <View style={styles.box}>
-        <Text style={styles.title}>Register</Text>
-        <Text style={styles.textoInicio}>
-          Bem-vindo! Insira seus dados para realizar o cadastro.
+        {/* Campo de Logo */}
+        <View style={styles.logoContainer}>
+          <Image
+            source={require("..//../assets/logo.png")}
+            style={styles.logo}
+          />
+          <Text style={styles.title}>VegConnect</Text>
+        </View>
+    
+        <Text style={styles.instrucoesInicio}>
+          Bem-vindo! Insira seus dados para realizar o Cadastro.
         </Text>
 
-        <Text style={{ color: "#191d23", fontSize: 18 }}>Nome</Text>
+        {/* Campo de Nome */}
         <TextInput
           style={styles.input}
+          placeholder="Nome"
           value={nome}
           onChangeText={setNome}
           autoCapitalize="words"
         />
 
+        {/* Campo de E-mail */}
         <TextInput
           style={styles.input}
           placeholder="E-mail"
@@ -174,15 +186,17 @@ export default function CadastroScreen() {
           autoCapitalize="none"
         />
 
+        {/* Campo de Nikename */}
         <TextInput
           style={styles.input}
-          placeholder="Nickname"
+          placeholder="Apelido"
           value={nickname}
           onChangeText={setNickname}
           keyboardType="default"
           autoCapitalize="none"
         />
 
+        {/* Campo de Telefone */}
         <TextInput
           style={styles.input}
           placeholder="Telefone"
@@ -192,27 +206,27 @@ export default function CadastroScreen() {
           autoCapitalize="none"
         />
 
-        <Text style={{ color: "#191d23", fontSize: 18 }}>Senha</Text>
+        {/* Campo de Senha */}
         <TextInput
           style={styles.input}
+          placeholder="Senha"
           value={senha}
           onChangeText={setSenha}
           secureTextEntry
         />
 
-        <Text style={{ color: "#191d23", fontSize: 18 }}>
-          Data de Nascimento
-        </Text>
+        {/* Campo de Data de Nascimento */}
         <TextInput
           style={styles.input}
-          placeholder="Ex. (DD/MM/AAAA)"
+          placeholder="Data de Nascimento - Ex.(DD/MM/AAAA)"
           value={dataNascimento}
           onChangeText={setDataNascimento}
           keyboardType="numeric"
         />
 
-        <Text style={styles.infoText}>
-          Você é um comerciante ou Chef? Não obrigatório
+        {/* Campo de Tipo de Usuario*/}
+        <Text style={styles.label}>
+          Você é um comerciante ou Chef ? Não obrigatório
         </Text>
         <Picker
           selectedValue={tipoUsuario}
@@ -224,72 +238,89 @@ export default function CadastroScreen() {
           <Picker.Item label="Chef" value="chef" />
         </Picker>
 
+        {/* Campo de Usuario Chef*/}
         {tipoUsuario === "chef" && (
           <>
-            <Text style={styles.label}>Especialidade</Text>
+            {/* Campo de Especialidade*/}
             <TextInput
               style={styles.input}
+              placeholder="Especialidade"
               value={especialidade}
               onChangeText={setEspecialidade}
             />
-            <Text style={styles.label}>Certificações</Text>
+
+            {/* Campo de Certificações*/}
             <TextInput
               style={styles.input}
+              placeholder="Certificações"
               value={certificacoes}
               onChangeText={setCertificacoes}
             />
           </>
         )}
 
+        {/* Campo de Usuario Comerciante*/}
         {tipoUsuario === "comerciante" && (
           <>
-            <Text style={styles.label}>Tipo do Produto</Text>
+          {/* Campo de Tipo do Produto*/}
             <TextInput
               style={styles.input}
+              placeholder="Tipo do Produto"
               value={tipoProduto}
               onChangeText={setTipoProduto}
             />
-            <Text style={styles.label}>Tipo de Comércio</Text>
+
+            {/* Campo de Tipo de Comércio*/}
             <TextInput
               style={styles.input}
+              placeholder="Tipo do Comércio"
               value={tipoComercio}
               onChangeText={setTipoComercio}
             />
-            <Text style={styles.label}>Nome do Comércio</Text>
+            
+            {/* Campo de Nome de Comércio*/}
             <TextInput
               style={styles.input}
+              placeholder="Nome do Comércio"
               value={nomeComercio}
               onChangeText={setNomeComercio}
             />
-            <Text style={styles.label}>Endereço do Comércio</Text>
+            
+            {/* Campo de Endereço de Comércio*/}
             <TextInput
               style={styles.input}
+              placeholder="Endereço do Comércio"
               value={enderecoComercio}
               onChangeText={setEnderecoComercio}
             />
-            <Text style={styles.label}>CNPJ</Text>
+            
+            {/* Campo de CNPJ*/}
             <TextInput
               style={styles.input}
+              placeholder="CNPJ"
               value={cnpj}
               onChangeText={setCnpj}
             />
-            <Text style={styles.label}>CEP do Comércio</Text>
+            
+            {/* Campo de CEP do Comércio*/}
             <TextInput
               style={styles.input}
+              placeholder="CEP do Comércio"
               value={cepComercio}
               onChangeText={setCepComercio}
             />
-            <Text style={styles.label}>Telefone do Comércio</Text>
+            
+            {/* Campo de Telefone do Comércio*/}
             <TextInput
               style={styles.input}
+              placeholder="Telefone do Comércio"
               value={telefoneComercio}
               onChangeText={setTelefoneComercio}
             />
           </>
         )}
-
-        {error ? <Text style={styles.error}>{error}</Text> : null}
-
+       
+        {/* Campo de Preferência Alimentar*/}
         <Text style={styles.label}>Sua preferência alimentar:</Text>
         <Picker
           selectedValue={prefAlim}
@@ -302,6 +333,10 @@ export default function CadastroScreen() {
           <Picker.Item label="Dieta Restritiva" value="Dieta restritiva" />
         </Picker>
 
+        {error ? <Text style={styles.error}>{error}</Text> : null}
+
+
+        {/* Campo de Button*/}
         <TouchableOpacity
           style={styles.button}
           onPress={handleCadastro}
@@ -314,8 +349,9 @@ export default function CadastroScreen() {
           )}
         </TouchableOpacity>
 
+        {/* Campo de Voltar Login*/}
         <TouchableOpacity onPress={() => router.push("/login")}>
-          <Text style={styles.link}>Já tem conta? Faça Login</Text>
+          <Text style={styles.link}>Já tem conta? <b>Faça Login</b></Text>
         </TouchableOpacity>
       </View>
     </ScrollView>

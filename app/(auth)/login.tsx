@@ -4,6 +4,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  Image,
   ActivityIndicator,
 } from "react-native";
 import { useRouter } from "expo-router";
@@ -41,26 +42,31 @@ export default function LoginScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.box}>
-        <Text style={styles.title}>Login</Text>
+        {/* Campo de Logo */}
+        <View style={styles.logoContainer}>
+                  <Image
+                    source={require("..//../assets/logo.png")}
+                    style={styles.logo}
+                  />
+                  <Text style={styles.title}>VegConnect</Text>
+                </View>
         <Text style={styles.bemVindo}>
           Bem-vindo! Insira suas credenciais para acessar sua conta.
         </Text>
 
         {/* Campo de E-mail */}
-        <Text style={{ color: "#191d23", fontSize: 18 }}>
-          E-mail
+             
           <TextInput
             style={styles.input}
+            placeholder="E-mail"
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"
             autoCapitalize="none"
           />
-        </Text>
 
         {/* Campo de Senha */}
-        <Text style={{ color: "#191d23", fontSize: 18 }}>
-          Senha
+        
           <TextInput
             style={styles.input}
             placeholder="Senha"
@@ -68,7 +74,6 @@ export default function LoginScreen() {
             onChangeText={setSenha}
             secureTextEntry
           />
-        </Text>
 
         {/* Link para recuperação de senha */}
         <TouchableOpacity onPress={() => router.push("/forgot-password")}>
@@ -93,6 +98,7 @@ export default function LoginScreen() {
           onPress={handleLogin}
           disabled={loading}
         >
+          {/* Animação de Login */}
           {loading ? (
             <LottieView
               source={require("..//../assets/animations/loading_anim.json")} // Caminho da animação
@@ -108,7 +114,7 @@ export default function LoginScreen() {
         {/* Link para Cadastro */}
         <TouchableOpacity onPress={() => router.push("/cadastro")}>
           <Text style={styles.link}>
-            Não tem uma conta? <b>Criar uma conta</b>
+            Não tem uma conta? <b>Criar uma Conta</b>
           </Text>
         </TouchableOpacity>
       </View>
