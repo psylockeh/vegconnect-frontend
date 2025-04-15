@@ -10,6 +10,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import feedStyles from "../../src/styles/FeedStyles";
 import Sidebar from "../../src/components/Sidebar";
+import { API_URL } from "@/config/api";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type Postagem = {
   autor: { nome: string };
@@ -25,20 +27,26 @@ export default function Feed() {
   const [postagens, setPostagens] = useState<Postagem[]>([]);
   const [mostrarCriacao, setMostrarCriacao] = useState(false);
 
-  useEffect(() => {
-    async function carregarPostagens() {
-      try {
-        const response = await axios.get(
-          "http://localhost:3000/usuario/postagens"
-        );
-        setPostagens(response.data);
-      } catch (error) {
-        console.error("Erro ao carregar postagens:", error);
-      }
-    }
+  async function carregarPostagens() {
+    try {
+      const token = await AsyncStorage.getItem("@token");
 
-    carregarPostagens();
-  }, []);
+      if (!token) {
+        console.error("🔒 Token ausente.");
+        return;
+      }
+
+      const response = await axios.get(`${API_URL}/usuario/postagens`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setPostagens(response.data);
+    } catch (error) {
+      console.error("Erro ao carregar postagens:", error);
+    }
+  }
 
   return (
     <View style={feedStyles.container}>

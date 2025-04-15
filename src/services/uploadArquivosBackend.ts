@@ -10,7 +10,7 @@ export const uploadArquivosParaBackend = async (arquivos: any[]) => {
   });
 
   try {
-    const response = await fetch("http://localhost:3000/upload", {
+    const response = await fetch("http:// 172.20.10.11:3000/upload", {
       method: "POST",
       body: formData,
     });

@@ -56,16 +56,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [perfilUsuario, setPerfilUsuario] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const carregarToken = async () => {
-    const tokenSalvo = await AsyncStorage.getItem("@token");
-    if (tokenSalvo) {
-      setUserToken(tokenSalvo);
-      setIsAuthenticated(true);
-    } else {
-      setIsAuthenticated(false);
-    }
-    setIsLoading(false);
-  };
 
   useEffect(() => {
     const carregarToken = async () => {

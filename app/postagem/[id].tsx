@@ -12,7 +12,7 @@ export default function DetalhesPostagem() {
     async function buscarPostagem() {
       try {
         const response = await axios.get(
-          `http://localhost:3000/usuario/postagens/${id}`
+          `http:// 172.20.10.11:3000/usuario/postagens/${id}`
         );
         setPostagem(response.data);
       } catch (error) {

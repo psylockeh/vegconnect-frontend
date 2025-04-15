@@ -25,11 +25,11 @@ export default function LoginScreen() {
     setError("");
 
     try {
-      console.log("🔹 Enviando para API:", { email, senha });
-
       await login(email, senha, manterConectado);
 
-      setTimeout(() => {}, 500);
+      setTimeout(() => {
+        router.replace("/(app)/feed");
+      }, 600);
     } catch (error: any) {
       setError("Credenciais inválidas ou erro de conexão.");
       console.error("❌ Erro ao fazer login:", error);
