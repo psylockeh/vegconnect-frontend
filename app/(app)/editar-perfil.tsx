@@ -157,7 +157,7 @@ export default function EditarPerfilScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <TouchableOpacity onPress={escolherFoto}>
         {foto_perfil ? (
           <Image source={{ uri: foto_perfil }} style={styles.avatar} />
@@ -221,6 +221,6 @@ export default function EditarPerfilScreen() {
           <Text style={styles.buttonText}>Salvar</Text>
         )}
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 }
