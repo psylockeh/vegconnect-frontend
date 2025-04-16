@@ -41,10 +41,11 @@ export const styles = StyleSheet.create({
         color: "#166534",
     },
     message: {
-        color: "red",
+        color: "#D32F2F",
         fontSize: 14,
-        marginTop: 10,
         textAlign: "center",
+        marginTop: 8,
+        marginBottom: 8,
     },
     input: {
         width: "100%",
@@ -55,18 +56,20 @@ export const styles = StyleSheet.create({
         borderColor: "#ccc",
     },
     button: {
-        marginTop: 20,
-        padding: 15,
-        backgroundColor: "#166534",
-        borderRadius: 5,
+        backgroundColor: "#3C6E47",
+        height: 48,
+        borderRadius: 12,
         justifyContent: "center",
         alignItems: "center",
+        width: "100%", // ou algo como 240
     },
+
     buttonText: {
         color: "#fff",
-        fontSize: 18,
+        fontSize: 16,
         fontWeight: "bold",
     },
+
     link: {
         marginTop: 20,
         textAlign: "center",

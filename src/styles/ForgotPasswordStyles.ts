@@ -7,16 +7,16 @@ export const styles = StyleSheet.create({
         alignItems: "center",
         padding: 20,
         backgroundColor: "#fff6da",
-      },
-    
-      box: {
+    },
+
+    box: {
         width: "100%",
         maxWidth: 400,
         padding: 20,
         borderRadius: 8,
         backgroundColor: "#fffcf4",
         elevation: 3,
-      },
+    },
     logoContainer: {
         marginLeft: -20,
         marginTop: -20,
@@ -45,10 +45,11 @@ export const styles = StyleSheet.create({
 
 
     message: {
-        color: "red",
+        color: "#D32F2F",
         fontSize: 14,
-        marginTop: 10,
         textAlign: "center",
+        marginTop: 8,
+        marginBottom: 8,
     },
     input: {
         width: "100%",
@@ -59,18 +60,20 @@ export const styles = StyleSheet.create({
         borderColor: "#ccc",
     },
     button: {
-        marginTop: 20,
-        padding: 15,
-        backgroundColor: "#166534",
-        borderRadius: 5,
+        backgroundColor: "#3C6E47",
+        height: 48,
+        borderRadius: 12,
         justifyContent: "center",
         alignItems: "center",
+        width: "100%", // ou algo como 240
     },
+
     buttonText: {
         color: "#fff",
-        fontSize: 18,
+        fontSize: 16,
         fontWeight: "bold",
     },
+
     link: {
         marginTop: 20,
         textAlign: "center",
@@ -81,6 +84,18 @@ export const styles = StyleSheet.create({
     loadingAnimation: {
         width: 50,
         height: 50,
-      },
-    
+    },
+
+    loadingWrapper: {
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100%",
+        width: "100%",
+    },
+
+    loadingIcon: {
+        width: 28,
+        height: 28,
+    },
+
 });

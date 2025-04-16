@@ -14,6 +14,8 @@ import { useAuth } from "@/context/AuthContext";
 import { CadastroStyles as styles } from "@/styles/CadastroStyles";
 import { Picker } from "@react-native-picker/picker";
 import { ToastAndroid, Platform } from "react-native";
+import LottieView from "lottie-react-native";
+
 
 export default function CadastroScreen() {
   const router = useRouter();
@@ -57,7 +59,7 @@ export default function CadastroScreen() {
       !nickname ||
       !telefone
     ) {
-      setError("Todos os campos são obrigatórios.");
+      setError("📌 Ops! Todos os campos são obrigatórios.");
       setLoading(false);
       return;
     }
@@ -66,7 +68,7 @@ export default function CadastroScreen() {
       !/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(senha)
     ) {
       setError(
-        "A senha deve ter pelo menos 8 caracteres, incluindo um número, uma letra maiúscula e um caractere especial."
+        "🥬 A senha deve ter pelo menos 8 caracteres, incluindo um número, uma letra maiúscula e um caractere especial."
       );
       setLoading(false);
       return;
@@ -125,7 +127,7 @@ export default function CadastroScreen() {
         }
       };
 
-      showToast("Cadastro realizado com sucesso!");
+      showToast("🌱 Cadastro realizado com sucesso!");
       router.replace("/login");
     } catch (error: any) {
       console.error("❌ Erro ao cadastrar usuário:", error);
@@ -136,7 +138,7 @@ export default function CadastroScreen() {
           error.response.data.message || "Erro desconhecido no cadastro."
         );
       } else {
-        setError("Erro ao conectar-se ao servidor. Verifique sua conexão.");
+        setError("❌ Erro ao conectar-se ao servidor. Verifique sua conexão.");
       }
     }
 
@@ -152,7 +154,7 @@ export default function CadastroScreen() {
         backgroundColor: "#fff6da",
       }}
     >
-   r
+      r
       <View style={styles.box}>
         {/* Campo de Logo */}
         <View style={styles.logoContainer}>
@@ -162,7 +164,7 @@ export default function CadastroScreen() {
           />
           <Text style={styles.title}>VegConnect</Text>
         </View>
-    
+
         <Text style={styles.instrucoesInicio}>
           Bem-vindo! Insira seus dados para realizar o Cadastro.
         </Text>
@@ -262,7 +264,7 @@ export default function CadastroScreen() {
         {/* Campo de Usuario Comerciante*/}
         {tipoUsuario === "comerciante" && (
           <>
-          {/* Campo de Tipo do Produto*/}
+            {/* Campo de Tipo do Produto*/}
             <TextInput
               style={styles.input}
               placeholder="Tipo do Produto"
@@ -277,7 +279,7 @@ export default function CadastroScreen() {
               value={tipoComercio}
               onChangeText={setTipoComercio}
             />
-            
+
             {/* Campo de Nome de Comércio*/}
             <TextInput
               style={styles.input}
@@ -285,7 +287,7 @@ export default function CadastroScreen() {
               value={nomeComercio}
               onChangeText={setNomeComercio}
             />
-            
+
             {/* Campo de Endereço de Comércio*/}
             <TextInput
               style={styles.input}
@@ -293,7 +295,7 @@ export default function CadastroScreen() {
               value={enderecoComercio}
               onChangeText={setEnderecoComercio}
             />
-            
+
             {/* Campo de CNPJ*/}
             <TextInput
               style={styles.input}
@@ -301,7 +303,7 @@ export default function CadastroScreen() {
               value={cnpj}
               onChangeText={setCnpj}
             />
-            
+
             {/* Campo de CEP do Comércio*/}
             <TextInput
               style={styles.input}
@@ -309,7 +311,7 @@ export default function CadastroScreen() {
               value={cepComercio}
               onChangeText={setCepComercio}
             />
-            
+
             {/* Campo de Telefone do Comércio*/}
             <TextInput
               style={styles.input}
@@ -319,7 +321,7 @@ export default function CadastroScreen() {
             />
           </>
         )}
-       
+
         {/* Campo de Preferência Alimentar*/}
         <Text style={styles.label}>Sua preferência alimentar:</Text>
         <Picker
@@ -343,7 +345,12 @@ export default function CadastroScreen() {
           disabled={loading}
         >
           {loading ? (
-            <ActivityIndicator color="#FFF" />
+            <LottieView
+              source={require("..//../assets/animations/loading_anim.json")}
+              autoPlay
+              loop
+              style={{ width: 24, height: 24 }}
+            />
           ) : (
             <Text style={styles.buttonText}>Criar Conta</Text>
           )}

@@ -4,6 +4,7 @@ import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import styles from "./styles";
 import { useRouter } from "expo-router";
 
+
 type Props = {
   onPostPress: () => void;
 };
@@ -25,19 +26,19 @@ export default function Sidebar({ onPostPress }: Props) {
 
   return (
     <>
-      {/* Sidebar principal com toggle */}
+      {/* Sidebar principal com  */}
       <Animated.View
         style={[styles.sidebar, { transform: [{ translateX: slideAnim }] }]}
       >
         <TouchableOpacity style={styles.toggleBtn} onPress={toggleSidebar}>
-          <MaterialIcons name="chevron-left" size={24} color="#FFF" />
+          <MaterialIcons name="menu" size={40} color="#FFF" />
         </TouchableOpacity>
 
         {open && (
           <View style={styles.menu}>
+            {/* Rota Post */}
             <TouchableOpacity style={styles.menuItem} onPress={onPostPress}>
-              <FontAwesome name="plus" size={20} color="#023D2E" />
-              <Text style={styles.label}>+ Post</Text>
+              <Text style={styles.labelPost}>+ Post</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -45,14 +46,22 @@ export default function Sidebar({ onPostPress }: Props) {
               onPress={() => router.push("/menu")}
             >
               <FontAwesome name="bars" size={20} color="#023D2E" />
-              <Text style={styles.label}>Menu</Text>
+              <Text style={styles.labelMenu}>Menu</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.menuItem}
+              onPress={() => router.push("/pesquisa")}
+            >
+              <MaterialIcons name="search" size={20} color="#FFF" />
+              <Text style={styles.label}>Pesquisa</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               style={styles.menuItem}
               onPress={() => router.push("/indicadores")}
             >
-              <FontAwesome name="line-chart" size={20} color="#023D2E" />
+              <MaterialIcons name="auto-graph" size={20} color="#FFF" />
               <Text style={styles.label}>Indicadores</Text>
             </TouchableOpacity>
 
@@ -60,7 +69,7 @@ export default function Sidebar({ onPostPress }: Props) {
               style={styles.menuItem}
               onPress={() => router.push("/localizar")}
             >
-              <FontAwesome name="map-marker" size={20} color="#023D2E" />
+              <MaterialIcons name="location-on" size={20} color="#FFF" />
               <Text style={styles.label}>Mapa</Text>
             </TouchableOpacity>
 
@@ -68,7 +77,7 @@ export default function Sidebar({ onPostPress }: Props) {
               style={styles.menuItem}
               onPress={() => router.push("/chat")}
             >
-              <FontAwesome name="comment" size={20} color="#023D2E" />
+              <MaterialIcons name="try" size={20} color="#FFF" />
               <Text style={styles.label}>IA</Text>
             </TouchableOpacity>
 
@@ -76,7 +85,7 @@ export default function Sidebar({ onPostPress }: Props) {
               style={styles.menuItem}
               onPress={() => router.push("/configuracoes")}
             >
-              <FontAwesome name="cog" size={20} color="#023D2E" />
+              <MaterialIcons name="settings" size={20} color="#FFF" />
               <Text style={styles.label}>Config</Text>
             </TouchableOpacity>
 
@@ -84,8 +93,8 @@ export default function Sidebar({ onPostPress }: Props) {
               style={styles.menuItem}
               onPress={() => router.push("/perfil")}
             >
-              <FontAwesome name="user-circle" size={20} color="#023D2E" />
-              <Text style={styles.label}>Perfil</Text>
+              <MaterialIcons name="person" size={25} color="#FFF" style={{ textAlign: "center", borderTopWidth: 2, width: 65, borderTopColor: "#ccc", paddingTop: 5 }} />
+              <Text style={styles.labelPerson}>Perfil</Text>
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.menuItem}>
@@ -99,7 +108,7 @@ export default function Sidebar({ onPostPress }: Props) {
       {/* Botão para reabrir a sidebar quando minimizada */}
       {!open && (
         <TouchableOpacity style={styles.reabrirBtn} onPress={toggleSidebar}>
-          <MaterialIcons name="chevron-right" size={28} color="#FFF" />
+          <MaterialIcons name="menu" size={35} color="#FFF" />
         </TouchableOpacity>
       )}
     </>

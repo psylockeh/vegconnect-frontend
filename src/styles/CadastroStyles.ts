@@ -20,8 +20,8 @@ export const CadastroStyles = StyleSheet.create({
   logoContainer: {
     marginLeft: -20,
     marginTop: -20,
-    flexDirection: "row", 
-    alignItems: "center",  
+    flexDirection: "row",
+    alignItems: "center",
   },
 
   logo: {
@@ -32,7 +32,7 @@ export const CadastroStyles = StyleSheet.create({
   title: {
     marginLeft: -12,
     fontSize: 24,
-    fontWeight: "bold", 
+    fontWeight: "bold",
     color: "#166534",
   },
 
@@ -63,18 +63,20 @@ export const CadastroStyles = StyleSheet.create({
   },
 
   button: {
-    marginTop: 20,
-    padding: 15,
-    backgroundColor: "#166534",
-    borderRadius: 5,
+    backgroundColor: "#3C6E47",
+    height: 48,
+    borderRadius: 12,
     justifyContent: "center",
     alignItems: "center",
+    width: "100%", // ou algo como 240
   },
+
   buttonText: {
     color: "#fff",
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "bold",
   },
+
   link: {
     marginTop: 20,
     textAlign: "center",
@@ -82,10 +84,11 @@ export const CadastroStyles = StyleSheet.create({
     fontSize: 16,
   },
   error: {
-    color: "red",
+    color: "#D32F2F",
     fontSize: 14,
-    marginTop: 10,
     textAlign: "center",
+    marginTop: 8,
+    marginBottom: 8,
   },
   dateButton: {
     width: "100%",
@@ -120,5 +123,22 @@ export const CadastroStyles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: "center",
     padding: 20,
+  },
+
+  loadingAnimation: {
+    width: 50,
+    height: 50,
+  },
+
+  loadingWrapper: {
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100%",
+    width: "100%",
+  },
+
+  loadingIcon: {
+    width: 28,
+    height: 28,
   },
 });

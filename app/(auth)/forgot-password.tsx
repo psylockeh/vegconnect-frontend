@@ -28,12 +28,12 @@ export default function ForgotPasswordScreen() {
         email,
       });
       if (response.status === 200) {
-        setMensagem("Enviamos um link de recuperação para seu e-mail.");
+        setMensagem("🌱 Enviamos um link de recuperação para seu e-mail.");
       }
     } catch (error: any) {
-      console.error("Erro ao recuperar senha:", error);
+      console.error("❌ Erro ao recuperar senha:", error);
       setMensagem(
-        "Não foi possível enviar o link de recuperação. Verifique o e-mail."
+        "🥬 Não foi possível enviar o link de recuperação. Verifique o e-mail."
       );
     }
 
@@ -80,14 +80,13 @@ export default function ForgotPasswordScreen() {
               source={require("..//../assets/animations/loading_anim.json")} // Caminho da animação
               autoPlay
               loop
-              style={styles.loadingAnimation}
+              style={{ width: 24, height: 24 }}
             />
           ) : (
             <Text style={styles.buttonText}>Recuperar Senha</Text>
           )}
         </TouchableOpacity>
-        <br />
-
+        
         {/* Link para Cadastro */}
         <TouchableOpacity onPress={() => router.push("/cadastro")}>
           <Text style={styles.link}>
