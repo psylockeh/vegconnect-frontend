@@ -160,11 +160,11 @@ export default function Feed() {
 
       {/* Modal */}
       <ModalCriarPostagem
-        visivel={tpPost !== ""}
+        visivel={mostrarModal}
         tp_post={tpPost}
         fechar={() => {
-          setTpPost("");
           setMostrarModal(false);
+          setTpPost("");
         }}
       />
     </View>

@@ -57,6 +57,7 @@ export default function ModalCriarPostagem({
   };
 
   const handleSubmitPostagem = async () => {
+    console.log("Tipo de postagem:", tp_post);
     const novaPostagem: any = {
       tp_post,
       titulo,
@@ -68,7 +69,7 @@ export default function ModalCriarPostagem({
       nome_receita: nomeReceita,
       ingredientes,
       instrucoes,
-      tempo_preparo: tempoPreparo,
+      temp_prep: tempoPreparo,
       categoria,
       tipo_comida: tipoComida,
       horario_abertura: horarioAbertura,
@@ -299,12 +300,79 @@ export default function ModalCriarPostagem({
           </View>
         );
 
+      case "recado":
       default:
         return (
           <View>
-            <Text style={{ color: "#555" }}>
-              Selecione um tipo de postagem para iniciar.
-            </Text>
+            <TextInput
+              placeholder="Digite seu recado"
+              value={conteudo}
+              onChangeText={setConteudo}
+              multiline
+              style={ModalStyles.input}
+            />
+
+            {/* Miniaturas das imagens */}
+            <View
+              style={{
+                flexDirection: "row",
+                flexWrap: "wrap",
+                gap: 10,
+                marginTop: 10,
+                marginBottom: 16,
+              }}
+            >
+              {midiasSelecionadas.map((uri, index) => (
+                <View key={index} style={{ position: "relative" }}>
+                  <Image
+                    source={{ uri }}
+                    style={{
+                      width: 80,
+                      height: 80,
+                      borderRadius: 8,
+                      borderWidth: 1,
+                      borderColor: "#D6E4DD",
+                    }}
+                  />
+                  <TouchableOpacity
+                    style={{
+                      position: "absolute",
+                      top: -6,
+                      right: -6,
+                      backgroundColor: "#fff",
+                      borderRadius: 10,
+                      borderWidth: 1,
+                      borderColor: "#ccc",
+                      paddingHorizontal: 4,
+                      paddingVertical: 2,
+                      zIndex: 2,
+                    }}
+                    onPress={() =>
+                      setMidiasSelecionadas((prev) =>
+                        prev.filter((_, i) => i !== index)
+                      )
+                    }
+                  >
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        fontWeight: "bold",
+                        color: "#D33",
+                      }}
+                    >
+                      X
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              ))}
+            </View>
+
+            <TouchableOpacity
+              onPress={selecionarImagens}
+              style={ModalStyles.botaoFechar}
+            >
+              <Text style={ModalStyles.textoBotao}>Selecionar Imagem</Text>
+            </TouchableOpacity>
           </View>
         );
     }
