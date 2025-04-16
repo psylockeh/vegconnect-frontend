@@ -1,69 +1,25 @@
 import { StyleSheet } from "react-native";
 
-const FeedStyles = StyleSheet.create({
+const feedStyles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#F5FAF6",
     flexDirection: "row",
-    backgroundColor: "#FFF6DA",
   },
-
-  // SIDEBAR
-  sidebar: {
-    width: 80,
-    backgroundColor: "#023D2E",
-    alignItems: "center",
-    paddingVertical: 20,
-    justifyContent: "space-between",
-  },
-  botaoSidebar: {
-    backgroundColor: "#fff",
-    width: 50,
-    height: 50,
-    borderRadius: 12,
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 24,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  textoSidebar: {
-    color: "#FFF",
-    fontSize: 12,
-    marginTop: 4,
-    textAlign: "center",
-  },
-  iconeSidebar: {
-    alignItems: "center",
-    marginVertical: 16,
-  },
-
-  // CONTEÚDO PRINCIPAL
   mainContent: {
     flex: 1,
     padding: 16,
   },
-  botaoCriar: {
-    backgroundColor: "#049352",
-    borderRadius: 8,
-    padding: 12,
-    alignItems: "center",
-    marginBottom: 12,
-  },
-  textoBotao: {
-    color: "#fff",
-    fontWeight: "bold",
-    fontSize: 16,
-  },
-
-  // CARD DE CRIAÇÃO
   cardCriarPost: {
-    backgroundColor: "#FFF3C9",
-    borderRadius: 16,
+    backgroundColor: "#FAFDFB",
     padding: 16,
-    marginBottom: 16,
+    borderRadius: 16,
+    marginBottom: 20,
+    shadowColor: "#000",
+    shadowOpacity: 0.05,
+    shadowOffset: { width: 0, height: 3 },
+    shadowRadius: 5,
+    elevation: 3,
   },
   headerUsuario: {
     flexDirection: "row",
@@ -71,112 +27,123 @@ const FeedStyles = StyleSheet.create({
     marginBottom: 12,
   },
   avatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: "#ccc",
-    marginRight: 12,
+    width: 42,
+    height: 42,
+    borderRadius: 21,
+    backgroundColor: "#D9E9DE",
+    marginRight: 10,
   },
   nomeUsuario: {
+    fontSize: 16,
     fontWeight: "bold",
-    fontSize: 14,
+    color: "#2E4F36",
   },
   tipoUsuario: {
-    fontSize: 12,
-    color: "#666",
+    fontSize: 13,
+    color: "#6C8A72",
   },
   inputPost: {
-    backgroundColor: "#fff",
-    borderRadius: 8,
+    backgroundColor: "#F0F4F2",
     padding: 12,
-    marginBottom: 8,
+    borderRadius: 10,
+    marginBottom: 10,
+    fontSize: 14,
+    borderWidth: 1,
+    borderColor: "#D7E2DA",
+    color: "#333",
   },
   ouLabel: {
-    alignSelf: "center",
-    color: "#999",
-    marginVertical: 8,
+    textAlign: "center",
+    fontSize: 14,
+    color: "#6B6B6B",
+    marginVertical: 6,
   },
   botoesTipoPostagem: {
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: 8,
-    marginBottom: 12,
+    justifyContent: "space-between",
+    gap: 10,
+    marginVertical: 8,
   },
   botaoTipo: {
-    backgroundColor: "#f76d57",
-    paddingVertical: 6,
-    paddingHorizontal: 14,
-    borderRadius: 20,
+    backgroundColor: "#E6F1EB",
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 8,
   },
   textoBotaoTipo: {
-    color: "#fff",
-    fontWeight: "bold",
+    fontSize: 14,
+    fontWeight: "500",
+    color: "#2E4F36",
   },
   iconesAcoes: {
     flexDirection: "row",
-    justifyContent: "space-around",
-    marginVertical: 12,
-  },
-  iconeFake: {
-    fontSize: 20,
+    justifyContent: "space-between",
+    marginTop: 12,
+    paddingHorizontal: 10,
   },
   botaoPublicar: {
-    backgroundColor: "#FFD700",
-    padding: 10,
+    marginTop: 16,
+    backgroundColor: "#3C6E47",
+    paddingVertical: 12,
     borderRadius: 10,
     alignItems: "center",
   },
   textoBotaoPublicar: {
-    color: "#000",
+    color: "#fff",
+    fontSize: 15,
     fontWeight: "bold",
   },
-
-  // CARD DE POSTAGEM
   cardPost: {
-    backgroundColor: "#FFF3C9",
-    borderRadius: 16,
+    backgroundColor: "#fff",
+    borderRadius: 12,
     padding: 16,
-    marginBottom: 16,
+    marginBottom: 12,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
+    shadowOpacity: 0.03,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 3,
     elevation: 2,
   },
   titulo: {
-    fontWeight: "bold",
     fontSize: 16,
-    color: "#333",
+    fontWeight: "bold",
+    color: "#2E4F36",
+    marginBottom: 4,
   },
   tipoLabel: {
-    color: "#000",
-    fontWeight: "bold",
-    fontSize: 13,
-    marginVertical: 4,
-    backgroundColor: "#ffeb3b",
-    alignSelf: "flex-start",
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    borderRadius: 4,
+    fontSize: 12,
+    color: "#6C8A72",
+    marginBottom: 6,
   },
   conteudo: {
-    marginTop: 8,
     fontSize: 14,
     color: "#333",
+    marginBottom: 10,
   },
   rodapePost: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 10,
+    borderTopWidth: 1,
+    borderTopColor: "#EEE",
+    paddingTop: 8,
   },
   autor: {
-    fontWeight: "600",
-    fontSize: 13,
+    fontSize: 12,
+    color: "#6B6B6B",
   },
   data: {
     fontSize: 12,
-    color: "#999",
+    color: "#6B6B6B",
   },
+
+  cardLinhaPostagem: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap:8,
+
+
+  }
 });
 
-export default FeedStyles;
+export default feedStyles;

@@ -1,6 +1,7 @@
 import { Stack, Redirect, useRouter } from "expo-router";
 import { useAuth } from "@/context/AuthContext";
 import { View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
+import Toast from "react-native-toast-message";
 
 export default function ProtectedLayout() {
   const { isAuthenticated, isLoading } = useAuth();

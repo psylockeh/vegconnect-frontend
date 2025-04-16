@@ -4,15 +4,19 @@ import {
   FlatList,
   TouchableOpacity,
   TextInput,
+  ScrollView,
 } from "react-native";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import feedStyles from "../../src/styles/FeedStyles";
-import Sidebar from "../../src/components/Sidebar";
+import feedStyles from "@/styles/FeedStyles";
+import Sidebar from "@/components/Sidebar";
+import ModalCriarPostagem from "@/components/ModalCriarPostagem";
 import { API_URL } from "@/config/api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAuth } from "@/context/AuthContext";
+import * as ImagePicker from "expo-image-picker";
+import { MaterialIcons } from "@expo/vector-icons";
 
 type Postagem = {
   autor: { nome: string };
@@ -26,7 +30,10 @@ type Postagem = {
 export default function Feed() {
   const router = useRouter();
   const [postagens, setPostagens] = useState<Postagem[]>([]);
-  const [mostrarCriacao, setMostrarCriacao] = useState(false);
+  const [mostrarModal, setMostrarModal] = useState(false);
+  const [tpPost, setTpPost] = useState<string>("");
+
+  const { perfilUsuario } = useAuth();
 
   async function carregarPostagens() {
     try {
@@ -49,12 +56,29 @@ export default function Feed() {
     }
   }
 
+  const abrirModal = (tipo: string) => {
+    setTpPost(tipo.toLowerCase());
+    setMostrarModal(true);
+  };
+
+  const selecionarImagem = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsMultipleSelection: false,
+    });
+
+    if (!result.canceled) {
+      alert("📷 Imagem selecionada com sucesso!");
+    }
+  };
+
   return (
     <View style={feedStyles.container}>
-      <Sidebar onPostPress={() => setMostrarCriacao(!mostrarCriacao)} />
+      <Sidebar onPostPress={() => {}} />
 
       <View style={feedStyles.mainContent}>
-        {mostrarCriacao && (
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {/* Card sempre visível */}
           <View style={feedStyles.cardCriarPost}>
             <View style={feedStyles.headerUsuario}>
               <View style={feedStyles.avatar} />
@@ -72,50 +96,77 @@ export default function Feed() {
 
             <Text style={feedStyles.ouLabel}>ou</Text>
 
-            <View style={feedStyles.botoesTipoPostagem}>
-              {["Receita", "Evento", "Comércio", "Promoção"].map((tipo) => (
-                <TouchableOpacity key={tipo} style={feedStyles.botaoTipo}>
-                  <Text style={feedStyles.textoBotaoTipo}>{tipo}</Text>
+            <View style={feedStyles.cardLinhaPostagem}>
+              <View style={feedStyles.botoesTipoPostagem}>
+                {["Receita", "Evento", "Estabelecimento", "Promoção"].map(
+                  (tipo) => (
+                    <TouchableOpacity
+                      key={tipo}
+                      style={feedStyles.botaoTipo}
+                      onPress={() => abrirModal(tipo)}
+                    >
+                      <Text style={feedStyles.textoBotaoTipo}>{tipo}</Text>
+                    </TouchableOpacity>
+                  )
+                )}
+              </View>
+
+              <View style={feedStyles.iconesAcoes}>
+                <TouchableOpacity onPress={selecionarImagem}>
+                  <MaterialIcons name="image" size={22} color="#3C6E47" />
                 </TouchableOpacity>
-              ))}
+                <TouchableOpacity>
+                  <MaterialIcons name="group" size={22} color="#3C6E47" />
+                </TouchableOpacity>
+              </View>
             </View>
 
-            <View style={feedStyles.iconesAcoes}>
-              <Text style={feedStyles.iconeFake}>🖼️</Text>
-              <Text style={feedStyles.iconeFake}>👥</Text>
-              <Text style={feedStyles.iconeFake}>➕</Text>
-            </View>
-
-            <TouchableOpacity style={feedStyles.botaoPublicar}>
+            <TouchableOpacity
+              onPress={() => abrirModal("receita")} // ou abrir um menu de escolha
+              style={feedStyles.botaoPublicar}
+            >
               <Text style={feedStyles.textoBotaoPublicar}>Publicar</Text>
             </TouchableOpacity>
           </View>
-        )}
 
-        <FlatList
-          data={postagens}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              onPress={() => router.push(`/postagem/${item.id}`)}
-            >
-              <View style={feedStyles.cardPost}>
-                <Text style={feedStyles.titulo}>{item.titulo}</Text>
-                <Text style={feedStyles.tipoLabel}>
-                  {item.tp_post.charAt(0).toUpperCase() + item.tp_post.slice(1)}
-                </Text>
-                <Text style={feedStyles.conteudo}>{item.conteudo}</Text>
-                <View style={feedStyles.rodapePost}>
-                  <Text style={feedStyles.autor}>{item.autor?.nome}</Text>
-                  <Text style={feedStyles.data}>
-                    {new Date(item.createdAt).toLocaleDateString("pt-BR")}
+          {/* Lista de postagens */}
+          <FlatList
+            data={postagens}
+            keyExtractor={(item) => item.id.toString()}
+            scrollEnabled={false}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                onPress={() => router.push(`/postagem/${item.id}`)}
+              >
+                <View style={feedStyles.cardPost}>
+                  <Text style={feedStyles.titulo}>{item.titulo}</Text>
+                  <Text style={feedStyles.tipoLabel}>
+                    {item.tp_post.charAt(0).toUpperCase() +
+                      item.tp_post.slice(1)}
                   </Text>
+                  <Text style={feedStyles.conteudo}>{item.conteudo}</Text>
+                  <View style={feedStyles.rodapePost}>
+                    <Text style={feedStyles.autor}>{item.autor?.nome}</Text>
+                    <Text style={feedStyles.data}>
+                      {new Date(item.createdAt).toLocaleDateString("pt-BR")}
+                    </Text>
+                  </View>
                 </View>
-              </View>
-            </TouchableOpacity>
-          )}
-        />
+              </TouchableOpacity>
+            )}
+          />
+        </ScrollView>
       </View>
+
+      {/* Modal */}
+      <ModalCriarPostagem
+        visivel={tpPost !== ""}
+        tp_post={tpPost}
+        fechar={() => {
+          setTpPost("");
+          setMostrarModal(false);
+        }}
+      />
     </View>
   );
 }

@@ -1,24 +1,30 @@
-export const uploadArquivosParaBackend = async (arquivos: any[]) => {
+import { API_URL } from "../config/api";
+
+export async function uploadArquivosParaBackend(
+  arquivos: any[]
+): Promise<string[]> {
   const formData = new FormData();
 
   arquivos.forEach((arquivo, index) => {
     formData.append("arquivos", {
       uri: arquivo.uri,
-      type: arquivo.type || "application/octet-stream",
-      name: `arquivo_${index}`,
+      name: arquivo.name || `arquivo-${index}.jpg`,
+      type: arquivo.type || "image/jpeg",
     } as any);
   });
 
-  try {
-    const response = await fetch("http:// 172.20.10.11:3000/upload", {
-      method: "POST",
-      body: formData,
-    });
+  const response = await fetch(`${API_URL}/upload`, {
+    method: "POST",
+    body: formData,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 
-    const data = await response.json();
-    return data.urls;
-  } catch (error) {
-    console.error("Erro no upload de arquivos:", error);
-    throw error;
+  if (!response.ok) {
+    throw new Error("Erro ao fazer upload das mídias.");
   }
-};
+
+  const resultado = await response.json();
+  return resultado.urls;
+}
