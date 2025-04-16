@@ -22,8 +22,17 @@ export default function LoginScreen() {
   const [manterConectado, setManterConectado] = useState(false);
 
   const handleLogin = async () => {
-    setLoading(true);
     setError("");
+
+    // Validação de campos obrigatórios
+    if (!email || !senha) {
+      setError(
+        "🌱 Por favor, preencha seu e-mail e senha para acessar o jardim da comunidade."
+      );
+      return;
+    }
+
+    setLoading(true);
 
     try {
       await login(email, senha, manterConectado);
@@ -32,7 +41,9 @@ export default function LoginScreen() {
         router.replace("/(app)/feed");
       }, 600);
     } catch (error: any) {
-      setError("Credenciais inválidas ou erro de conexão.");
+      setError(
+        "🥬 Eita! Credenciais inválidas. Verifique seu e-mail e senha e tente novamente."
+      );
       console.error("❌ Erro ao fazer login:", error);
     }
 
@@ -44,36 +55,36 @@ export default function LoginScreen() {
       <View style={styles.box}>
         {/* Campo de Logo */}
         <View style={styles.logoContainer}>
-                  <Image
-                    source={require("..//../assets/logo.png")}
-                    style={styles.logo}
-                  />
-                  <Text style={styles.title}>VegConnect</Text>
-                </View>
+          <Image
+            source={require("..//../assets/logo.png")}
+            style={styles.logo}
+          />
+          <Text style={styles.title}>VegConnect</Text>
+        </View>
         <Text style={styles.bemVindo}>
           Bem-vindo! Insira suas credenciais para acessar sua conta.
         </Text>
 
         {/* Campo de E-mail */}
-             
-          <TextInput
-            style={styles.input}
-            placeholder="E-mail"
-            value={email}
-            onChangeText={setEmail}
-            keyboardType="email-address"
-            autoCapitalize="none"
-          />
+
+        <TextInput
+          style={styles.input}
+          placeholder="E-mail"
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          autoCapitalize="none"
+        />
 
         {/* Campo de Senha */}
-        
-          <TextInput
-            style={styles.input}
-            placeholder="Senha"
-            value={senha}
-            onChangeText={setSenha}
-            secureTextEntry
-          />
+
+        <TextInput
+          style={styles.input}
+          placeholder="Senha"
+          value={senha}
+          onChangeText={setSenha}
+          secureTextEntry
+        />
 
         {/* Link para recuperação de senha */}
         <TouchableOpacity onPress={() => router.push("/forgot-password")}>

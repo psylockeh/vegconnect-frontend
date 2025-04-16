@@ -12,6 +12,7 @@ import feedStyles from "../../src/styles/FeedStyles";
 import Sidebar from "../../src/components/Sidebar";
 import { API_URL } from "@/config/api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useAuth } from "@/context/AuthContext";
 
 type Postagem = {
   autor: { nome: string };

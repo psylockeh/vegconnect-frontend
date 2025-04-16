@@ -88,7 +88,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const { token } = response.data;
 
       await AsyncStorage.setItem("@token", token);
-
       setUserToken(token);
       setIsAuthenticated(true);
 
@@ -105,6 +104,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         error.response?.data || error.message
       );
       setIsAuthenticated(false);
+      throw new Error("Credenciais inválidas");
     }
   };
 
