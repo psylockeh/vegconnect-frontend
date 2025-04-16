@@ -11,6 +11,7 @@ import { useRouter } from "expo-router";
 import { useAuth } from "@/context/AuthContext";
 import { LoginStyles as styles } from "@/styles/LoginStyles";
 import LottieView from "lottie-react-native";
+import BotaoComLoader from "@/components/BotaoComLoader";
 
 export default function LoginScreen() {
   const router = useRouter();
@@ -103,19 +104,17 @@ export default function LoginScreen() {
           <Text style={styles.checkboxLabel}>Manter-me conectado</Text>
         </View>
 
-        {/* Botão de Login */}
         <TouchableOpacity
           style={styles.button}
           onPress={handleLogin}
           disabled={loading}
         >
-          {/* Animação de Login */}
           {loading ? (
             <LottieView
-              source={require("..//../assets/animations/loading_anim.json")} // Caminho da animação
+              source={require("..//../assets/animations/loading_anim.json")}
               autoPlay
               loop
-              style={styles.loadingAnimation}
+              style={{ width: 24, height: 24 }}
             />
           ) : (
             <Text style={styles.buttonText}>Entrar</Text>

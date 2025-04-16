@@ -21,8 +21,8 @@ export const LoginStyles = StyleSheet.create({
   logoContainer: {
     marginLeft: -20,
     marginTop: -20,
-    flexDirection: "row", 
-    alignItems: "center",  
+    flexDirection: "row",
+    alignItems: "center",
   },
 
   logo: {
@@ -33,7 +33,7 @@ export const LoginStyles = StyleSheet.create({
   title: {
     marginLeft: -12,
     fontSize: 24,
-    fontWeight: "bold", 
+    fontWeight: "bold",
     color: "#166534",
   },
   bemVindo: {
@@ -42,7 +42,7 @@ export const LoginStyles = StyleSheet.create({
     marginBottom: 30,
     color: "#166534",
   },
- 
+
   input: {
     width: "100%",
     padding: 12,
@@ -60,52 +60,37 @@ export const LoginStyles = StyleSheet.create({
   },
 
   error: {
-    color: "red",
+    color: "#D32F2F",
     fontSize: 14,
-    marginTop: 10,
     textAlign: "center",
+    marginTop: 8,
+    marginBottom: 8,
   },
 
   checkboxContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 20,
+    marginBottom: 12,
   },
 
   checkbox: {
     width: 20,
     height: 20,
     borderWidth: 2,
-    borderColor: "#ccc",
+    borderColor: "#3C6E47",
     borderRadius: 4,
     justifyContent: "center",
     alignItems: "center",
+    marginRight: 8,
   },
-
   checkboxMark: {
-    fontSize: 18,
-    color: "#166534",
+    fontSize: 14,
+    color: "#3C6E47",
+    fontWeight: "bold",
   },
-
   checkboxLabel: {
-    marginLeft: 10,
     fontSize: 16,
     color: "#166534",
-  },
-
-  button: {
-    marginTop: 20,
-    padding: 15,
-    backgroundColor: "#166534",
-    borderRadius: 5,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  buttonText: {
-    color: "#fff",
-    fontSize: 18,
-    fontWeight: "bold",
   },
 
   link: {
@@ -135,5 +120,31 @@ export const LoginStyles = StyleSheet.create({
   footerText: {
     fontSize: 16,
     color: "#166534",
+  },
+  button: {
+    backgroundColor: "#3C6E47",
+    height: 48,
+    borderRadius: 12,
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%", // ou algo como 240
+  },
+
+  buttonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+
+  loadingWrapper: {
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100%",
+    width: "100%",
+  },
+
+  loadingIcon: {
+    width: 28,
+    height: 28,
   },
 });

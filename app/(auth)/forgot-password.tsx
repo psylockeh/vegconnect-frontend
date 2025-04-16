@@ -52,7 +52,9 @@ export default function ForgotPasswordScreen() {
           <Text style={styles.title}>VegConnect</Text>
         </View>
 
-        <Text style={styles.instrucoesInicio}>Insira o e-mail cadastrado para recuperar a senha.</Text>
+        <Text style={styles.instrucoesInicio}>
+          Insira o e-mail cadastrado para recuperar a senha.
+        </Text>
 
         {/* Campo de Recuperar E-mail */}
         <TextInput
@@ -83,7 +85,8 @@ export default function ForgotPasswordScreen() {
           ) : (
             <Text style={styles.buttonText}>Recuperar Senha</Text>
           )}
-        </TouchableOpacity><br />
+        </TouchableOpacity>
+        <br />
 
         {/* Link para Cadastro */}
         <TouchableOpacity onPress={() => router.push("/cadastro")}>
@@ -94,7 +97,9 @@ export default function ForgotPasswordScreen() {
 
         {/* Campo de votar ao Login */}
         <TouchableOpacity onPress={() => router.push("/login")}>
-          <Text style={styles.link}><b>Voltar para o Login</b></Text>
+          <Text style={styles.link}>
+            <b>Voltar para o Login</b>
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
