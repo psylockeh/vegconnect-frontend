@@ -1,11 +1,18 @@
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
+  containerPrincipal: {
+    flex: 1,
+    backgroundColor: "#F5FAF6",
+    flexDirection: "row",
+  },
+
   container: {
     flex: 1,
     padding: 20,
     backgroundColor: "#f4f4f4",
   },
+  
   avatar: {
     width: 100,
     height: 100,

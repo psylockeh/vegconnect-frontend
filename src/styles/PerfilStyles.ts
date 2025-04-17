@@ -1,11 +1,15 @@
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
-  container: {
+  containerPrincipal: {
+    flex: 1,
+    backgroundColor: "#F5FAF6",
+    flexDirection: "row",
+  },
+  containerConteudo: {
+    flexGrow: 1,
     padding: 20,
     paddingTop: 40,
-    backgroundColor: "#fff",
-    flexGrow: 1,
     alignItems: "center",
   },
   input: {
@@ -40,7 +44,7 @@ export const styles = StyleSheet.create({
     width: 120,
     height: 120,
     borderRadius: 60,
-    backgroundColor: "#eee",
+    backgroundColor: "#D9E9DE",
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 20,
@@ -64,11 +68,12 @@ export const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 10,
+    color: "#2E4F36",
   },
   nickname: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#222",
+    color: "#2E4F36",
     marginBottom: 6,
     textAlign: "center",
   },
