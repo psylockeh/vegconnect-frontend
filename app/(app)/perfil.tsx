@@ -16,6 +16,7 @@ export default function PerfilScreen() {
     }
   }, [isAuthenticated]);
 
+  
   if (!perfilUsuario) return null;
 
   return (
@@ -40,7 +41,7 @@ export default function PerfilScreen() {
           <Text style={styles.info}>
             Comércio: {perfilUsuario.nome_comercio}
           </Text>
-          <Text style={styles.info}>Tel: {perfilUsuario.tel_com}</Text>
+          <Text style={styles.info}>Tel: {perfilUsuario.telefone}</Text>
         </>
       )}
 
