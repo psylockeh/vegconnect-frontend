@@ -12,14 +12,19 @@ export const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: "#f4f4f4",
   },
-  
+
+  avatarContainer: {
+    alignSelf: "center",
+    position: "relative",
+    marginBottom: 20,
+  },
+
   avatar: {
     width: 100,
     height: 100,
     borderRadius: 50,
-    alignSelf: "center",
-    marginBottom: 20,
   },
+
   avatarPlaceholder: {
     width: 100,
     height: 100,
@@ -27,13 +32,27 @@ export const styles = StyleSheet.create({
     backgroundColor: "#ddd",
     justifyContent: "center",
     alignItems: "center",
-    alignSelf: "center",
-    marginBottom: 20,
   },
+
   avatarText: {
-    fontSize: 16,
+    fontSize: 14,
     color: "#666",
+    marginTop: 5,
   },
+
+  overlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    backgroundColor: "rgba(0, 0, 0, 0.4)",
+    justifyContent: "center",
+    alignItems: "center",
+    pointerEvents: "none",
+  },
+
   label: {
     fontSize: 16,
     fontWeight: "bold",
@@ -41,6 +60,7 @@ export const styles = StyleSheet.create({
     marginBottom: 5,
     color: "#333",
   },
+
   input: {
     borderWidth: 1,
     borderColor: "#ccc",
@@ -49,6 +69,7 @@ export const styles = StyleSheet.create({
     marginBottom: 15,
     backgroundColor: "#fff",
   },
+
   button: {
     backgroundColor: "#007bff",
     padding: 15,
@@ -56,6 +77,7 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 20,
   },
+
   buttonText: {
     color: "#fff",
     fontSize: 18,
