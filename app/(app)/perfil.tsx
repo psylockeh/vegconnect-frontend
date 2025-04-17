@@ -3,6 +3,7 @@ import { View, Text, Image, Button, ScrollView } from "react-native";
 import { useRouter } from "expo-router";
 import { useAuth } from "@/context/AuthContext";
 import { styles } from "@/styles/PerfilStyles";
+import Sidebar from "@/components/Sidebar";
 
 export default function PerfilScreen() {
   const router = useRouter();
@@ -16,51 +17,54 @@ export default function PerfilScreen() {
     }
   }, [isAuthenticated]);
 
-  
   if (!perfilUsuario) return null;
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      {perfilUsuario.foto_perfil ? (
-        <Image
-          source={{ uri: perfilUsuario.foto_perfil }}
-          style={styles.avatar}
-        />
-      ) : (
-        <View style={styles.avatarPlaceholder}>
-          <Text style={styles.avatarText}>Sem foto</Text>
-        </View>
-      )}
+    <View style={styles.containerPrincipal}>
+      <Sidebar onPostPress={() => {}} />
 
-      <Text style={styles.title}>{perfilUsuario.nome}</Text>
-      <Text style={styles.nickname}>@{perfilUsuario.nickname}</Text>
-      <Text style={styles.bio}>{perfilUsuario.bio}</Text>
+      <ScrollView contentContainerStyle={styles.containerConteudo}>
+        {perfilUsuario.foto_perfil ? (
+          <Image
+            source={{ uri: perfilUsuario.foto_perfil }}
+            style={styles.avatar}
+          />
+        ) : (
+          <View style={styles.avatarPlaceholder}>
+            <Text style={styles.avatarText}>Sem foto</Text>
+          </View>
+        )}
 
-      {perfilUsuario.tp_user === "Comerciante" && (
-        <>
+        <Text style={styles.title}>{perfilUsuario.nome}</Text>
+        <Text style={styles.nickname}>@{perfilUsuario.nickname}</Text>
+        <Text style={styles.bio}>{perfilUsuario.bio}</Text>
+
+        {perfilUsuario.tp_user === "Comerciante" && (
+          <>
+            <Text style={styles.info}>
+              Comércio: {perfilUsuario.nome_comercio}
+            </Text>
+            <Text style={styles.info}>Tel: {perfilUsuario.telefone}</Text>
+          </>
+        )}
+
+        {perfilUsuario.tp_user === "Chef" && (
           <Text style={styles.info}>
-            Comércio: {perfilUsuario.nome_comercio}
+            Especialidade: {perfilUsuario.especialidade}
           </Text>
-          <Text style={styles.info}>Tel: {perfilUsuario.telefone}</Text>
-        </>
-      )}
+        )}
 
-      {perfilUsuario.tp_user === "Chef" && (
-        <Text style={styles.info}>
-          Especialidade: {perfilUsuario.especialidade}
-        </Text>
-      )}
+        {perfilUsuario.tp_user === "Comum" && (
+          <Text style={styles.info}>
+            Preferência alimentar: {perfilUsuario.pref_alim}
+          </Text>
+        )}
 
-      {perfilUsuario.tp_user === "Comum" && (
-        <Text style={styles.info}>
-          Preferência alimentar: {perfilUsuario.pref_alim}
-        </Text>
-      )}
-
-      <Button
-        title="Editar Perfil"
-        onPress={() => router.push("/editar-perfil")}
-      />
-    </ScrollView>
+        <Button
+          title="Editar Perfil"
+          onPress={() => router.push("/editar-perfil")}
+        />
+      </ScrollView>
+    </View>
   );
 }
