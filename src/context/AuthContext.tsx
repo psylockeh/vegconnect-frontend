@@ -85,11 +85,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         senha,
       });
 
-      const { token } = response.data;
+      const { token, usuario } = response.data;
 
       await AsyncStorage.setItem("@token", token);
       setUserToken(token);
       setIsAuthenticated(true);
+
+      setPerfilUsuario(usuario);
+      console.log(usuario.tp_user);
 
       if (manterConectado) {
         await AsyncStorage.setItem("@token", token);

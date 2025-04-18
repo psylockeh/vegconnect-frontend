@@ -36,6 +36,7 @@
     "expo-symbols": "~0.2.2",
     "expo-system-ui": "~4.0.9",
     "expo-web-browser": "~14.0.2",
+    "jwt-decode": "^4.0.0",
     "linear-gradient": "^1.0.6",
     "lottie-react-native": "^7.1.0",
     "react": "18.3.1",
