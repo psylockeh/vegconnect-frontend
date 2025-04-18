@@ -37,13 +37,13 @@ export default function Sidebar({ onPostPress }: Props) {
         {open && (
           <View style={styles.menu}>
             {/* Rota Post */}
-            <TouchableOpacity style={styles.menuItem} onPress={onPostPress}>
+            <TouchableOpacity style={styles.menuItem} onPress={() => router.push("/feed")}>
               <Text style={styles.labelPost}>+ Post</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               style={styles.menuItem}
-              onPress={() => router.push("/menu")}
+              // onPress={() => router.push("/menu")}
             >
               <FontAwesome name="bars" size={20} color="#023D2E" />
               <Text style={styles.labelMenu}>Menu</Text>
