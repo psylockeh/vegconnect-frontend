@@ -2,6 +2,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_URL } from "@/config/api";
 
 export async function enviarPostagem(dados: any) {
+  console.log("✅ Dados enviados:", dados);
+
   const token = await AsyncStorage.getItem("@token");
   if (!token) throw new Error("Token não encontrado.");
 
@@ -11,6 +13,7 @@ export async function enviarPostagem(dados: any) {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
+
     body: JSON.stringify(dados),
   });
 

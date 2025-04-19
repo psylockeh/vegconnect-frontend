@@ -21,14 +21,19 @@ import { MaterialIcons } from "@expo/vector-icons";
 import Toast from "react-native-toast-message";
 import { uploadImageToCloudinary } from "@/utils/cloudinary";
 import { enviarPostagem } from "@/services/postagemService";
+import CardPostagem from "@/components/CardPostagem"; // ✅ novo import
 
 type Postagem = {
-  autor: { nome: string };
-  tp_post: string;
-  createdAt: string;
   id: number;
-  titulo: string;
-  conteudo: string;
+  tp_post: string;
+  titulo?: string;
+  conteudo?: string;
+  createdAt: string;
+  autor: {
+    nome: string;
+    nickname?: string;
+    foto_perfil?: string;
+  };
 };
 
 export default function Feed() {
@@ -38,27 +43,22 @@ export default function Feed() {
   const [tpPost, setTpPost] = useState<string>("");
   const [recadoTexto, setRecadoTexto] = useState("");
   const [midiasSelecionadas, setMidiasSelecionadas] = useState<string[]>([]);
-  // força logout - temporario
-  const { logout } = useAuth();
+  const { logout, perfilUsuario } = useAuth();
 
-  const { perfilUsuario } = useAuth();
-
-  async function carregarPostagens() {
+  const carregarPostagens = async () => {
     try {
       const token = await AsyncStorage.getItem("@token");
       if (!token) return;
 
       const response = await axios.get(`${API_URL}/usuario/postagens`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       setPostagens(response.data);
     } catch (error) {
       console.error("Erro ao carregar postagens:", error);
     }
-  }
+  };
 
   useEffect(() => {
     carregarPostagens();
@@ -81,8 +81,9 @@ export default function Feed() {
       setMidiasSelecionadas((prev) => [...prev, ...uris]);
     }
   };
+
   const removerImagem = (uri: string) => {
-    setMidiasSelecionadas((prev: string[]) => prev.filter((m) => m !== uri));
+    setMidiasSelecionadas((prev) => prev.filter((m) => m !== uri));
   };
 
   const publicarRecado = async () => {
@@ -95,18 +96,13 @@ export default function Feed() {
         if (url) midia_urls.push(url);
       }
 
-      const dados = {
+      await enviarPostagem({
         tp_post: "recado",
         conteudo: recadoTexto.trim(),
         midia_urls,
-      };
-
-      await enviarPostagem(dados);
-      Toast.show({
-        type: "success",
-        text1: "Recado publicado!",
       });
 
+      Toast.show({ type: "success", text1: "Recado publicado!" });
       setRecadoTexto("");
       setMidiasSelecionadas([]);
       carregarPostagens();
@@ -117,48 +113,6 @@ export default function Feed() {
         text2: err.message || "Tente novamente.",
       });
     }
-
-    try {
-      const token = await AsyncStorage.getItem("@token");
-      if (!token) return;
-
-      const midia_urls: string[] = [];
-
-      for (const uri of midiasSelecionadas) {
-        const uploaded = await uploadImageToCloudinary(uri);
-        if (uploaded) midia_urls.push(uploaded);
-      }
-
-      const response = await axios.post(
-        `${API_URL}/usuario/postagens`,
-        {
-          tp_post: "recado",
-          conteudo: recadoTexto,
-          midia_urls,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      Toast.show({
-        type: "success",
-        text1: "Recado publicado!",
-        text2: "Sua mensagem foi enviada com sucesso.",
-      });
-
-      setRecadoTexto("");
-      setMidiasSelecionadas([]);
-      carregarPostagens();
-    } catch (err) {
-      Toast.show({
-        type: "error",
-        text1: "Erro ao publicar",
-        text2: "Verifique sua conexão ou tente novamente.",
-      });
-    }
   };
 
   return (
@@ -167,13 +121,17 @@ export default function Feed() {
 
       <View style={feedStyles.mainContent}>
         <ScrollView showsVerticalScrollIndicator={false}>
-          {/* Card sempre visível */}
+          {/* Card de criação de recado */}
           <View style={feedStyles.cardCriarPost}>
             <View style={feedStyles.headerUsuario}>
               <View style={feedStyles.avatar} />
               <View>
-                <Text style={feedStyles.nomeUsuario}>Kamala da Silva</Text>
-                <Text style={feedStyles.tipoUsuario}>Público</Text>
+                <Text style={feedStyles.nomeUsuario}>
+                  {perfilUsuario?.nome || "Usuário"}
+                </Text>
+                <Text style={feedStyles.tipoUsuario}>
+                  {perfilUsuario?.tp_user || "Público"}
+                </Text>
               </View>
             </View>
 
@@ -185,21 +143,7 @@ export default function Feed() {
               onChangeText={setRecadoTexto}
               multiline
             />
-            <TouchableOpacity
-              onPress={async () => {
-                await logout();
-                router.replace("/login"); // ou "/(auth)/login" conforme seu roteamento
-              }}
-              style={{
-                padding: 10,
-                backgroundColor: "#D33",
-                borderRadius: 8,
-                alignSelf: "flex-end",
-                margin: 10,
-              }}
-            >
-              <Text style={{ color: "white", fontWeight: "bold" }}>Sair</Text>
-            </TouchableOpacity>
+
             {midiasSelecionadas.length > 0 && (
               <ScrollView horizontal style={{ marginTop: 10 }}>
                 {midiasSelecionadas.map((uri, index) => (
@@ -235,6 +179,7 @@ export default function Feed() {
             <Text style={feedStyles.ouLabel}>ou</Text>
 
             <View style={feedStyles.cardLinhaPostagem}>
+              <Text style={feedStyles.ouLabel}> </Text>
               <View style={feedStyles.botoesTipoPostagem}>
                 {["Receita", "Evento", "Estabelecimento", "Promoção"].map(
                   (tipo: string) => (
@@ -248,7 +193,6 @@ export default function Feed() {
                   )
                 )}
               </View>
-
               <View style={feedStyles.iconesAcoes}>
                 <TouchableOpacity onPress={selecionarImagem}>
                   <MaterialIcons name="image" size={22} color="#3C6E47" />
@@ -275,32 +219,19 @@ export default function Feed() {
           <FlatList
             data={postagens}
             keyExtractor={(item) => item.id.toString()}
-            scrollEnabled={false}
+            scrollEnabled={true}
             renderItem={({ item }) => (
               <TouchableOpacity
                 onPress={() => router.push(`/postagem/${item.id}`)}
               >
-                <View style={feedStyles.cardPost}>
-                  <Text style={feedStyles.titulo}>{item.titulo}</Text>
-                  <Text style={feedStyles.tipoLabel}>
-                    {item.tp_post.charAt(0).toUpperCase() +
-                      item.tp_post.slice(1)}
-                  </Text>
-                  <Text style={feedStyles.conteudo}>{item.conteudo}</Text>
-                  <View style={feedStyles.rodapePost}>
-                    <Text style={feedStyles.autor}>{item.autor?.nome}</Text>
-                    <Text style={feedStyles.data}>
-                      {new Date(item.createdAt).toLocaleDateString("pt-BR")}
-                    </Text>
-                  </View>
-                </View>
+                <CardPostagem postagem={item} />
               </TouchableOpacity>
             )}
           />
         </ScrollView>
       </View>
 
-      {/* Modal para outros tipos de postagem */}
+      {/* Modal para outras postagens */}
       <ModalCriarPostagem
         visivel={mostrarModal}
         tp_post={tpPost}

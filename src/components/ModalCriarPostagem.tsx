@@ -57,11 +57,16 @@ export default function ModalCriarPostagem({
   };
 
   const handleSubmitPostagem = async () => {
-    console.log("Tipo de postagem:", tp_post);
+    let conteudoFormatado = conteudo?.trim();
+
+    if (tp_post === "receita" && !conteudoFormatado && instrucoes?.trim()) {
+      conteudoFormatado = instrucoes.trim();
+    }
+
     const novaPostagem: any = {
       tp_post,
       titulo,
-      conteudo,
+      conteudo: conteudoFormatado,
       data,
       localizacao,
       valor,
