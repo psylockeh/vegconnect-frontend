@@ -138,7 +138,7 @@ export default function CadastroScreen() {
           error.response.data.message || "Erro desconhecido no cadastro."
         );
       } else {
-        setError("❌ Erro ao conectar-se ao servidor. Verifique sua conexão.");
+        setError("❌ Usuário já cadastrado. Verifique seus dados.");
       }
     }
 

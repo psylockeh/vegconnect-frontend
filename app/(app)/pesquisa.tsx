@@ -1,95 +1,106 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, Text, FlatList } from 'react-native';
-import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { View, TextInput, Text, TouchableOpacity, FlatList, ActivityIndicator, StyleSheet } from 'react-native';
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { API_URL } from "@/config/api";
+import { styles } from "@/styles/PesquisaStyles"
 
-interface Usuario {
-  id_user: number;
-  nome: string;
-  nickname: string;
-  tp_user: string;
-}
+const PesquisaGeral = () => {
+  const [termo, setTermo] = useState('');
+  const [tipo, setTipo] = useState('usuario');
+  const [resultados, setResultados] = useState<any[]>([]);
+  const [carregando, setCarregando] = useState(false);
+  const [erro, setErro] = useState('');
 
-const API_URL = 'http://localhost:28147'; 
+  const opcoes = [
+    { label: 'Perfil', valor: 'usuario' },
+    { label: 'Post', valor: 'recado' },
+    { label: 'Receita', valor: 'receita' },
+    { label: 'Estabelecimento', valor: 'estabelecimento' },
+    { label: 'Evento', valor: 'evento' },
+    { label: 'Promoção', valor: 'promocao' },
+  ];
 
-const BuscarUsuarios = () => {
-  const [query, setQuery] = useState('');
-  const [usuarios, setUsuarios] = useState<Usuario[]>([]);
-  const [error, setError] = useState('');
+  const pesquisar = async (tipoSelecionado: string = tipo) => {
+    if (!termo.trim()) {
+      setErro('Digite o que deseja pesquisar!!');
+      return;
+    }
 
-  const buscarUsuarios = async () => {
+    setErro('');
+    setCarregando(true);
+    setResultados([]);
+
     try {
       const token = await AsyncStorage.getItem('@token');
       if (!token) {
-        setError('Token não encontrado!');
+        setErro('Token não encontrado!');
         return;
       }
-  
-      const url = `${API_URL}/usuario/pesquisarUsuarios?novoUsuario=${encodeURIComponent(query)}`;
-      console.log('URL da API:', url);
-  
-      const response = await axios.get(url, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+
+      const response = await axios.get(`${API_URL}/usuario/pesquisaGeral?tipo=${tipoSelecionado}&pesquisa=${encodeURIComponent(termo)}`, {
+        headers: { Authorization: `Bearer ${token}` },
       });
-  
-      console.log('Dados da API:', response.data);
-  
-      if (Array.isArray(response.data)) {
-        if (response.data.length > 0) {
-          setUsuarios(response.data);
-          setError('');
-        } else {
-          setUsuarios([]);
-          setError('Nenhum usuário encontrado com esse termo.');
-        }
-      } else {
-        setError('Resposta inesperada da API.');
-      }
-    } catch (err) {
-      console.error('Erro ao buscar usuários:', err);
-      setError('Erro ao buscar usuários.');
+
+      setResultados(response.data);
+    } catch (err: any) {
+      setErro(err.response?.data?.msg || err.message || '❌ Erro ao realizar pesquisa!!');
+    } finally {
+      setCarregando(false);
     }
   };
 
+  const handleFiltroClick = (novoTipo: string) => {
+    setTipo(novoTipo);
+    pesquisar(novoTipo);
+  };
+
   return (
-    <View style={{ padding: 20 }}>
+    <View style={styles.container}>
+      {/* Campo de texto para pesquisa */}
       <TextInput
-        value={query}
-        onChangeText={setQuery}
-        placeholder="Buscar por nome, nickname ou tipo de usuário"
-        style={{
-          borderBottomWidth: 1,
-          marginBottom: 20,
-          fontSize: 16,
-          padding: 8,
-        }}
+        value={termo}
+        onChangeText={setTermo}
+        placeholder="Pesquisar..."
+        onSubmitEditing={() => pesquisar()}  // A pesquisa é iniciada quando o usuário pressionar Enter/Return
+        style={styles.input}
       />
-      <Button title="Buscar" onPress={buscarUsuarios} />
 
-      {error ? <Text style={{ color: 'red', marginTop: 10 }}>{error}</Text> : null}
-
-      <FlatList
-        data={usuarios}
-        keyExtractor={(item) => item.id_user.toString()}
-        renderItem={({ item }) => (
-          <View
-            style={{
-              marginVertical: 10,
-              padding: 10,
-              backgroundColor: '#f2f2f2',
-              borderRadius: 8,
-            }}
+      {/* Menu de filtros */}
+      <View style={styles.menuFiltro}>
+        {opcoes.map((opcao) => (
+          <TouchableOpacity
+            key={opcao.valor}
+            onPress={() => handleFiltroClick(opcao.valor)}  // Define o filtro
+            style={[
+              styles.botaoFiltro,
+              tipo === opcao.valor ? styles.botaoFiltroSelecionado : null
+            ]}
           >
-            <Text style={{ fontWeight: 'bold' }}>{item.nome}</Text>
-            <Text>Nickname: {item.nickname}</Text>
-            <Text>Tipo: {item.tp_user}</Text>
+            <Text style={styles.textoBotao}>{opcao.label}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+
+
+      {carregando && <ActivityIndicator size="large" color="#00f" style={styles.carregando} />}
+
+      {erro && <Text style={styles.erro}>{erro}</Text>}
+
+      {/* Exibição dos resultados da pesquisa */}
+      <FlatList
+        data={resultados}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item }) => (
+          <View style={styles.cardResultado}>
+            <Text style={styles.textoResultado}>{item.nome}</Text>
+            <Text style={styles.textoResultado}>{item.descricao}</Text>
           </View>
         )}
+        ListEmptyComponent={<Text style={styles.semResultado}>🌱 Nenhum resultado encontrado.</Text>}
       />
     </View>
   );
 };
 
-export default BuscarUsuarios;
+export default PesquisaGeral;
