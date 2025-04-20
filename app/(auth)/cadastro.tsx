@@ -358,7 +358,7 @@ export default function CadastroScreen() {
 
         {/* Campo de Voltar Login*/}
         <TouchableOpacity onPress={() => router.push("/login")}>
-          <Text style={styles.link}>Já tem conta? <b>Faça Login</b></Text>
+          <Text style={styles.link}>Já tem conta? <Text style={{ fontWeight: "bold" }}>Faça Login</Text>w</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>

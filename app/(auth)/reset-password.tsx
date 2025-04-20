@@ -86,7 +86,7 @@ export default function ResetPasswordScreen() {
 
         {/* Campo de votar ao Login */}
         <TouchableOpacity onPress={() => router.push("/login")}>
-          <Text style={styles.link}><b>Voltar para o Login</b></Text>
+          <Text style={styles.link}> <Text style={{ fontWeight: "bold" }}>Voltar para o Login</Text></Text>
         </TouchableOpacity>
       </View>
     </View>

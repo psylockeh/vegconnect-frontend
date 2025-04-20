@@ -86,18 +86,18 @@ export default function ForgotPasswordScreen() {
             <Text style={styles.buttonText}>Recuperar Senha</Text>
           )}
         </TouchableOpacity>
-        
+
         {/* Link para Cadastro */}
         <TouchableOpacity onPress={() => router.push("/cadastro")}>
           <Text style={styles.link}>
-            Não tem uma conta? <b>Criar uma Conta</b>
+            Não tem uma conta? <Text style={{ fontWeight: "bold" }}>Criar uma Conta</Text>
           </Text>
         </TouchableOpacity>
 
         {/* Campo de votar ao Login */}
         <TouchableOpacity onPress={() => router.push("/login")}>
           <Text style={styles.link}>
-            <b>Voltar para o Login</b>
+            <Text style={{ fontWeight: "bold" }}>Voltar para o Login</Text>
           </Text>
         </TouchableOpacity>
       </View>
