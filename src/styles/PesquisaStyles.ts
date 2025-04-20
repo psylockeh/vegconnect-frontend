@@ -1,50 +1,71 @@
 import { StyleSheet } from "react-native";
 
-export const styles = StyleSheet.create({
+export const pesquisarStyles = StyleSheet.create({
   container: {
-    padding: 16,
-    maxWidth: '100%',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
+    flex: 1,
+    backgroundColor: "#F5FAF6",
+    flexDirection: "row",
   },
-  input: {
+  mainContent: {
+    flex: 1,
+    padding: 16,
+
+  },
+  inputPesquisar: {
     width: '100%',
+    backgroundColor: "#F0F4F2",
     padding: 12,
-    borderRadius: 8,
+    borderRadius: 10,
+    marginBottom: 10,
+    fontSize: 14,
     borderWidth: 1,
-    borderColor: '#ccc',
-    marginBottom: 16,
-    fontSize: 16,
+    borderColor: "#D7E2DA",
+    color: "#333",
+  },
+
+  cardPesquisa: {
+    backgroundColor: "#FAFDFB",
+    padding: 16,
+    marginTop: -10,
+    marginBottom: 20,
+    borderRadius: 16,
+    shadowColor: "#000",
+    shadowOpacity: 0.05,
+    shadowOffset: { width: 0, height: 3 },
+    shadowRadius: 5,
+    elevation: 3,
   },
   menuFiltro: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 10,
-    marginBottom: 16,
+    gap: 5,
+    marginBottom: 2,
   },
   botaoFiltro: {
-    paddingHorizontal: 16,
+    backgroundColor: "#E6F1EB",
     paddingVertical: 8,
-    borderRadius: 25,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    backgroundColor: '#f0f0f0',
+    paddingHorizontal: 10,
+    borderRadius: 8,
   },
   botaoFiltroSelecionado: {
     backgroundColor: '#4CAF50',
     borderColor: '#4CAF50',
+    color: "#FFF"
   },
   textoBotao: {
     fontSize: 14,
-    color: '#333',
+    fontWeight: "500",
+    color: "#2E4F36",
   },
   carregando: {
     marginVertical: 16,
   },
   erro: {
-    color: 'red',
+    color: "#D32F2F",
     fontSize: 16,
-    marginVertical: 16,
+    textAlign: "center",
+    marginTop: 10,
+    marginBottom: 8,
   },
   cardResultado: {
     padding: 16,
@@ -63,11 +84,7 @@ export const styles = StyleSheet.create({
     fontSize: 14,
     color: '#333',
   },
-  semResultado: {
-    fontSize: 16,
-    color: '#666',
-    textAlign: 'center',
-  },
 });
 
 
+export default pesquisarStyles;

@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { View, TextInput, Text, TouchableOpacity, FlatList, ActivityIndicator, StyleSheet } from 'react-native';
+import { View, TextInput, Text, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native';
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_URL } from "@/config/api";
-import { styles } from "@/styles/PesquisaStyles"
+import pesquisarStyles from "@/styles/PesquisaStyles"
+import Sidebar from "@/components/Sidebar";
 
 const PesquisaGeral = () => {
   const [termo, setTermo] = useState('');
@@ -23,7 +24,7 @@ const PesquisaGeral = () => {
 
   const pesquisar = async (tipoSelecionado: string = tipo) => {
     if (!termo.trim()) {
-      setErro('Digite o que deseja pesquisar!!');
+      setErro('📌 Digite o que deseja pesquisar!!');
       return;
     }
 
@@ -34,7 +35,7 @@ const PesquisaGeral = () => {
     try {
       const token = await AsyncStorage.getItem('@token');
       if (!token) {
-        setErro('Token não encontrado!');
+        setErro('❌ Token não encontrado!');
         return;
       }
 
@@ -56,50 +57,54 @@ const PesquisaGeral = () => {
   };
 
   return (
-    <View style={styles.container}>
-      {/* Campo de texto para pesquisa */}
-      <TextInput
-        value={termo}
-        onChangeText={setTermo}
-        placeholder="Pesquisar..."
-        onSubmitEditing={() => pesquisar()}  // A pesquisa é iniciada quando o usuário pressionar Enter/Return
-        style={styles.input}
-      />
+    <View style={pesquisarStyles.container}>
+      <Sidebar onPostPress={() => { }} />
 
-      {/* Menu de filtros */}
-      <View style={styles.menuFiltro}>
-        {opcoes.map((opcao) => (
-          <TouchableOpacity
-            key={opcao.valor}
-            onPress={() => handleFiltroClick(opcao.valor)}  // Define o filtro
-            style={[
-              styles.botaoFiltro,
-              tipo === opcao.valor ? styles.botaoFiltroSelecionado : null
-            ]}
-          >
-            <Text style={styles.textoBotao}>{opcao.label}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
+      <View style={pesquisarStyles.mainContent}>
+        <View style={pesquisarStyles.cardPesquisa}>
+          {/* Campo de texto para pesquisa */}
+          <TextInput
+            value={termo}
+            onChangeText={setTermo}
+            placeholder="Pesquisar..."
+            onSubmitEditing={() => pesquisar()}  
+            style={pesquisarStyles.inputPesquisar}
+          />
 
-
-      {carregando && <ActivityIndicator size="large" color="#00f" style={styles.carregando} />}
-
-      {erro && <Text style={styles.erro}>{erro}</Text>}
-
-      {/* Exibição dos resultados da pesquisa */}
-      <FlatList
-        data={resultados}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => (
-          <View style={styles.cardResultado}>
-            <Text style={styles.textoResultado}>{item.nome}</Text>
-            <Text style={styles.textoResultado}>{item.descricao}</Text>
+          {/* Menu de filtros */}
+          <View style={pesquisarStyles.menuFiltro}>
+            {opcoes.map((opcao) => (
+              <TouchableOpacity
+                key={opcao.valor}
+                onPress={() => handleFiltroClick(opcao.valor)}  // Define o filtro
+                style={[
+                  pesquisarStyles.botaoFiltro,
+                  tipo === opcao.valor ? pesquisarStyles.botaoFiltroSelecionado : null
+                ]}
+              >
+                <Text style={pesquisarStyles.textoBotao}>{opcao.label}</Text>
+              </TouchableOpacity>
+            ))}
           </View>
-        )}
-        ListEmptyComponent={<Text style={styles.semResultado}>🌱 Nenhum resultado encontrado.</Text>}
-      />
-    </View>
+        </View>
+
+        {carregando && <ActivityIndicator size="large" color="#00f" style={pesquisarStyles.carregando} />}
+
+        {erro && <Text style={pesquisarStyles.erro}>{erro}</Text>}
+
+        {/* Exibição dos resultados da pesquisa */}
+        <FlatList
+          data={resultados}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item }) => (
+            <View style={pesquisarStyles.cardResultado}>
+              <Text style={pesquisarStyles.textoResultado}>{item.nome}</Text>
+              <Text style={pesquisarStyles.textoResultado}>{item.descricao}</Text>
+            </View>
+          )}
+        />
+      </View>
+    </View >
   );
 };
 
