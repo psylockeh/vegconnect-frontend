@@ -1,0 +1,11 @@
+node_modules
+.git
+.expo
+*.log
+*.sqlite
+*.db
+*.png
+*.jpg
+*.jpeg
+.DS_Store
+.env
