@@ -114,17 +114,41 @@ export default function Feed() {
       });
     }
   };
+  console.log("📷 URL da foto:", perfilUsuario?.foto_perfil);
 
   return (
     <View style={feedStyles.container}>
       <Sidebar onPostPress={() => {}} />
 
       <View style={feedStyles.mainContent}>
+        <View style={{ alignItems: "flex-end", padding: 8 }}>
+          <TouchableOpacity
+            onPress={logout}
+            style={{
+              backgroundColor: "#D33",
+              paddingHorizontal: 12,
+              paddingVertical: 6,
+              borderRadius: 6,
+            }}
+          >
+            <Text style={{ color: "#fff", fontWeight: "bold" }}>Sair</Text>
+          </TouchableOpacity>
+        </View>
         <ScrollView showsVerticalScrollIndicator={false}>
           {/* Card de criação de recado */}
           <View style={feedStyles.cardCriarPost}>
             <View style={feedStyles.headerUsuario}>
-              <View style={feedStyles.avatar} />
+              {perfilUsuario?.foto_perfil ? (
+                <Image
+                  source={{ uri: perfilUsuario.foto_perfil }}
+                  style={feedStyles.avatar}
+                />
+              ) : (
+                <View style={feedStyles.avatar}>
+                  <Text style={{ color: "#999", fontSize: 10 }}>Sem foto</Text>
+                </View>
+              )}
+
               <View>
                 <Text style={feedStyles.nomeUsuario}>
                   {perfilUsuario?.nome || "Usuário"}

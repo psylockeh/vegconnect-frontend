@@ -14,6 +14,7 @@ import { enviarPostagem } from "@/services/postagemService";
 import { uploadImageToCloudinary } from "@/utils/cloudinary";
 import * as ImagePicker from "expo-image-picker";
 import Toast from "react-native-toast-message";
+import { useAuth } from "@/context/AuthContext";
 
 type Props = {
   visivel: boolean;
@@ -42,6 +43,11 @@ export default function ModalCriarPostagem({
   const [horarioFechamento, setHorarioFechamento] = useState("");
   const [cep, setCep] = useState("");
   const [midiasSelecionadas, setMidiasSelecionadas] = useState<string[]>([]);
+  const [nomeComercio, setNomeComercio] = useState("");
+  const [descricaoComercio, setDescricaoComercio] = useState("");
+  const [endereco, setEndereco] = useState("");
+
+  const { perfilUsuario } = useAuth();
 
   const selecionarImagens = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -80,6 +86,9 @@ export default function ModalCriarPostagem({
       horario_abertura: horarioAbertura,
       horario_fechamento: horarioFechamento,
       cep,
+      endereco,
+      nome_comercio: nomeComercio,
+      descricao_comercio: descricaoComercio,
     };
 
     const erro = validarPostagem(tp_post, novaPostagem);
@@ -136,11 +145,30 @@ export default function ModalCriarPostagem({
     fechar();
   };
 
+  const renderHeaderUsuario = () => (
+    <View style={ModalStyles.headerUsuario}>
+      <Image
+        source={{
+          uri:
+            perfilUsuario?.foto_perfil?.startsWith("http") &&
+            perfilUsuario.foto_perfil
+              ? perfilUsuario.foto_perfil
+              : "https://res.cloudinary.com/demo/image/upload/v1682620184/default-profile.png",
+        }}
+        style={ModalStyles.avatar}
+      />
+      <View>
+        <Text style={ModalStyles.nomeUsuario}>{perfilUsuario?.nome}</Text>
+        <Text style={ModalStyles.tipoUsuario}>{perfilUsuario?.tp_user}</Text>
+      </View>
+    </View>
+  );
+
   const renderFormulario = () => {
     switch (tp_post) {
       case "receita":
         return (
-          <View>
+          <>
             <TextInput
               placeholder="Título"
               value={titulo}
@@ -179,12 +207,12 @@ export default function ModalCriarPostagem({
               onChangeText={setCategoria}
               style={ModalStyles.input}
             />
-          </View>
+          </>
         );
 
       case "evento":
         return (
-          <View>
+          <>
             <TextInput
               placeholder="Título"
               value={titulo}
@@ -222,22 +250,22 @@ export default function ModalCriarPostagem({
               onChangeText={setLinks}
               style={ModalStyles.input}
             />
-          </View>
+          </>
         );
 
       case "estabelecimento":
         return (
-          <View>
+          <>
             <TextInput
-              placeholder="Título"
-              value={titulo}
-              onChangeText={setTitulo}
+              placeholder="Nome do Comércio"
+              value={nomeComercio}
+              onChangeText={setNomeComercio}
               style={ModalStyles.input}
             />
             <TextInput
               placeholder="Descrição"
-              value={conteudo}
-              onChangeText={setConteudo}
+              value={descricaoComercio}
+              onChangeText={setDescricaoComercio}
               multiline
               style={ModalStyles.input}
             />
@@ -267,16 +295,16 @@ export default function ModalCriarPostagem({
             />
             <TextInput
               placeholder="Endereço"
-              value={localizacao}
-              onChangeText={setLocalizacao}
+              value={endereco}
+              onChangeText={setEndereco}
               style={ModalStyles.input}
             />
-          </View>
+          </>
         );
 
       case "promocao":
         return (
-          <View>
+          <>
             <TextInput
               placeholder="Título"
               value={titulo}
@@ -302,13 +330,13 @@ export default function ModalCriarPostagem({
               onChangeText={setLinks}
               style={ModalStyles.input}
             />
-          </View>
+          </>
         );
 
       case "recado":
       default:
         return (
-          <View>
+          <>
             <TextInput
               placeholder="Digite seu recado"
               value={conteudo}
@@ -316,69 +344,7 @@ export default function ModalCriarPostagem({
               multiline
               style={ModalStyles.input}
             />
-
-            {/* Miniaturas das imagens */}
-            <View
-              style={{
-                flexDirection: "row",
-                flexWrap: "wrap",
-                gap: 10,
-                marginTop: 10,
-                marginBottom: 16,
-              }}
-            >
-              {midiasSelecionadas.map((uri, index) => (
-                <View key={index} style={{ position: "relative" }}>
-                  <Image
-                    source={{ uri }}
-                    style={{
-                      width: 80,
-                      height: 80,
-                      borderRadius: 8,
-                      borderWidth: 1,
-                      borderColor: "#D6E4DD",
-                    }}
-                  />
-                  <TouchableOpacity
-                    style={{
-                      position: "absolute",
-                      top: -6,
-                      right: -6,
-                      backgroundColor: "#fff",
-                      borderRadius: 10,
-                      borderWidth: 1,
-                      borderColor: "#ccc",
-                      paddingHorizontal: 4,
-                      paddingVertical: 2,
-                      zIndex: 2,
-                    }}
-                    onPress={() =>
-                      setMidiasSelecionadas((prev) =>
-                        prev.filter((_, i) => i !== index)
-                      )
-                    }
-                  >
-                    <Text
-                      style={{
-                        fontSize: 12,
-                        fontWeight: "bold",
-                        color: "#D33",
-                      }}
-                    >
-                      X
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              ))}
-            </View>
-
-            <TouchableOpacity
-              onPress={selecionarImagens}
-              style={ModalStyles.botaoFechar}
-            >
-              <Text style={ModalStyles.textoBotao}>Selecionar Imagem</Text>
-            </TouchableOpacity>
-          </View>
+          </>
         );
     }
   };
@@ -393,62 +359,8 @@ export default function ModalCriarPostagem({
           </Text>
 
           <ScrollView style={{ flex: 1 }}>
+            {renderHeaderUsuario()}
             {renderFormulario()}
-
-            {/* Miniaturas das imagens selecionadas */}
-            <View
-              style={{
-                flexDirection: "row",
-                flexWrap: "wrap",
-                gap: 10,
-                marginTop: 10,
-                marginBottom: 16,
-              }}
-            >
-              {midiasSelecionadas.map((uri, index) => (
-                <View key={index} style={{ position: "relative" }}>
-                  <Image
-                    source={{ uri }}
-                    style={{
-                      width: 80,
-                      height: 80,
-                      borderRadius: 8,
-                      borderWidth: 1,
-                      borderColor: "#D6E4DD",
-                    }}
-                  />
-                  <TouchableOpacity
-                    style={{
-                      position: "absolute",
-                      top: -6,
-                      right: -6,
-                      backgroundColor: "#fff",
-                      borderRadius: 10,
-                      borderWidth: 1,
-                      borderColor: "#ccc",
-                      paddingHorizontal: 4,
-                      paddingVertical: 2,
-                      zIndex: 2,
-                    }}
-                    onPress={() =>
-                      setMidiasSelecionadas((prev) =>
-                        prev.filter((_, i) => i !== index)
-                      )
-                    }
-                  >
-                    <Text
-                      style={{
-                        fontSize: 12,
-                        fontWeight: "bold",
-                        color: "#D33",
-                      }}
-                    >
-                      X
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              ))}
-            </View>
           </ScrollView>
 
           <TouchableOpacity

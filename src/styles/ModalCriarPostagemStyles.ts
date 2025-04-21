@@ -62,6 +62,27 @@ const ModalCriarPostagemStyles = StyleSheet.create({
     fontWeight: "600",
     fontSize: 15,
   },
+  headerUsuario: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 12,
+    gap: 12,
+  },
+  avatar: {
+    width: 42,
+    height: 42,
+    borderRadius: 21,
+    backgroundColor: "#ccc",
+  },
+  nomeUsuario: {
+    fontWeight: "bold",
+    fontSize: 15,
+    color: "#2c2c2c",
+  },
+  tipoUsuario: {
+    fontSize: 13,
+    color: "#666",
+  },
 });
 
 export default ModalCriarPostagemStyles;

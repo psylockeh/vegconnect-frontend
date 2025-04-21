@@ -11,7 +11,7 @@ const CardPostagem = ({ postagem }: Props) => {
   const {
     tp_post,
     conteudo,
-    usuario,
+    autor: usuario,
     createdAt,
     titulo,
     ingredientes,
