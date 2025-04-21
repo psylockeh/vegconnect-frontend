@@ -9,6 +9,8 @@ const feedStyles = StyleSheet.create({
   mainContent: {
     flex: 1,
     padding: 16,
+    marginTop: -10,
+    marginBottom: -10,
   },
   cardCriarPost: {
     backgroundColor: "#FAFDFB",
@@ -27,11 +29,11 @@ const feedStyles = StyleSheet.create({
     marginBottom: 12,
   },
   avatar: {
-    width: 42,
-    height: 42,
-    borderRadius: 21,
+    width: 50,
+    height: 50,
+    borderRadius: 30,
+    marginRight: 30,
     backgroundColor: "#E6F1EB",
-    marginRight: 10,
   },
   nomeUsuario: {
     fontSize: 16,

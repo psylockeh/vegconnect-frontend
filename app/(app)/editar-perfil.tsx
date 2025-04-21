@@ -7,7 +7,6 @@ import {
   ActivityIndicator,
   Image,
   ScrollView,
-  Platform,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { useAuth } from "@/context/AuthContext";
@@ -17,11 +16,10 @@ import axios from "axios";
 import { API_URL } from "@/config/api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Sidebar from "@/components/Sidebar";
-import { FontAwesome } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 
 export default function EditarPerfilScreen() {
   const { carregarPerfil, perfilUsuario } = useAuth();
-
   const [nome, setNome] = useState("");
   const [nickname, setNickname] = useState("");
   const [bio, setBio] = useState("");
@@ -157,86 +155,93 @@ export default function EditarPerfilScreen() {
   };
 
   return (
-    <View style={styles.containerPrincipal}>
-      <Sidebar onPostPress={() => {}} />
+    <View style={styles.container}>
+      <Sidebar onPostPress={() => { }} />
+      <View style={styles.mainContent}>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View style={styles.cardEditarPerfil}>
+            <View style={styles.headerUsuario}>
+              <TouchableOpacity
+                onPress={escolherFoto}
+                onPressIn={() => setIsCameraHovered(true)}
+                onPressOut={() => setIsCameraHovered(false)}
+                activeOpacity={0.7}
+              >
+                <View style={styles.avatarContainer}>
+                  {perfilUsuario?.foto_perfil ? (
+                    <Image
+                      source={{ uri: perfilUsuario.foto_perfil }}
+                      style={styles.avatar}
+                    />
+                  ) : (
+                    <View style={styles.avatar}>
+                      <Text style={{ color: "#black", fontSize: 16, textAlign: "center", marginTop: 35 }}>Sem foto</Text>
+                      <MaterialIcons style={{alignSelf: "flex-end", marginTop: 30}} name="add-a-photo" size={24} color="black" />
+                    </View>
+                  )}
+                </View>
+              </TouchableOpacity>
 
-      <ScrollView style={styles.container}>
-        <TouchableOpacity
-          onPress={escolherFoto}
-          onPressIn={() => setIsCameraHovered(true)}
-          onPressOut={() => setIsCameraHovered(false)}
-          activeOpacity={0.7}
-        >
-          <View style={styles.avatarContainer}>
-            {foto_perfil ? (
-              <Image source={{ uri: foto_perfil }} style={styles.avatar} />
-            ) : (
-              <View style={styles.avatarPlaceholder}>
-                <Text style={styles.avatarText}>Adicionar Foto</Text>
+              <View>
+                <Text style={styles.label}>Nome Completo</Text>
+                <TextInput
+                  style={styles.inputEditarPerfil}
+                  placeholder="Digite seu nome"
+                  value={nome}
+                  onChangeText={setNome}
+
+                />
+
+                <Text style={styles.label}>Telefone</Text>
+                <TextInput
+                  style={styles.inputEditarPerfil}
+                  placeholder="Digite seu telefone"
+                  value={telefone}
+                  onChangeText={setTelefone}
+                  keyboardType="phone-pad"
+                />
+
+                <Text style={styles.label}>Nickname (único)</Text>
+                <TextInput
+                  style={styles.inputEditarPerfil}
+                  placeholder="Digite seu nickname"
+                  value={nickname}
+                  onChangeText={setNickname}
+                />
+
+                <Text style={styles.label}>Biografia</Text>
+                <TextInput
+                  style={styles.inputEditarPerfil}
+                  placeholder="Digite uma breve descrição"
+                  value={bio}
+                  onChangeText={setBio}
+                  multiline
+                />
+
+                {tipo === "Comum" && (
+                  <>
+                    <Text style={styles.label}>Preferência Alimentar</Text>
+                    <TextInput
+                      style={styles.inputEditarPerfil}
+                      placeholder="Ex.: Dieta restritiva"
+                      value={prefAlim}
+                      onChangeText={setPrefAlim}
+                    />
+                  </>
+                )}
               </View>
-            )}
-            {isCameraHovered && (
-              <View style={styles.overlay}>
-                <FontAwesome name="camera" size={24} color="#FFF" />
-              </View>
-            )}
+            </View>
+
+            <TouchableOpacity style={styles.botaoSalvarPerfil} onPress={salvarPerfil}>
+              {loading ? (
+                <ActivityIndicator color="#fff" />
+              ) : (
+                <Text style={styles.textoBotaoSalvar}>Salvar</Text>
+              )}
+            </TouchableOpacity>
           </View>
-        </TouchableOpacity>
-
-        <Text style={styles.label}>Nome Completo</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Digite seu nome"
-          value={nome}
-          onChangeText={setNome}
-        />
-
-        <Text style={styles.label}>Telefone</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Digite seu telefone"
-          value={telefone}
-          onChangeText={setTelefone}
-          keyboardType="phone-pad"
-        />
-
-        <Text style={styles.label}>Nickname (único)</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Digite seu nickname"
-          value={nickname}
-          onChangeText={setNickname}
-        />
-
-        <Text style={styles.label}>Biografia</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Digite uma breve descrição"
-          value={bio}
-          onChangeText={setBio}
-          multiline
-        />
-
-        {tipo === "Comum" && (
-          <>
-            <Text style={styles.label}>Preferência Alimentar</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Ex.: Dieta restritiva"
-              value={prefAlim}
-              onChangeText={setPrefAlim}
-            />
-          </>
-        )}
-
-        <TouchableOpacity style={styles.button} onPress={salvarPerfil}>
-          {loading ? (
-            <ActivityIndicator color="#fff" />
-          ) : (
-            <Text style={styles.buttonText}>Salvar</Text>
-          )}
-        </TouchableOpacity>
-      </ScrollView>
-    </View>
+        </ScrollView>
+      </View >
+    </View >
   );
 }

@@ -154,7 +154,6 @@ export default function CadastroScreen() {
         backgroundColor: "#fff6da",
       }}
     >
-      r
       <View style={styles.box}>
         {/* Campo de Logo */}
         <View style={styles.logoContainer}>
@@ -358,7 +357,7 @@ export default function CadastroScreen() {
 
         {/* Campo de Voltar Login*/}
         <TouchableOpacity onPress={() => router.push("/login")}>
-          <Text style={styles.link}>Já tem conta? <Text style={{ fontWeight: "bold" }}>Faça Login</Text>w</Text>
+          <Text style={styles.link}>Já tem conta? <Text style={{ fontWeight: "bold" }}>Faça Login</Text></Text>
         </TouchableOpacity>
       </View>
     </ScrollView>

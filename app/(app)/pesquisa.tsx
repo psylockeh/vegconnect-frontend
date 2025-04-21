@@ -103,7 +103,7 @@ const PesquisaGeral = () => {
             <TouchableOpacity
               onPress={() => {
                 if (tipo === "usuario") {
-                  router.push(`/perfil/${item.id}`); 
+                  router.push(`/perfil/${item.id_user}`); 
                 } else {
                   router.push(`/postagem/${item.id}`);
                 }

@@ -83,14 +83,6 @@ export default function Sidebar({ onPostPress }: Props) {
 
             <TouchableOpacity
               style={styles.menuItem}
-              onPress={() => router.push("/configuracoes")}
-            >
-              <MaterialIcons name="settings" size={20} color="#FFF" />
-              <Text style={styles.label}>Config</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={styles.menuItem}
               onPress={() => router.push("/perfil")}
             >
               <MaterialIcons name="person" size={25} color="#FFF" style={{ textAlign: "center", borderTopWidth: 2, width: 65, borderTopColor: "#ccc", paddingTop: 5 }} />

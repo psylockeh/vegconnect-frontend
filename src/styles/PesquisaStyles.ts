@@ -9,7 +9,7 @@ export const pesquisarStyles = StyleSheet.create({
   mainContent: {
     flex: 1,
     padding: 16,
-
+    marginBottom: -10,
   },
   inputPesquisar: {
     width: '100%',
