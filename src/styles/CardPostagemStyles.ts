@@ -15,10 +15,11 @@ export const styles = StyleSheet.create({
     marginBottom: 10,
   },
   fotoPerfil: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    marginRight: 10,
+    width: 50,
+    height: 50,
+    borderRadius: 30,
+    marginRight: 30,
+    backgroundColor: "#E6F1EB",
   },
   nomeUsuario: {
     fontWeight: "bold",
@@ -27,6 +28,11 @@ export const styles = StyleSheet.create({
   nickname: {
     color: "#666",
     fontSize: 14,
+  },
+  tpUser: {
+    fontSize: 14,
+    color: 'black',
+    marginTop: 8,
   },
   tagTipoPost: {
     alignSelf: "flex-start",

@@ -30,7 +30,7 @@ const feedStyles = StyleSheet.create({
     width: 42,
     height: 42,
     borderRadius: 21,
-    backgroundColor: "#D9E9DE",
+    backgroundColor: "#E6F1EB",
     marginRight: 10,
   },
   nomeUsuario: {
@@ -141,8 +141,6 @@ const feedStyles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     gap:8,
-
-
   }
 });
 

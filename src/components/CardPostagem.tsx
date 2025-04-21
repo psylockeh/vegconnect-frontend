@@ -60,10 +60,22 @@ const CardPostagem = ({ postagem }: Props) => {
     <View style={[styles.card, { borderColor: definirCorBorda() }]}>
       {/* Cabeçalho */}
       <View style={styles.headerUsuario}>
-        <Image source={{ uri: fotoPerfilUrl }} style={styles.fotoPerfil} />
+        {/* <Image source={{ uri: fotoPerfilUrl }} style={styles.fotoPerfil} /> */}
+
+        {usuario?.foto_perfil? (
+                <Image
+                  source={{ uri: fotoPerfilUrl}}
+                  style={styles.fotoPerfil}
+                />
+              ) : (
+                <View style={styles.fotoPerfil}>
+                  <Text style={{ color: "#black", fontSize: 10, textAlign:"auto", marginTop: 15, paddingLeft: 5}}>Sem foto</Text>
+                </View>
+              )}
         <View>
           <Text style={styles.nomeUsuario}>{usuario?.nome}</Text>
           <Text style={styles.nickname}>@{usuario?.nickname}</Text>
+          <Text style={styles.nickname}>{usuario?.tp_user}</Text>
         </View>
       </View>
 
@@ -118,14 +130,10 @@ const CardPostagem = ({ postagem }: Props) => {
 
       {tp_post === "promocao" && (
         <View>
-          {links && (
-            <Text style={styles.campo}>
-              Link da promoção:{" "}
-              <Text style={{ color: "#2563eb" }} selectable>
-                {links}
-              </Text>
-            </Text>
-          )}
+          <Text style={styles.subTitulo}>Receita: {nome_receita}</Text>
+          <Text style={styles.campo}>Ingredientes: {ingredientes}</Text>
+          <Text style={styles.campo}>Instruções: {instrucoes}</Text>
+          <Text style={styles.campo}>Tempo de Preparo: {temp_prep}</Text>
         </View>
       )}
 
