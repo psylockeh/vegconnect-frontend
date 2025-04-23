@@ -38,11 +38,12 @@ const feedStyles = StyleSheet.create({
   nomeUsuario: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#2E4F36",
+    color: "#023D2E",
   },
   tipoUsuario: {
     fontSize: 13,
     color: "#6C8A72",
+    marginTop: 5,
   },
   inputPost: {
     backgroundColor: "#F0F4F2",

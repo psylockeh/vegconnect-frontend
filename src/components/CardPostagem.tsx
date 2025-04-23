@@ -62,20 +62,22 @@ const CardPostagem = ({ postagem }: Props) => {
       <View style={styles.headerUsuario}>
         {/* <Image source={{ uri: fotoPerfilUrl }} style={styles.fotoPerfil} /> */}
 
-        {usuario?.foto_perfil? (
-                <Image
-                  source={{ uri: fotoPerfilUrl}}
-                  style={styles.fotoPerfil}
-                />
-              ) : (
-                <View style={styles.fotoPerfil}>
-                  <Text style={{ color: "#black", fontSize: 10, textAlign:"auto", marginTop: 15, paddingLeft: 5}}>Sem foto</Text>
-                </View>
-              )}
+        {usuario?.foto_perfil ? (
+          <Image
+            source={{ uri: fotoPerfilUrl }}
+            style={styles.fotoPerfil}
+          />
+        ) : (
+          <View style={styles.fotoPerfil}>
+            <Text style={{ color: "#black", fontSize: 10, textAlign: "auto", marginTop: 15, paddingLeft: 5 }}>Sem foto</Text>
+          </View>
+        )}
         <View>
           <Text style={styles.nomeUsuario}>{usuario?.nome}</Text>
           <Text style={styles.nickname}>@{usuario?.nickname}</Text>
-          <Text style={styles.nickname}>{usuario?.tp_user}</Text>
+          <Text style={styles.nickname}>
+            <FontAwesome name="leaf" style={{ color: "#67b26f", fontSize: 20, marginRight: 8 }} />
+            {usuario?.tp_user}</Text>
         </View>
       </View>
 

@@ -4,6 +4,7 @@ import { useRouter } from "expo-router";
 import { useAuth } from "@/context/AuthContext";
 import { styles } from "@/styles/PerfilStyles";
 import Sidebar from "@/components/Sidebar";
+import { FontAwesome} from "@expo/vector-icons";
 
 export default function PerfilScreen() {
   const router = useRouter();
@@ -39,12 +40,13 @@ export default function PerfilScreen() {
               <View>
                 <Text style={styles.nomeUsuario}> {perfilUsuario.nome || "Usuárioid_user"} </Text>
                 <Text style={styles.nickname}> @{perfilUsuario.nickname || "usuário"} </Text>
-                <Text style={styles.tpUser}> {perfilUsuario.tp_user || "Público"} </Text>
+                <Text style={styles.tpUser}><FontAwesome name="leaf" style={{color: "#67b26f", fontSize: 20, marginRight: 8}}/>
+                {perfilUsuario.tp_user || "Público"} </Text>
 
                 {perfilUsuario.tp_user === "Comerciante" && (
                   <>
                     <Text style={styles.info}>
-                      Comércio: {perfilUsuario.nome_comercio}
+                      Comércio: {perfilUsuario.nome_com}
                     </Text>
                     <Text style={styles.info}>Tel: {perfilUsuario.telefone}</Text>
                   </>

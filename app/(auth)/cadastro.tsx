@@ -177,16 +177,6 @@ export default function CadastroScreen() {
           autoCapitalize="words"
         />
 
-        {/* Campo de E-mail */}
-        <TextInput
-          style={styles.input}
-          placeholder="E-mail"
-          value={email}
-          onChangeText={setEmail}
-          keyboardType="email-address"
-          autoCapitalize="none"
-        />
-
         {/* Campo de Nikename */}
         <TextInput
           style={styles.input}
@@ -194,6 +184,16 @@ export default function CadastroScreen() {
           value={nickname}
           onChangeText={setNickname}
           keyboardType="default"
+          autoCapitalize="none"
+        />
+
+        {/* Campo de E-mail */}
+        <TextInput
+          style={styles.input}
+          placeholder="E-mail"
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
           autoCapitalize="none"
         />
 
@@ -207,15 +207,6 @@ export default function CadastroScreen() {
           autoCapitalize="none"
         />
 
-        {/* Campo de Senha */}
-        <TextInput
-          style={styles.input}
-          placeholder="Senha"
-          value={senha}
-          onChangeText={setSenha}
-          secureTextEntry
-        />
-
         {/* Campo de Data de Nascimento */}
         <TextInput
           style={styles.input}
@@ -223,6 +214,15 @@ export default function CadastroScreen() {
           value={dataNascimento}
           onChangeText={setDataNascimento}
           keyboardType="numeric"
+        />
+
+        {/* Campo de Senha */}
+        <TextInput
+          style={styles.input}
+          placeholder="Senha"
+          value={senha}
+          onChangeText={setSenha}
+          secureTextEntry
         />
 
         {/* Campo de Tipo de Usuario*/}
@@ -263,36 +263,12 @@ export default function CadastroScreen() {
         {/* Campo de Usuario Comerciante*/}
         {tipoUsuario === "comerciante" && (
           <>
-            {/* Campo de Tipo do Produto*/}
-            <TextInput
-              style={styles.input}
-              placeholder="Tipo do Produto"
-              value={tipoProduto}
-              onChangeText={setTipoProduto}
-            />
-
-            {/* Campo de Tipo de Comércio*/}
-            <TextInput
-              style={styles.input}
-              placeholder="Tipo do Comércio"
-              value={tipoComercio}
-              onChangeText={setTipoComercio}
-            />
-
             {/* Campo de Nome de Comércio*/}
             <TextInput
               style={styles.input}
               placeholder="Nome do Comércio"
               value={nomeComercio}
               onChangeText={setNomeComercio}
-            />
-
-            {/* Campo de Endereço de Comércio*/}
-            <TextInput
-              style={styles.input}
-              placeholder="Endereço do Comércio"
-              value={enderecoComercio}
-              onChangeText={setEnderecoComercio}
             />
 
             {/* Campo de CNPJ*/}
@@ -303,14 +279,6 @@ export default function CadastroScreen() {
               onChangeText={setCnpj}
             />
 
-            {/* Campo de CEP do Comércio*/}
-            <TextInput
-              style={styles.input}
-              placeholder="CEP do Comércio"
-              value={cepComercio}
-              onChangeText={setCepComercio}
-            />
-
             {/* Campo de Telefone do Comércio*/}
             <TextInput
               style={styles.input}
@@ -318,9 +286,40 @@ export default function CadastroScreen() {
               value={telefoneComercio}
               onChangeText={setTelefoneComercio}
             />
+
+            {/* Campo de Tipo de Comércio*/}
+            <TextInput
+              style={styles.input}
+              placeholder="Tipo do Comércio"
+              value={tipoComercio}
+              onChangeText={setTipoComercio}
+            />
+
+            {/* Campo de Tipo do Produto*/}
+            <TextInput
+              style={styles.input}
+              placeholder="Tipo do Produto"
+              value={tipoProduto}
+              onChangeText={setTipoProduto}
+            />
+
+            {/* Campo de Endereço de Comércio*/}
+            <TextInput
+              style={styles.input}
+              placeholder="Endereço do Comércio"
+              value={enderecoComercio}
+              onChangeText={setEnderecoComercio}
+            />
+
+            {/* Campo de CEP do Comércio*/}
+            <TextInput
+              style={styles.input}
+              placeholder="CEP do Comércio"
+              value={cepComercio}
+              onChangeText={setCepComercio}
+            />
           </>
         )}
-
         {/* Campo de Preferência Alimentar*/}
         <Text style={styles.label}>Sua preferência alimentar:</Text>
         <Picker
@@ -333,6 +332,7 @@ export default function CadastroScreen() {
           <Picker.Item label="Vegetariano" value="Vegetariano" />
           <Picker.Item label="Dieta Restritiva" value="Dieta restritiva" />
         </Picker>
+
 
         {error ? <Text style={styles.error}>{error}</Text> : null}
 

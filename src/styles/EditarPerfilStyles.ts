@@ -44,7 +44,7 @@ export const styles = StyleSheet.create({
     fontWeight: "bold",
     marginTop: 10,
     marginBottom: 5,
-    color: "#333",
+    color: "#023D2E",
   },
   inputEditarPerfil: {
     backgroundColor: "#F0F4F2",
@@ -62,10 +62,43 @@ export const styles = StyleSheet.create({
     paddingVertical: 12,
     borderRadius: 10,
     alignItems: "center",
+    height: 48,
+    justifyContent: "center",
+    width: "100%",
   },
   textoBotaoSalvar: {
     color: "#fff",
     fontSize: 15,
     fontWeight: "bold",
+  },
+  loadingAnimation: {
+    width: 50,
+    height: 50,
+  },
+  loadingWrapper: {
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100%",
+    width: "100%",
+  },
+  loadingIcon: {
+    width: 28,
+    height: 28,
+  },
+  picker: {
+    width: "100%",
+    height: 50,
+    backgroundColor: "#F0F4F2",
+    borderRadius: 8,
+    marginBottom: 15,
+    borderColor: "#DDD",
+    padding: 5,
+  },
+  error: {
+    color: "#D32F2F",
+    fontSize: 14,
+    textAlign: "center",
+    marginTop: 8,
+    marginBottom: 8,
   },
 });

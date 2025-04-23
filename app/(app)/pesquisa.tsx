@@ -7,6 +7,8 @@ import pesquisarStyles from "@/styles/PesquisaStyles"
 import Sidebar from "@/components/Sidebar";
 import CardPostagem from "@/components/CardPostagem";
 import { useRouter } from "expo-router";
+import { FontAwesome } from "@expo/vector-icons";
+
 
 const PesquisaGeral = () => {
   const [termo, setTermo] = useState('');
@@ -91,7 +93,7 @@ const PesquisaGeral = () => {
           </View>
         </View>
 
-        {carregando && <ActivityIndicator size="large" color="#00f" style={pesquisarStyles.carregando} />}
+        {carregando && <ActivityIndicator size="large" color="#3C6E47" style={pesquisarStyles.carregando} />}
 
         {erro && <Text style={pesquisarStyles.erro}>{erro}</Text>}
 
@@ -103,7 +105,7 @@ const PesquisaGeral = () => {
             <TouchableOpacity
               onPress={() => {
                 if (tipo === "usuario") {
-                  router.push(`/perfil/${item.id_user}`); 
+                  router.push(`/perfil/${item.id_user}`);
                 } else {
                   router.push(`/postagem/${item.id}`);
                 }
@@ -118,7 +120,7 @@ const PesquisaGeral = () => {
                       />
                     ) : (
                       <View style={pesquisarStyles.fotoPerfil}>
-                        <Text style={{color: "black", fontSize: 10, textAlign: "center", marginTop: 15, }} >
+                        <Text style={{ color: "black", fontSize: 10, textAlign: "center", marginTop: 15, }} >
                           Sem foto
                         </Text>
                       </View>
@@ -126,7 +128,9 @@ const PesquisaGeral = () => {
                     <View>
                       <Text style={pesquisarStyles.nomeUsuario}> {item.nome || "Usuário"} </Text>
                       <Text style={pesquisarStyles.nickname}> @{item.nickname || "usuário"} </Text>
-                      <Text style={pesquisarStyles.textoResultado}> {item.tp_user || "Público"} </Text>
+                      <Text style={pesquisarStyles.textoResultado}>
+                        <FontAwesome name="leaf" style={{ color: "#67b26f", fontSize: 20, marginRight: 8 }}/>
+                        {item.tp_user || "Público"} </Text>
                     </View>
                   </View>
                 </View>

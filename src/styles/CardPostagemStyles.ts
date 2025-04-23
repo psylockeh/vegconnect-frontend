@@ -24,6 +24,7 @@ export const styles = StyleSheet.create({
   nomeUsuario: {
     fontWeight: "bold",
     fontSize: 16,
+    color: "#023D2E",
   },
   nickname: {
     color: "#666",
@@ -32,7 +33,7 @@ export const styles = StyleSheet.create({
   tpUser: {
     fontSize: 14,
     color: 'black',
-    marginTop: 8,
+    marginTop: 10,
   },
   tagTipoPost: {
     alignSelf: "flex-start",

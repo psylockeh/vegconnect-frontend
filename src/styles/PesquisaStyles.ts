@@ -100,6 +100,7 @@ export const pesquisarStyles = StyleSheet.create({
   nomeUsuario: {
     fontWeight: "bold",
     fontSize: 16,
+    color: "#023D2E",
   },
   nickname: {
     color: "#666",

@@ -52,7 +52,7 @@ export const styles = StyleSheet.create({
   nomeUsuario: {
     fontSize: 19,
     fontWeight: "bold",
-    color: "#2E4F36",
+    color: "#023D2E",
   },
   nickname: {
     color: "#666",
@@ -61,6 +61,7 @@ export const styles = StyleSheet.create({
   tpUser: {
     fontSize: 14,
     color: '#333',
+    marginTop: 5,
   },
 
   info: {

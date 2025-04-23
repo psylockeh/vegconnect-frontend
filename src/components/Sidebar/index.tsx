@@ -3,6 +3,7 @@ import { useState, useRef } from "react";
 import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import styles from "./styles";
 import { useRouter } from "expo-router";
+import { useAuth } from "@/context/AuthContext";
 
 
 type Props = {
@@ -11,6 +12,7 @@ type Props = {
 
 export default function Sidebar({ onPostPress }: Props) {
   const [open, setOpen] = useState(true);
+  const {perfilUsuario } = useAuth();
   const router = useRouter();
 
   const slideAnim = useRef(new Animated.Value(0)).current;
@@ -91,7 +93,7 @@ export default function Sidebar({ onPostPress }: Props) {
 
             <TouchableOpacity style={styles.menuItem}>
               <FontAwesome name="leaf" size={20} color="#67b26f" />
-              <Text style={styles.label}>Comum</Text>
+              <Text style={styles.label}>{perfilUsuario.tp_user}</Text>
             </TouchableOpacity>
           </View>
         )}
