@@ -21,7 +21,7 @@ import LottieView from "lottie-react-native";
 import { Picker } from "@react-native-picker/picker";
 
 export default function EditarPerfilScreen() {
-  const { carregarPerfil, perfilUsuario } = useAuth();
+  const { carregarPerfil, logout, perfilUsuario } = useAuth();
   const [nome, setNome] = useState("");
   const [nickname, setNickname] = useState("");
   const [bio, setBio] = useState("");
@@ -162,6 +162,36 @@ export default function EditarPerfilScreen() {
     }
 
     setLoading(false);
+  };
+
+  //Deletar dados do Perfil
+  const deletarPerfil = async () => {
+    try {
+      const token = await AsyncStorage.getItem("@token");
+      const userId = perfilUsuario?.id_user; 
+  
+      if (!userId) {
+        setMensagemAlerta("❌ ID de usuário não encontrado!");
+        return;
+      }
+  
+      await axios.delete(`${API_URL}/usuario/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+  
+      setMensagemAlerta("📌 Perfil deletado com sucesso!");
+      setTimeout(async () => {
+        await AsyncStorage.removeItem("@token");
+        
+        perfilUsuario("logout");  // Colocar rota correta de direcionamento para quando excluir
+
+      }, 10000);
+    } catch (error) {
+      console.error("Erro ao deletar perfil:", error);
+      setMensagemAlerta("❌ Erro ao deletar o perfil!");
+    }
   };
 
   return (
@@ -363,8 +393,15 @@ export default function EditarPerfilScreen() {
                   style={{ width: 24, height: 24 }}
                 />
               ) : (
-                <Text style={styles.textoBotaoSalvar}>Salvar</Text>
+                <Text style={styles.textoBotao}>Salvar</Text>
               )}
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.botaoDeletarPerfil}
+              onPress={deletarPerfil}
+            >
+                <Text style={styles.textoBotao}>Excluir Perfil</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>

@@ -66,7 +66,17 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     width: "100%",
   },
-  textoBotaoSalvar: {
+  botaoDeletarPerfil: {
+    marginTop: 16,
+    backgroundColor: "#e53935",
+    paddingVertical: 12,
+    borderRadius: 10,
+    alignItems: "center",
+    height: 48,
+    justifyContent: "center",
+    width: "100%",
+  },
+  textoBotao: {
     color: "#fff",
     fontSize: 15,
     fontWeight: "bold",
