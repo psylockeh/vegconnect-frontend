@@ -85,7 +85,7 @@ export default function Sidebar({ onPostPress }: Props) {
 
             <TouchableOpacity
               style={styles.menuItem}
-              onPress={() => router.push("/perfil")}
+              onPress={() => router.push(`/perfil/${perfilUsuario.nickname}-${perfilUsuario.id_user}`)}
             >
               <MaterialIcons name="person" size={25} color="#FFF" style={{ textAlign: "center", borderTopWidth: 2, width: 65, borderTopColor: "#ccc", paddingTop: 5 }} />
               <Text style={styles.labelPerson}>Perfil</Text>

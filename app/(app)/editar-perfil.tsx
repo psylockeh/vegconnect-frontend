@@ -175,7 +175,7 @@ export default function EditarPerfilScreen() {
         return;
       }
   
-      await axios.delete(`${API_URL}/usuario/${userId}`, {
+      await axios.delete(`${API_URL}/usuario/deletarPerfil/${userId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -187,7 +187,7 @@ export default function EditarPerfilScreen() {
         
         perfilUsuario("logout");  // Colocar rota correta de direcionamento para quando excluir
 
-      }, 10000);
+      }, 1000);
     } catch (error) {
       console.error("Erro ao deletar perfil:", error);
       setMensagemAlerta("❌ Erro ao deletar o perfil!");
