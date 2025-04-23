@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { API_URL } from "@/config/api";
 import { styles } from "@/styles/CardPostagemStyles";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function DetalhesPostagem() {
   const { id } = useLocalSearchParams();
@@ -12,7 +13,13 @@ export default function DetalhesPostagem() {
 
   const carregarPostagem = async () => {
     try {
-      const response = await axios.get(`${API_URL}/usuario/postagens/${id}`);
+      const token = await AsyncStorage.getItem("@token");
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const response = await axios.get(`${API_URL}/usuario/postagens/${id}`, config);
       setPostagem(response.data);
     } catch (error) {
       console.error("Erro ao buscar detalhes da postagem:", error);
@@ -22,9 +29,10 @@ export default function DetalhesPostagem() {
   };
 
   useEffect(() => {
+    console.log("ID recebido:", id);
     carregarPostagem();
   }, []);
-
+  
   const renderCamposEspecificos = () => {
     if (!postagem) return null;
     const { tp_post } = postagem;

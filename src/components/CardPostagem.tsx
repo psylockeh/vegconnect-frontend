@@ -9,6 +9,7 @@ interface Props {
 
 const CardPostagem = ({ postagem }: Props) => {
   const {
+    id,
     tp_post,
     conteudo,
     autor: usuario,
@@ -60,8 +61,6 @@ const CardPostagem = ({ postagem }: Props) => {
     <View style={[styles.card, { borderColor: definirCorBorda() }]}>
       {/* Cabeçalho */}
       <View style={styles.headerUsuario}>
-        {/* <Image source={{ uri: fotoPerfilUrl }} style={styles.fotoPerfil} /> */}
-
         {usuario?.foto_perfil ? (
           <Image
             source={{ uri: fotoPerfilUrl }}
@@ -86,8 +85,9 @@ const CardPostagem = ({ postagem }: Props) => {
         <Text style={styles.tagTipoText}>
           {postagem.tp_post.charAt(0).toUpperCase() + postagem.tp_post.slice(1)}
         </Text>
-      </View>
 
+      </View>
+      <Text style={styles.subTitulo}>Id: {id}</Text>
       {/* Título */}
       {titulo && <Text style={styles.titulo}>{titulo}</Text>}
 
@@ -96,7 +96,7 @@ const CardPostagem = ({ postagem }: Props) => {
 
       {/* Campos personalizados por tipo */}
       {tp_post === "receita" && (
-        <View>
+        <View>          
           <Text style={styles.subTitulo}>Receita: {nome_receita}</Text>
           <Text style={styles.campo}>Ingredientes: {ingredientes}</Text>
           <Text style={styles.campo}>Instruções: {instrucoes}</Text>
