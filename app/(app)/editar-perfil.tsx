@@ -19,9 +19,10 @@ import Sidebar from "@/components/Sidebar";
 import { MaterialIcons } from "@expo/vector-icons";
 import LottieView from "lottie-react-native";
 import { Picker } from "@react-native-picker/picker";
+import { useRouter } from "expo-router";
 
 export default function EditarPerfilScreen() {
-  const { carregarPerfil, logout, perfilUsuario } = useAuth();
+  const { carregarPerfil, perfilUsuario } = useAuth();
   const [nome, setNome] = useState("");
   const [nickname, setNickname] = useState("");
   const [bio, setBio] = useState("");
@@ -32,6 +33,9 @@ export default function EditarPerfilScreen() {
   const [loading, setLoading] = useState(false);
   const [isCameraHovered, setIsCameraHovered] = useState(false);
   const [mensagemAlerta, setMensagemAlerta] = useState("");
+  const [senha, setSenha] = useState("");
+  const [confirmarSenha, setConfirmarSenha] = useState("");
+  const router = useRouter();
 
   const tipo = perfilUsuario?.tp_user;
 
@@ -59,6 +63,7 @@ export default function EditarPerfilScreen() {
     if (perfilUsuario) {
       setNome(perfilUsuario.nome || "");
       setNickname(perfilUsuario.nickname || "");
+      setSenha(perfilUsuario.senha || "");
       setEmail(perfilUsuario.email || "");
       setBio(perfilUsuario.bio || "");
       setTelefone(perfilUsuario.telefone || "");
@@ -120,6 +125,7 @@ export default function EditarPerfilScreen() {
         nome,
         telefone,
         nickname,
+        senha,
         email,
         data_nascimento,
         bio,
@@ -144,7 +150,18 @@ export default function EditarPerfilScreen() {
       if (tipo === "Comum") {
         formData.pref_alim = prefAlim;
       }
-
+      if (senha !== confirmarSenha) {
+        setMensagemAlerta("🔐 As senhas não coincidem. Tente novamente.");
+        setLoading(false);
+        return;
+      }
+      if (
+        !/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(senha)
+      ) {
+        setMensagemAlerta(
+          "🔐 A senha deve ter pelo menos 8 caracteres, incluindo um número, uma letra maiúscula e um caractere especial."
+        );
+      }
       const token = await AsyncStorage.getItem("@token");
       await axios.put(`${API_URL}/usuario/perfil`, formData, {
         headers: {
@@ -168,26 +185,24 @@ export default function EditarPerfilScreen() {
   const deletarPerfil = async () => {
     try {
       const token = await AsyncStorage.getItem("@token");
-      const userId = perfilUsuario?.id_user; 
-  
+      const userId = perfilUsuario?.id_user;
+
       if (!userId) {
         setMensagemAlerta("❌ ID de usuário não encontrado!");
         return;
       }
-  
+
       await axios.delete(`${API_URL}/usuario/deletarPerfil/${userId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-  
+
       setMensagemAlerta("📌 Perfil deletado com sucesso!");
       setTimeout(async () => {
         await AsyncStorage.removeItem("@token");
-        
-        perfilUsuario("logout");  // Colocar rota correta de direcionamento para quando excluir
-
-      }, 1000);
+        router.push("/login"); 
+      }, 5000);
     } catch (error) {
       console.error("Erro ao deletar perfil:", error);
       setMensagemAlerta("❌ Erro ao deletar o perfil!");
@@ -263,6 +278,25 @@ export default function EditarPerfilScreen() {
                   value={data_nascimento}
                   onChangeText={setDataNascimento}
                 />
+
+                <Text style={styles.label}>Senha:</Text>
+                <TextInput
+                  style={styles.inputEditarPerfil}
+                  placeholder="Senha"
+                  value={senha}
+                  onChangeText={setSenha}
+                  secureTextEntry
+                />
+
+                <Text style={styles.label}>Confirmar Senha:</Text>
+                <TextInput
+                  style={styles.inputEditarPerfil}
+                  placeholder="Confirmar Senha"
+                  value={confirmarSenha}
+                  onChangeText={setConfirmarSenha}
+                  secureTextEntry
+                />
+
 
                 {/* Campo de Usuario Chef*/}
                 {tipo === "Chef" && (
@@ -401,7 +435,7 @@ export default function EditarPerfilScreen() {
               style={styles.botaoDeletarPerfil}
               onPress={deletarPerfil}
             >
-                <Text style={styles.textoBotao}>Excluir Perfil</Text>
+              <Text style={styles.textoBotao}>Excluir Perfil</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>

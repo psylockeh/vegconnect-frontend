@@ -39,6 +39,8 @@ export default function CadastroScreen() {
   const [cnpj, setCnpj] = useState("");
   const [cepComercio, setCepComercio] = useState("");
   const [telefoneComercio, setTelefoneComercio] = useState("");
+  const [confirmarSenha, setConfirmarSenha] = useState("");
+
 
   const formatarDataParaAPI = (data: string) => {
     const regex = /^(\d{2})\/(\d{2})\/(\d{4})$/;
@@ -54,6 +56,7 @@ export default function CadastroScreen() {
       !nome ||
       !email ||
       !senha ||
+      !confirmarSenha ||
       !dataNascimento ||
       !prefAlim ||
       !nickname ||
@@ -63,12 +66,35 @@ export default function CadastroScreen() {
       setLoading(false);
       return;
     }
-
+    if (senha !== confirmarSenha) {
+      setError("🔐 As senhas não coincidem. Tente novamente.");
+      setLoading(false);
+      return;
+    }
+    if (tipoUsuario === "chef" && (!especialidade || !certificacoes)) {
+      setError("📌 Ops! Todos os campos são obrigatórios.");
+      setLoading(false);
+      return;
+    }
+    if (
+      tipoUsuario === "comerciante" &&
+      (!nomeComercio ||
+        !cnpj ||
+        !telefoneComercio ||
+        !tipoComercio ||
+        !tipoProduto ||
+        !enderecoComercio ||
+        !cepComercio)
+    ) {
+      setError("📌 Ops! Todos os campos são obrigatórios.");
+      setLoading(false);
+      return;
+    }
     if (
       !/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(senha)
     ) {
       setError(
-        "🥬 A senha deve ter pelo menos 8 caracteres, incluindo um número, uma letra maiúscula e um caractere especial."
+        "🔐 A senha deve ter pelo menos 8 caracteres, incluindo um número, uma letra maiúscula e um caractere especial."
       );
       setLoading(false);
       return;
@@ -222,6 +248,14 @@ export default function CadastroScreen() {
           placeholder="Senha"
           value={senha}
           onChangeText={setSenha}
+          secureTextEntry
+        />
+
+        <TextInput
+          style={styles.input}
+          placeholder="Confirmar Senha"
+          value={confirmarSenha}
+          onChangeText={setConfirmarSenha}
           secureTextEntry
         />
 
