@@ -6,8 +6,10 @@ import React, {
   ReactNode,
 } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios";
+import Toast from "react-native-toast-message";
+import axios from "../utils/axiosInstance";
 import { API_URL } from "../config/api";
+import { isAxiosError } from "axios";
 
 interface AuthContextProps {
   userToken: string | null;
@@ -64,6 +66,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (tokenSalvo) {
         setUserToken(tokenSalvo);
         setIsAuthenticated(true);
+        await carregarPerfil();
       } else {
         setIsAuthenticated(false);
       }
@@ -80,7 +83,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     manterConectado: boolean
   ) => {
     try {
-      const response = await axios.post(`${API_URL}/auth/signin`, {
+      const response = await axios.post(`/auth/signin`, {
         email,
         senha,
       });
@@ -90,12 +93,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       await AsyncStorage.setItem("@token", token);
       setUserToken(token);
       setIsAuthenticated(true);
-
       setPerfilUsuario(usuario);
-      console.log(usuario.tp_user);
 
       if (manterConectado) {
-        await AsyncStorage.setItem("@token", token);
+        await AsyncStorage.setItem("@token", token); // já garantido
       }
 
       setTimeout(() => {
@@ -120,15 +121,22 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         return;
       }
 
-      const response = await axios.get(`${API_URL}/usuario/perfil`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
+      const response = await axios.get(`/usuario/perfil`);
       setPerfilUsuario(response.data);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Erro ao carregar perfil:", error);
+
+      if (
+        error.response?.status === 401 &&
+        error.response?.data?.message?.toLowerCase()?.includes("jwt")
+      ) {
+        await logout();
+        Toast.show({
+          type: "error",
+          text1: "Sessão expirada",
+          text2: "Faça login novamente.",
+        });
+      }
     }
   };
 
@@ -147,31 +155,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     bio?: string;
   }) => {
     try {
-      const token = await AsyncStorage.getItem("@token");
-
-      if (!token) {
-        console.error("Token não encontrado!");
-        return;
-      }
-
-      const response = await axios.put(
-        `${API_URL}/usuario/perfil`,
-        dadosAtualizados,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const response = await axios.put(`/usuario/perfil`, dadosAtualizados);
 
       if (response.status === 200) {
         setPerfilUsuario(response.data);
         console.log("Perfil atualizado com sucesso!");
       }
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.error(
-          "Erro ao atualizar perfil:",
-          error.response?.data || error.message
-        );
+    } catch (error: unknown) {
+      if (isAxiosError(error)) {
+        console.error("Erro:", error.response?.data || error.message);
       } else {
         console.error("Erro desconhecido:", error);
       }
@@ -196,9 +188,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     cnpj: string,
     cep_comercio: string,
     telefone_comercio: string
-  ) => {
+  ): Promise<void> => {
     try {
-      const response = await axios.post(`${API_URL}/auth/signup`, {
+      const response = await axios.post(`/auth/signup`, {
         nome,
         email,
         senha,
@@ -234,7 +226,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const forgotPassword = async (email: string) => {
     try {
-      await axios.post(`${API_URL}/auth/recuperar-senha`, { email });
+      await axios.post(`/auth/recuperar-senha`, { email });
       console.log("✅ E-mail de recuperação enviado com sucesso!");
     } catch (error) {
       console.error("❌ Erro ao solicitar recuperação de senha:", error);
@@ -244,7 +236,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const resetPassword = async (token: string, novaSenha: string) => {
     try {
-      const response = await axios.post(`${API_URL}/auth/redefinir-senha`, {
+      const response = await axios.post(`/auth/redefinir-senha`, {
         token,
         novaSenha,
       });

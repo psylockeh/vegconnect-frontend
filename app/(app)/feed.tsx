@@ -21,7 +21,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import Toast from "react-native-toast-message";
 import { uploadImageToCloudinary } from "@/utils/cloudinary";
 import { enviarPostagem } from "@/services/postagemService";
-import CardPostagem from "@/components/CardPostagem"; // ✅ novo import
+import CardPostagem from "@/components/CardPostagem";
 
 type Postagem = {
   id: number;
@@ -258,11 +258,9 @@ export default function Feed() {
       {/* Modal para outras postagens */}
       <ModalCriarPostagem
         visivel={mostrarModal}
+        fechar={() => setMostrarModal(false)}
         tp_post={tpPost}
-        fechar={() => {
-          setMostrarModal(false);
-          setTpPost("");
-        }}
+        onPostagemCriada={carregarPostagens} // ou () => carregarPostagens()
       />
     </View>
   );

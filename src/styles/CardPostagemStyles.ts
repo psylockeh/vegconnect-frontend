@@ -84,4 +84,48 @@ export const styles = StyleSheet.create({
     fontSize: 13,
     color: "#555",
   },
+  listaItemTexto: {
+    fontSize: 14,
+    color: "#333",
+    lineHeight: 20,
+    marginLeft: 8,
+    marginBottom: 4,
+  },
+  tipoUsuario: {
+    fontSize: 12,
+    color: "#777",
+    marginBottom: 4,
+  },
+
+  categoriaContainer: {
+    marginTop: 8,
+    flexWrap: "wrap",
+    flexDirection: "row",
+    gap: 4,
+  },
+
+  categoriaTags: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 6,
+    marginTop: 4,
+  },
+
+  tag: {
+    backgroundColor: "#3C6E47",
+    color: "#fff",
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 16,
+    fontSize: 12,
+    marginRight: 4,
+    marginBottom: 4,
+  },
+  tagsContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 6,
+    marginTop: 4,
+    marginBottom: 8,
+  },
 });

@@ -15,17 +15,26 @@ import { uploadImageToCloudinary } from "@/utils/cloudinary";
 import * as ImagePicker from "expo-image-picker";
 import Toast from "react-native-toast-message";
 import { useAuth } from "@/context/AuthContext";
+import FormularioReceita from "@/components/postagens/FormularioReceita";
 
 type Props = {
   visivel: boolean;
   fechar: () => void;
   tp_post: string;
+  onPostagemCriada?: () => void;
+};
+
+type Ingrediente = {
+  nome: string;
+  quantidade: string;
+  secao: string;
 };
 
 export default function ModalCriarPostagem({
   visivel,
   fechar,
   tp_post,
+  onPostagemCriada,
 }: Props) {
   const [titulo, setTitulo] = useState("");
   const [conteudo, setConteudo] = useState("");
@@ -34,10 +43,10 @@ export default function ModalCriarPostagem({
   const [valor, setValor] = useState("");
   const [links, setLinks] = useState("");
   const [nomeReceita, setNomeReceita] = useState("");
-  const [ingredientes, setIngredientes] = useState("");
-  const [instrucoes, setInstrucoes] = useState("");
+  const [ingredientes, setIngredientes] = useState<Ingrediente[]>([]);
+  const [instrucoes, setInstrucoes] = useState<string[]>([]);
   const [tempoPreparo, setTempoPreparo] = useState("");
-  const [categoria, setCategoria] = useState("");
+  const [categoria, setCategoria] = useState<string[]>([]);
   const [tipoComida, setTipoComida] = useState("");
   const [horarioAbertura, setHorarioAbertura] = useState("");
   const [horarioFechamento, setHorarioFechamento] = useState("");
@@ -65,13 +74,13 @@ export default function ModalCriarPostagem({
   const handleSubmitPostagem = async () => {
     let conteudoFormatado = conteudo?.trim();
 
-    if (tp_post === "receita" && !conteudoFormatado && instrucoes?.trim()) {
-      conteudoFormatado = instrucoes.trim();
+    if (tp_post === "receita" && !conteudoFormatado && instrucoes.length > 0) {
+      conteudoFormatado = instrucoes.join("\n").trim();
     }
 
     const novaPostagem: any = {
       tp_post,
-      titulo,
+      titulo: nomeReceita,
       conteudo: conteudoFormatado,
       data,
       localizacao,
@@ -96,20 +105,24 @@ export default function ModalCriarPostagem({
 
     try {
       const midia_urls: string[] = [];
-
       for (const uri of midiasSelecionadas) {
         const uploadedUrl = await uploadImageToCloudinary(uri);
         if (uploadedUrl) midia_urls.push(uploadedUrl);
       }
 
+      novaPostagem.ingredientes = JSON.stringify(ingredientes);
+      novaPostagem.instrucoes = JSON.stringify(instrucoes);
+      novaPostagem.categoria = JSON.stringify(categoria);
       novaPostagem.midia_urls = midia_urls;
 
       await enviarPostagem(novaPostagem);
+      onPostagemCriada?.();
       Toast.show({
         type: "success",
         text1: "Postagem publicada!",
         text2: "Sua publicação foi enviada com sucesso. 🌱",
       });
+
       fechar();
       resetarCampos();
     } catch (err: any) {
@@ -129,15 +142,18 @@ export default function ModalCriarPostagem({
     setValor("");
     setLinks("");
     setNomeReceita("");
-    setIngredientes("");
-    setInstrucoes("");
+    setIngredientes([]);
+    setInstrucoes([]);
     setTempoPreparo("");
-    setCategoria("");
+    setCategoria([]);
     setTipoComida("");
     setHorarioAbertura("");
     setHorarioFechamento("");
     setCep("");
     setMidiasSelecionadas([]);
+    setNomeComercio("");
+    setDescricaoComercio("");
+    setEndereco("");
   };
 
   const fecharModal = () => {
@@ -149,17 +165,19 @@ export default function ModalCriarPostagem({
     <View style={ModalStyles.headerUsuario}>
       <Image
         source={{
-          uri:
-            perfilUsuario?.foto_perfil?.startsWith("http") &&
-            perfilUsuario.foto_perfil
-              ? perfilUsuario.foto_perfil
-              : "https://res.cloudinary.com/demo/image/upload/v1682620184/default-profile.png",
+          uri: perfilUsuario?.foto_perfil?.startsWith("http")
+            ? perfilUsuario.foto_perfil
+            : "https://res.cloudinary.com/demo/image/upload/v1682620184/default-profile.png",
         }}
         style={ModalStyles.avatar}
       />
       <View>
-        <Text style={ModalStyles.nomeUsuario}>{perfilUsuario?.nome}</Text>
-        <Text style={ModalStyles.tipoUsuario}>{perfilUsuario?.tp_user}</Text>
+        <Text style={ModalStyles.nomeUsuario}>
+          {perfilUsuario?.nome || "Usuário"}
+        </Text>
+        <Text style={ModalStyles.tipoUsuario}>
+          {perfilUsuario?.tp_user || "Público"}
+        </Text>
       </View>
     </View>
   );
@@ -168,46 +186,18 @@ export default function ModalCriarPostagem({
     switch (tp_post) {
       case "receita":
         return (
-          <>
-            <TextInput
-              placeholder="Título"
-              value={titulo}
-              onChangeText={setTitulo}
-              style={ModalStyles.input}
-            />
-            <TextInput
-              placeholder="Nome da Receita"
-              value={nomeReceita}
-              onChangeText={setNomeReceita}
-              style={ModalStyles.input}
-            />
-            <TextInput
-              placeholder="Ingredientes"
-              value={ingredientes}
-              onChangeText={setIngredientes}
-              multiline
-              style={ModalStyles.input}
-            />
-            <TextInput
-              placeholder="Instruções"
-              value={instrucoes}
-              onChangeText={setInstrucoes}
-              multiline
-              style={ModalStyles.input}
-            />
-            <TextInput
-              placeholder="Tempo de Preparo"
-              value={tempoPreparo}
-              onChangeText={setTempoPreparo}
-              style={ModalStyles.input}
-            />
-            <TextInput
-              placeholder="Categoria"
-              value={categoria}
-              onChangeText={setCategoria}
-              style={ModalStyles.input}
-            />
-          </>
+          <FormularioReceita
+            nomeReceita={nomeReceita}
+            setNomeReceita={setNomeReceita}
+            ingredientes={ingredientes}
+            setIngredientes={setIngredientes}
+            instrucoes={instrucoes}
+            setInstrucoes={setInstrucoes}
+            tempoPreparo={tempoPreparo}
+            setTempoPreparo={setTempoPreparo}
+            categoria={categoria}
+            setCategoria={setCategoria}
+          />
         );
 
       case "evento":
@@ -336,15 +326,13 @@ export default function ModalCriarPostagem({
       case "recado":
       default:
         return (
-          <>
-            <TextInput
-              placeholder="Digite seu recado"
-              value={conteudo}
-              onChangeText={setConteudo}
-              multiline
-              style={ModalStyles.input}
-            />
-          </>
+          <TextInput
+            placeholder="Digite seu recado"
+            value={conteudo}
+            onChangeText={setConteudo}
+            multiline
+            style={ModalStyles.input}
+          />
         );
     }
   };
