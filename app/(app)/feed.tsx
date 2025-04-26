@@ -17,7 +17,7 @@ import { API_URL } from "@/config/api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAuth } from "@/context/AuthContext";
 import * as ImagePicker from "expo-image-picker";
-import { MaterialIcons } from "@expo/vector-icons";
+import { MaterialIcons, FontAwesome} from "@expo/vector-icons";
 import Toast from "react-native-toast-message";
 import { uploadImageToCloudinary } from "@/utils/cloudinary";
 import { enviarPostagem } from "@/services/postagemService";
@@ -118,22 +118,10 @@ export default function Feed() {
 
   return (
     <View style={feedStyles.container}>
-      <Sidebar onPostPress={() => {}} />
+      <Sidebar onPostPress={() => { }} />
 
       <View style={feedStyles.mainContent}>
-        <View style={{ alignItems: "flex-end", padding: 8 }}>
-          <TouchableOpacity
-            onPress={logout}
-            style={{
-              backgroundColor: "#D33",
-              paddingHorizontal: 12,
-              paddingVertical: 6,
-              borderRadius: 6,
-            }}
-          >
-            <Text style={{ color: "#fff", fontWeight: "bold" }}>Sair</Text>
-          </TouchableOpacity>
-        </View>
+
         <ScrollView showsVerticalScrollIndicator={false}>
           {/* Card de criação de recado */}
           <View style={feedStyles.cardCriarPost}>
@@ -145,7 +133,7 @@ export default function Feed() {
                 />
               ) : (
                 <View style={feedStyles.avatar}>
-                  <Text style={{ color: "#999", fontSize: 10 }}>Sem foto</Text>
+                  <Text style={{ color: "#black", fontSize: 10, textAlign: "auto", marginTop: 15, paddingLeft: 5 }}>Sem foto</Text>
                 </View>
               )}
 
@@ -154,8 +142,24 @@ export default function Feed() {
                   {perfilUsuario?.nome || "Usuário"}
                 </Text>
                 <Text style={feedStyles.tipoUsuario}>
+                  <FontAwesome name="leaf" style={{ color: "#67b26f", fontSize: 20, marginRight: 8 }} />
                   {perfilUsuario?.tp_user || "Público"}
                 </Text>
+              </View>
+
+              {/* Botão Sair */}
+              <View style={{ flex: 1, justifyContent: "center", alignItems: "flex-end", padding: 8 }}>
+                <TouchableOpacity
+                  onPress={logout}
+                  style={{
+                    backgroundColor: "#D33",
+                    paddingHorizontal: 12,
+                    paddingVertical: 6,
+                    borderRadius: 6,
+                  }}
+                >
+                  <Text style={{ color: "#fff", fontWeight: "bold" }}>Sair</Text>
+                </TouchableOpacity>
               </View>
             </View>
 

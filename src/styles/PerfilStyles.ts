@@ -1,80 +1,83 @@
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
-  containerPrincipal: {
+  container: {
     flex: 1,
     backgroundColor: "#F5FAF6",
     flexDirection: "row",
   },
-  containerConteudo: {
-    flexGrow: 1,
-    padding: 20,
-    paddingTop: 40,
-    alignItems: "center",
+  mainContent: {
+    flex: 1,
+    padding: 16,
+    marginTop: -10,
+    marginBottom: -10,
   },
-  input: {
-    width: "100%",
-    height: 50,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 8,
-    paddingHorizontal: 12,
+  cardPerfil: {
+    backgroundColor: "#FAFDFB",
+    padding: 16,
+    borderRadius: 16,
+    marginBottom: 20,
+    shadowColor: "#000",
+    shadowOpacity: 0.05,
+    shadowOffset: { width: 0, height: 3 },
+    shadowRadius: 5,
+    elevation: 3,
+  },
+  headerUsuario: {
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 12,
   },
-  button: {
-    backgroundColor: "#4CAF50",
-    padding: 15,
-    borderRadius: 8,
-    marginTop: 10,
-    width: "100%",
+  botaoAlterarPerfil: {
+    marginTop: 15,
+    backgroundColor: "#3C6E47",
+    paddingVertical: 12,
+    borderRadius: 10,
     alignItems: "center",
   },
-  buttonText: {
+  textoBotaoAlterar: {
     color: "#fff",
+    fontSize: 15,
     fontWeight: "bold",
-    fontSize: 16,
   },
   avatar: {
-    width: 120,
-    height: 120,
+    width: 110,
+    height: 110,
     borderRadius: 60,
+    marginTop: 10,
     marginBottom: 20,
+    marginRight: 25,
+    backgroundColor: "#E6F1EB",
   },
-  avatarPlaceholder: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    backgroundColor: "#D9E9DE",
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 20,
-  },
-  avatarText: {
-    color: "#888",
-    fontSize: 14,
-  },
-  bio: {
-    fontStyle: "italic",
-    color: "#555",
-    marginBottom: 10,
-    textAlign: "center",
-  },
-  info: {
-    fontSize: 16,
-    marginVertical: 4,
-    color: "#333",
-  },
-  title: {
-    fontSize: 24,
+  nomeUsuario: {
+    fontSize: 19,
     fontWeight: "bold",
-    marginBottom: 10,
-    color: "#2E4F36",
+    color: "#023D2E",
   },
   nickname: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#2E4F36",
-    marginBottom: 6,
-    textAlign: "center",
+    color: "#666",
+    fontSize: 15,
   },
+  tpUser: {
+    fontSize: 14,
+    color: '#333',
+    marginTop: 5,
+  },
+
+  info: {
+    fontSize: 16,
+    color: "#666",
+    fontWeight: "bold",
+    marginLeft: 3,
+    marginTop: 15,
+  },
+  bio: {
+    fontSize: 14,
+    fontStyle: "italic",
+    color: "#666",
+    textAlign: "center",
+    backgroundColor: "#F0F4F2",
+    paddingVertical: 12,
+    borderRadius: 10,
+  }
 });

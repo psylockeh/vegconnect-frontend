@@ -9,7 +9,7 @@ export const pesquisarStyles = StyleSheet.create({
   mainContent: {
     flex: 1,
     padding: 16,
-
+    marginBottom: -10,
   },
   inputPesquisar: {
     width: '100%',
@@ -82,7 +82,29 @@ export const pesquisarStyles = StyleSheet.create({
   },
   textoResultado: {
     fontSize: 14,
-    color: '#333',
+    color: 'black',
+    marginTop: 15,
+  },
+  headerUsuario: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 12,
+  },
+  fotoPerfil: {
+    width: 50,
+    height: 50,
+    borderRadius: 30,
+    marginRight: 30,
+    backgroundColor: "#E6F1EB",
+  },
+  nomeUsuario: {
+    fontWeight: "bold",
+    fontSize: 16,
+    color: "#023D2E",
+  },
+  nickname: {
+    color: "#666",
+    fontSize: 14,
   },
 });
 

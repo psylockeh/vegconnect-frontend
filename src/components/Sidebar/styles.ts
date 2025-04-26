@@ -16,7 +16,7 @@ export default StyleSheet.create({
     alignItems: "center",
   },
   menuItem: {
-    marginBottom: 20,
+    marginBottom: 18,
     alignItems: "center",
   },
 
@@ -24,7 +24,7 @@ export default StyleSheet.create({
     color: "black",
     fontSize: 12,
     marginTop: 4,
-  
+    marginBottom:-5,
     padding: 10,
     textAlign: "center",
     fontWeight: "bold",

@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
-import { View, TextInput, Text, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native';
+import { View, TextInput, Text, TouchableOpacity, FlatList, ActivityIndicator, Image } from 'react-native';
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_URL } from "@/config/api";
 import pesquisarStyles from "@/styles/PesquisaStyles"
 import Sidebar from "@/components/Sidebar";
+import CardPostagem from "@/components/CardPostagem";
+import { useRouter } from "expo-router";
+import { FontAwesome } from "@expo/vector-icons";
+
 
 const PesquisaGeral = () => {
   const [termo, setTermo] = useState('');
@@ -12,6 +16,7 @@ const PesquisaGeral = () => {
   const [resultados, setResultados] = useState<any[]>([]);
   const [carregando, setCarregando] = useState(false);
   const [erro, setErro] = useState('');
+  const router = useRouter();
 
   const opcoes = [
     { label: 'Perfil', valor: 'usuario' },
@@ -67,7 +72,7 @@ const PesquisaGeral = () => {
             value={termo}
             onChangeText={setTermo}
             placeholder="Pesquisar..."
-            onSubmitEditing={() => pesquisar()}  
+            onSubmitEditing={() => pesquisar()}
             style={pesquisarStyles.inputPesquisar}
           />
 
@@ -88,7 +93,7 @@ const PesquisaGeral = () => {
           </View>
         </View>
 
-        {carregando && <ActivityIndicator size="large" color="#00f" style={pesquisarStyles.carregando} />}
+        {carregando && <ActivityIndicator size="large" color="#3C6E47" style={pesquisarStyles.carregando} />}
 
         {erro && <Text style={pesquisarStyles.erro}>{erro}</Text>}
 
@@ -97,10 +102,42 @@ const PesquisaGeral = () => {
           data={resultados}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => (
-            <View style={pesquisarStyles.cardResultado}>
-              <Text style={pesquisarStyles.textoResultado}>{item.nome}</Text>
-              <Text style={pesquisarStyles.textoResultado}>{item.descricao}</Text>
-            </View>
+            <TouchableOpacity
+              onPress={() => {
+                if (tipo === "usuario") {
+                  router.push(`/perfil/${item.nickname}-${item.id_user}`);
+                } else {
+                  router.push(`/postagem/${item.id}`);
+                }
+              }}
+            >
+              {tipo === "usuario" ? (
+                <View style={pesquisarStyles.cardResultado}>
+                  <View style={pesquisarStyles.headerUsuario}>
+                    {item.foto_perfil ? (
+                      <Image
+                        source={{ uri: item.foto_perfil }} style={pesquisarStyles.fotoPerfil}
+                      />
+                    ) : (
+                      <View style={pesquisarStyles.fotoPerfil}>
+                        <Text style={{ color: "black", fontSize: 10, textAlign: "center", marginTop: 15, }} >
+                          Sem foto
+                        </Text>
+                      </View>
+                    )}
+                    <View>
+                      <Text style={pesquisarStyles.nomeUsuario}> {item.nome || "Usuário"} </Text>
+                      <Text style={pesquisarStyles.nickname}> @{item.nickname || "usuário"} </Text>
+                      <Text style={pesquisarStyles.textoResultado}>
+                        <FontAwesome name="leaf" style={{ color: "#67b26f", fontSize: 20, marginRight: 8 }}/>
+                        {item.tp_user || "Público"} </Text>
+                    </View>
+                  </View>
+                </View>
+              ) : (
+                <CardPostagem postagem={item} />
+              )}
+            </TouchableOpacity>
           )}
         />
       </View>

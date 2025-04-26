@@ -3,6 +3,7 @@ import { useState, useRef } from "react";
 import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import styles from "./styles";
 import { useRouter } from "expo-router";
+import { useAuth } from "@/context/AuthContext";
 
 
 type Props = {
@@ -11,6 +12,7 @@ type Props = {
 
 export default function Sidebar({ onPostPress }: Props) {
   const [open, setOpen] = useState(true);
+  const {perfilUsuario } = useAuth();
   const router = useRouter();
 
   const slideAnim = useRef(new Animated.Value(0)).current;
@@ -83,15 +85,7 @@ export default function Sidebar({ onPostPress }: Props) {
 
             <TouchableOpacity
               style={styles.menuItem}
-              onPress={() => router.push("/configuracoes")}
-            >
-              <MaterialIcons name="settings" size={20} color="#FFF" />
-              <Text style={styles.label}>Config</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={styles.menuItem}
-              onPress={() => router.push("/perfil")}
+              onPress={() => router.push(`/perfil/${perfilUsuario.nickname}-${perfilUsuario.id_user}`)}
             >
               <MaterialIcons name="person" size={25} color="#FFF" style={{ textAlign: "center", borderTopWidth: 2, width: 65, borderTopColor: "#ccc", paddingTop: 5 }} />
               <Text style={styles.labelPerson}>Perfil</Text>
@@ -99,7 +93,7 @@ export default function Sidebar({ onPostPress }: Props) {
 
             <TouchableOpacity style={styles.menuItem}>
               <FontAwesome name="leaf" size={20} color="#67b26f" />
-              <Text style={styles.label}>Comum</Text>
+              <Text style={styles.label}>{perfilUsuario.tp_user}</Text>
             </TouchableOpacity>
           </View>
         )}

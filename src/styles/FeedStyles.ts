@@ -9,6 +9,8 @@ const feedStyles = StyleSheet.create({
   mainContent: {
     flex: 1,
     padding: 16,
+    marginTop: -10,
+    marginBottom: -10,
   },
   cardCriarPost: {
     backgroundColor: "#FAFDFB",
@@ -27,20 +29,21 @@ const feedStyles = StyleSheet.create({
     marginBottom: 12,
   },
   avatar: {
-    width: 42,
-    height: 42,
-    borderRadius: 21,
-    backgroundColor: "#D9E9DE",
-    marginRight: 10,
+    width: 50,
+    height: 50,
+    borderRadius: 30,
+    marginRight: 30,
+    backgroundColor: "#E6F1EB",
   },
   nomeUsuario: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#2E4F36",
+    color: "#023D2E",
   },
   tipoUsuario: {
     fontSize: 13,
     color: "#6C8A72",
+    marginTop: 5,
   },
   inputPost: {
     backgroundColor: "#F0F4F2",
@@ -141,8 +144,6 @@ const feedStyles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     gap:8,
-
-
   }
 });
 

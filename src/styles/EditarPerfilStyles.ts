@@ -1,86 +1,114 @@
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
-  containerPrincipal: {
+  container: {
     flex: 1,
     backgroundColor: "#F5FAF6",
     flexDirection: "row",
   },
-
-  container: {
+  mainContent: {
     flex: 1,
-    padding: 20,
-    backgroundColor: "#f4f4f4",
+    padding: 16,
+    marginTop: -10,
+    marginBottom: -10,
   },
 
+  cardEditarPerfil: {
+    backgroundColor: "#FAFDFB",
+    padding: 10,
+    borderRadius: 16,
+    shadowColor: "#000",
+    shadowOpacity: 0.05,
+    shadowOffset: { width: 0, height: 3 },
+    shadowRadius: 5,
+    elevation: 3,
+  },
+  headerUsuario: {
+    flexDirection: "column",
+    marginBottom: 12,
+  },
   avatarContainer: {
     alignSelf: "center",
     position: "relative",
-    marginBottom: 20,
+    marginBottom: 10,
   },
-
   avatar: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    marginBottom: 15,
+    backgroundColor: "#E6F1EB",
   },
-
-  avatarPlaceholder: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    backgroundColor: "#ddd",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  avatarText: {
-    fontSize: 14,
-    color: "#666",
-    marginTop: 5,
-  },
-
-  overlay: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    backgroundColor: "rgba(0, 0, 0, 0.4)",
-    justifyContent: "center",
-    alignItems: "center",
-    pointerEvents: "none",
-  },
-
   label: {
     fontSize: 16,
     fontWeight: "bold",
     marginTop: 10,
     marginBottom: 5,
+    color: "#023D2E",
+  },
+  inputEditarPerfil: {
+    backgroundColor: "#F0F4F2",
+    padding: 12,
+    borderRadius: 10,
+    marginBottom: 10,
+    fontSize: 14,
+    borderWidth: 1,
+    borderColor: "#D7E2DA",
     color: "#333",
   },
-
-  input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 5,
-    padding: 10,
-    marginBottom: 15,
-    backgroundColor: "#fff",
-  },
-
-  button: {
-    backgroundColor: "#007bff",
-    padding: 15,
-    borderRadius: 5,
+  botaoSalvarPerfil: {
+    marginTop: 16,
+    backgroundColor: "#3C6E47",
+    paddingVertical: 12,
+    borderRadius: 10,
     alignItems: "center",
-    marginTop: 20,
+    height: 48,
+    justifyContent: "center",
+    width: "100%",
   },
-
-  buttonText: {
+  botaoDeletarPerfil: {
+    marginTop: 16,
+    backgroundColor: "#e53935",
+    paddingVertical: 12,
+    borderRadius: 10,
+    alignItems: "center",
+    height: 48,
+    justifyContent: "center",
+    width: "100%",
+  },
+  textoBotao: {
     color: "#fff",
-    fontSize: 18,
+    fontSize: 15,
     fontWeight: "bold",
+  },
+  loadingAnimation: {
+    width: 50,
+    height: 50,
+  },
+  loadingWrapper: {
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100%",
+    width: "100%",
+  },
+  loadingIcon: {
+    width: 28,
+    height: 28,
+  },
+  picker: {
+    width: "100%",
+    height: 50,
+    backgroundColor: "#F0F4F2",
+    borderRadius: 8,
+    marginBottom: 15,
+    borderColor: "#DDD",
+    padding: 5,
+  },
+  error: {
+    color: "#D32F2F",
+    fontSize: 14,
+    textAlign: "center",
+    marginTop: 8,
+    marginBottom: 8,
   },
 });

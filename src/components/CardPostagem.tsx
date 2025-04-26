@@ -9,6 +9,7 @@ interface Props {
 
 const CardPostagem = ({ postagem }: Props) => {
   const {
+    id,
     tp_post,
     conteudo,
     autor: usuario,
@@ -76,11 +77,26 @@ const CardPostagem = ({ postagem }: Props) => {
     <View style={[styles.card, { borderColor: definirCorBorda() }]}>
       {/* Cabeçalho */}
       <View style={styles.headerUsuario}>
-        <Image source={{ uri: fotoPerfilUrl }} style={styles.fotoPerfil} />
+        {usuario?.foto_perfil ? (
+          <Image source={{ uri: fotoPerfilUrl }} style={styles.fotoPerfil} />
+        ) : (
+          <View style={styles.fotoPerfil}>
+            <Text
+              style={{
+                color: "#black",
+                fontSize: 10,
+                textAlign: "auto",
+                marginTop: 15,
+                paddingLeft: 5,
+              }}
+            >
+              Sem foto
+            </Text>
+          </View>
+        )}
         <View>
           <Text style={styles.nomeUsuario}>{usuario?.nome}</Text>
           <Text style={styles.nickname}>@{usuario?.nickname}</Text>
-          <Text style={styles.tipoUsuario}>{usuario?.tp_user}</Text>
         </View>
       </View>
 
@@ -90,7 +106,7 @@ const CardPostagem = ({ postagem }: Props) => {
           {tp_post.charAt(0).toUpperCase() + tp_post.slice(1)}
         </Text>
       </View>
-
+      <Text style={styles.subTitulo}>Id: {id}</Text>
       {/* Título */}
       {nome_receita && <Text style={styles.titulo}>{nome_receita}</Text>}
       {titulo && <Text style={styles.titulo}>{titulo}</Text>}
@@ -100,62 +116,50 @@ const CardPostagem = ({ postagem }: Props) => {
 
       {/* Receita */}
       {tp_post === "receita" && (
-        <View style={{ marginTop: 8, gap: 8 }}>
-          {/* Ingredientes */}
-          {ingredientesFormatados.length > 0 && (
-            <View style={{ marginBottom: 12 }}>
-              <Text style={styles.campo}>Ingredientes:</Text>
-              {Object.entries(
-                ingredientesFormatados.reduce((acc: any, curr: any) => {
-                  const secao = curr.secao || "Geral";
-                  if (!acc[secao]) acc[secao] = [];
-                  acc[secao].push(`• ${curr.nome} - ${curr.quantidade}`);
-                  return acc;
-                }, {})
-              ).map(([secao, lista], idx) => (
-                <View key={idx} style={{ marginVertical: 4 }}>
-                  <Text style={[styles.subTitulo, { marginTop: 4 }]}>
-                    {secao}
-                  </Text>
-                  {(lista as string[]).map((item, i) => (
-                    <Text key={i} style={styles.listaItemTexto}>
-                      {item}
-                    </Text>
-                  ))}
-                </View>
-              ))}
-            </View>
-          )}
+        <View>
+          <Text style={styles.subTitulo}>Receita: {nome_receita}</Text>
+          <Text style={styles.campo}>Ingredientes: {ingredientes}</Text>
+          <Text style={styles.campo}>Instruções: {instrucoes}</Text>
+          <Text style={styles.campo}>Tempo de Preparo: {temp_prep}</Text>
+        </View>
+      )}
 
-          {/* Instruções */}
-          {instrucoesFormatadas.length > 0 && (
-            <View style={{ marginBottom: 12 }}>
-              <Text style={styles.campo}>Instruções (Passo a passo):</Text>
-              {instrucoesFormatadas.map((item: string, i: number) => (
-                <Text key={i} style={styles.listaItemTexto}>
-                  • {item}
-                </Text>
-              ))}
-            </View>
-          )}
+      {/* Instruções */}
+      {instrucoesFormatadas.length > 0 && (
+        <View style={{ marginBottom: 12 }}>
+          <Text style={styles.campo}>Instruções (Passo a passo):</Text>
+          {instrucoesFormatadas.map((item: string, i: number) => (
+            <Text key={i} style={styles.listaItemTexto}>
+              • {item}
+            </Text>
+          ))}
+        </View>
+      )}
 
-          {/* Tempo de Preparo */}
-          {temp_prep && (
-            <Text style={styles.campo}>Tempo de Preparo: {temp_prep}</Text>
+      {tp_post === "evento" && (
+        <View>
+          <Text style={styles.campo}>Local: {localizacao}</Text>
+          <Text style={styles.campo}>Valor: R$ {valor}</Text>
+          {links && (
+            <Text style={styles.campo}>
+              Link:{" "}
+              <Text style={{ color: "#2563eb" }} selectable>
+                {links}
+              </Text>
+            </Text>
           )}
+        </View>
+      )}
 
-          {/* Categoria */}
-          {categorias.length > 0 && (
-            <View>
-              <Text style={styles.campo}>Categoria:</Text>
-              <View style={styles.tagsContainer}>
-                {categorias.map((cat, idx) => (
-                  <Text key={idx} style={styles.tag}>
-                    {cat}
-                  </Text>
-                ))}
-              </View>
-            </View>
+      {tp_post === "promocao" && (
+        <View>
+          {links && (
+            <Text style={styles.campo}>
+              Link da promoção:{" "}
+              <Text style={{ color: "#2563eb" }} selectable>
+                {links}
+              </Text>
+            </Text>
           )}
         </View>
       )}
