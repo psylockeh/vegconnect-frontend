@@ -56,6 +56,10 @@ export default function ModalCriarPostagem({
   const [descricaoComercio, setDescricaoComercio] = useState("");
   const [endereco, setEndereco] = useState("");
   const [descricaoResumida, setDescricaoResumida] = useState("");
+  const [calorias, setCalorias] = useState("");
+  const [dificuldade, setDificuldade] = useState("");
+  const [rendimentoQuantidade, setRendimentoQuantidade] = useState("");
+  const [tipoRendimento, setTipoRendimento] = useState("porções");
 
   const { perfilUsuario } = useAuth();
 
@@ -190,12 +194,6 @@ export default function ModalCriarPostagem({
       case "receita":
         return (
           <>
-            <TextInput
-              placeholder="Este será o resumo que aparecerá no feed para atrair pessoas para sua postagem completa"
-              value={descricaoResumida}
-              onChangeText={setDescricaoResumida}
-              style={ModalStyles.input}
-            />
             <FormularioReceita
               nomeReceita={nomeReceita}
               setNomeReceita={setNomeReceita}
@@ -207,6 +205,16 @@ export default function ModalCriarPostagem({
               setTempoPreparo={setTempoPreparo}
               categoria={categoria}
               setCategoria={setCategoria}
+              calorias={calorias}
+              setCalorias={setCalorias}
+              dificuldade={dificuldade}
+              setDificuldade={setDificuldade}
+              rendimentoQuantidade={rendimentoQuantidade}
+              setRendimentoQuantidade={setRendimentoQuantidade}
+              tipoRendimento={tipoRendimento}
+              setTipoRendimento={setTipoRendimento}
+              descricao_resumida={descricaoResumida}
+              setDescricaoResumida={setDescricaoResumida}
             />
           </>
         );

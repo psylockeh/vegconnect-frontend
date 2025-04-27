@@ -3,19 +3,26 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
   inputPadrao: {
     borderWidth: 1,
-    borderColor: "#ccc",
-    padding: 10,
-    borderRadius: 6,
-    backgroundColor: "#f9f9f9",
+    borderColor: "#B7B7A4",
+    backgroundColor: "#F9F9F9",
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 14,
+    color: "#023D2E",
+  },
+  formularioContainer: {
+    flex: 1,
+    backgroundColor: "#F5FAF6",
+    padding: 16,
+  },
+
+  tituloBloco: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#023D2E",
     marginBottom: 10,
   },
-  tituloBloco: {
-    fontWeight: "bold",
-    fontSize: 16,
-    marginBottom: 8,
-    marginTop: 16,
-    color: "#3C6E47",
-  },
+
   listaIngrediente: {
     flexDirection: "row",
     alignItems: "center",
@@ -99,5 +106,36 @@ export const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "bold",
     fontSize: 13,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    padding: 10,
+    borderRadius: 8,
+    marginBottom: 12,
+    backgroundColor: "#fff",
+  },
+  blocoResumo: {
+    backgroundColor: "#F4F4F4",
+    padding: 14,
+    borderRadius: 12,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: "#ccc",
+  },
+
+  tituloResumo: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#023D2E",
+    marginBottom: 8,
+  },
+  blocoPadrao: {
+    backgroundColor: "#F4F4F4",
+    padding: 16,
+    borderRadius: 12,
+    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: "#ccc",
   },
 });
