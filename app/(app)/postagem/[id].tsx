@@ -19,7 +19,10 @@ export default function DetalhesPostagem() {
           Authorization: `Bearer ${token}`,
         },
       };
-      const response = await axios.get(`${API_URL}/usuario/postagens/${id}`, config);
+      const response = await axios.get(
+        `${API_URL}/usuario/postagens/${id}`,
+        config
+      );
       setPostagem(response.data);
     } catch (error) {
       console.error("Erro ao buscar detalhes da postagem:", error);
@@ -32,7 +35,7 @@ export default function DetalhesPostagem() {
     console.log("ID recebido:", id);
     carregarPostagem();
   }, []);
-  
+
   const renderCamposEspecificos = () => {
     if (!postagem) return null;
     const { tp_post } = postagem;

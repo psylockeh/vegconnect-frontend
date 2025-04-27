@@ -12,6 +12,7 @@ const validarPostagem = (tp_post: string, dados: any): string | null => {
     horario_abertura,
     horario_fechamento,
     cep,
+    descricao_resumida,
   } = dados;
 
   if (tp_post === "recado") {
@@ -25,13 +26,18 @@ const validarPostagem = (tp_post: string, dados: any): string | null => {
       !titulo?.trim() ||
       !conteudo?.trim() ||
       !data?.trim() ||
-      !localizacao?.trim()
+      !localizacao?.trim() ||
+      !descricao_resumida?.trim()
     ) {
-      return "Título, conteúdo, data e local são obrigatórios para eventos.";
+      return "Título, conteúdo, data, local e a descrição são obrigatórios para eventos.";
     }
   }
 
   if (tp_post === "receita") {
+    if (!descricao_resumida?.trim()) {
+      return "Por favor, escreva um resumo para a sua postagem.";
+    }
+
     if (!nome_receita || nome_receita.trim() === "") {
       return "Nome da receita é obrigatório.";
     }
@@ -76,15 +82,21 @@ const validarPostagem = (tp_post: string, dados: any): string | null => {
       !horario_abertura?.trim() ||
       !horario_fechamento?.trim() ||
       !cep?.trim() ||
-      !localizacao?.trim()
+      !localizacao?.trim() ||
+      !descricao_resumida?.trim()
     ) {
-      return "Preencha todos os dados obrigatórios do estabelecimento.";
+      return "Título, conteúdo, tipo de comida, horário de abertura, horário de fechamento, CEP, local e a descrição são obrigatórios para estabelecimentos.";
     }
   }
 
   if (tp_post === "promocao") {
-    if (!titulo?.trim() || !conteudo?.trim() || !data?.trim()) {
-      return "Título, conteúdo e validade são obrigatórios na promoção.";
+    if (
+      !titulo?.trim() ||
+      !conteudo?.trim() ||
+      !data?.trim() ||
+      !descricao_resumida?.trim()
+    ) {
+      return "Título, conteúdo, data e a descrição são obrigatórios para promoções.";
     }
   }
 

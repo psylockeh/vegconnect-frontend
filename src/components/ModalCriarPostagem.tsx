@@ -55,6 +55,7 @@ export default function ModalCriarPostagem({
   const [nomeComercio, setNomeComercio] = useState("");
   const [descricaoComercio, setDescricaoComercio] = useState("");
   const [endereco, setEndereco] = useState("");
+  const [descricaoResumida, setDescricaoResumida] = useState("");
 
   const { perfilUsuario } = useAuth();
 
@@ -98,6 +99,7 @@ export default function ModalCriarPostagem({
       endereco,
       nome_comercio: nomeComercio,
       descricao_comercio: descricaoComercio,
+      descricao_resumida: descricaoResumida,
     };
 
     const erro = validarPostagem(tp_post, novaPostagem);
@@ -154,6 +156,7 @@ export default function ModalCriarPostagem({
     setNomeComercio("");
     setDescricaoComercio("");
     setEndereco("");
+    setDescricaoResumida("");
   };
 
   const fecharModal = () => {
@@ -186,23 +189,37 @@ export default function ModalCriarPostagem({
     switch (tp_post) {
       case "receita":
         return (
-          <FormularioReceita
-            nomeReceita={nomeReceita}
-            setNomeReceita={setNomeReceita}
-            ingredientes={ingredientes}
-            setIngredientes={setIngredientes}
-            instrucoes={instrucoes}
-            setInstrucoes={setInstrucoes}
-            tempoPreparo={tempoPreparo}
-            setTempoPreparo={setTempoPreparo}
-            categoria={categoria}
-            setCategoria={setCategoria}
-          />
+          <>
+            <TextInput
+              placeholder="Este será o resumo que aparecerá no feed para atrair pessoas para sua postagem completa"
+              value={descricaoResumida}
+              onChangeText={setDescricaoResumida}
+              style={ModalStyles.input}
+            />
+            <FormularioReceita
+              nomeReceita={nomeReceita}
+              setNomeReceita={setNomeReceita}
+              ingredientes={ingredientes}
+              setIngredientes={setIngredientes}
+              instrucoes={instrucoes}
+              setInstrucoes={setInstrucoes}
+              tempoPreparo={tempoPreparo}
+              setTempoPreparo={setTempoPreparo}
+              categoria={categoria}
+              setCategoria={setCategoria}
+            />
+          </>
         );
 
       case "evento":
         return (
           <>
+            <TextInput
+              placeholder="Este será o resumo que aparecerá no feed para atrair pessoas para sua postagem completa"
+              value={descricaoResumida}
+              onChangeText={setDescricaoResumida}
+              style={ModalStyles.input}
+            />
             <TextInput
               placeholder="Título"
               value={titulo}
@@ -246,6 +263,12 @@ export default function ModalCriarPostagem({
       case "estabelecimento":
         return (
           <>
+            <TextInput
+              placeholder="Este será o resumo que aparecerá no feed para atrair pessoas para sua postagem completa"
+              value={descricaoResumida}
+              onChangeText={setDescricaoResumida}
+              style={ModalStyles.input}
+            />
             <TextInput
               placeholder="Nome do Comércio"
               value={nomeComercio}
@@ -295,6 +318,12 @@ export default function ModalCriarPostagem({
       case "promocao":
         return (
           <>
+            <TextInput
+              placeholder="Este será o resumo que aparecerá no feed para atrair pessoas para sua postagem completa"
+              value={descricaoResumida}
+              onChangeText={setDescricaoResumida}
+              style={ModalStyles.input}
+            />
             <TextInput
               placeholder="Título"
               value={titulo}

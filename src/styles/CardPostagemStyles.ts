@@ -32,7 +32,7 @@ export const styles = StyleSheet.create({
   },
   tpUser: {
     fontSize: 14,
-    color: 'black',
+    color: "black",
     marginTop: 10,
   },
   tagTipoPost: {
@@ -91,48 +91,30 @@ export const styles = StyleSheet.create({
     fontSize: 13,
     color: "#555",
   },
+  localizacao: {
+    fontSize: 13,
+    color: "#444",
+    marginTop: 4,
+  },
+  valor: {
+    fontSize: 13,
+    color: "#444",
+    marginTop: 2,
+  },
+  links: {
+    fontSize: 13,
+    color: "#2563eb",
+    marginTop: 2,
+    textDecorationLine: "underline",
+  },
   listaItemTexto: {
-    fontSize: 14,
-    color: "#333",
-    lineHeight: 20,
-    marginLeft: 8,
+    fontSize: 13,
+    color: "#444",
     marginBottom: 4,
   },
-  tipoUsuario: {
-    fontSize: 12,
-    color: "#777",
-    marginBottom: 4,
-  },
-
-  categoriaContainer: {
-    marginTop: 8,
-    flexWrap: "wrap",
-    flexDirection: "row",
-    gap: 4,
-  },
-
-  categoriaTags: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 6,
+  descricaoResumida: {
+    fontSize: 13,
+    color: "#444",
     marginTop: 4,
-  },
-
-  tag: {
-    backgroundColor: "#3C6E47",
-    color: "#fff",
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 16,
-    fontSize: 12,
-    marginRight: 4,
-    marginBottom: 4,
-  },
-  tagsContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 6,
-    marginTop: 4,
-    marginBottom: 8,
   },
 });
