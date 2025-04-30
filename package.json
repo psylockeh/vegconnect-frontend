@@ -50,7 +50,8 @@
     "react-native-web": "~0.19.13",
     "react-native-webview": "13.12.5",
     "scrollview": "^0.0.0",
-    "vegconnect-frontend": "file:"
+    "vegconnect-frontend": "file:",
+    "expo-checkbox": "~4.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

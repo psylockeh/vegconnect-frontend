@@ -9,10 +9,14 @@ import {
 import { styles } from "@/styles/FormularioReceitaStyles";
 import { Picker } from "@react-native-picker/picker";
 import { Platform } from "react-native";
+import { useRef } from "react";
+
+const inputIngredienteRef = useRef<TextInput>(null);
 
 type Ingrediente = {
   nome: string;
   quantidade: string;
+  medida: string;
   secao: string;
 };
 
@@ -37,6 +41,8 @@ type Props = {
   setTipoRendimento: (value: string) => void;
   descricao_resumida: string;
   setDescricaoResumida: (value: string) => void;
+  medidaAtual: string;
+  setMedidaAtual: (value: string) => void;
 };
 
 export default function FormularioReceita({
@@ -64,6 +70,7 @@ export default function FormularioReceita({
   const [ingredienteAtual, setIngredienteAtual] = useState("");
   const [quantidadeAtual, setQuantidadeAtual] = useState("");
   const [secaoAtual, setSecaoAtual] = useState("Geral");
+  const [medidaAtual, setMedidaAtual] = useState("unidade");
 
   const secoes = ["Geral", "Massa", "Recheio", "Cobertura", "Molho"];
 
@@ -85,18 +92,56 @@ export default function FormularioReceita({
     ],
   };
 
+  const opcoesMedidas = [
+    "unidade",
+    "xícara",
+    "colher de sopa",
+    "colher de chá",
+    "grama",
+    "quilo",
+    "litro",
+    "mililitro",
+    "pitada",
+  ];
+
   const handleAdicionarIngrediente = () => {
     if (!ingredienteAtual || !quantidadeAtual) return;
+
+    // Pluralização da medida
+    const quantidadeNumero = parseFloat(quantidadeAtual);
+    let medidaFormatada = medidaAtual;
+
+    if (quantidadeNumero > 1) {
+      if (medidaAtual === "xícara") medidaFormatada = "xícaras";
+      else if (medidaAtual === "colher de sopa")
+        medidaFormatada = "colheres de sopa";
+      else if (medidaAtual === "colher de chá")
+        medidaFormatada = "colheres de chá";
+      else if (medidaAtual === "unidade") medidaFormatada = "unidades";
+      else if (medidaAtual === "grama") medidaFormatada = "gramas";
+      else if (medidaAtual === "quilo") medidaFormatada = "quilos";
+      else if (medidaAtual === "litro") medidaFormatada = "litros";
+      else if (medidaAtual === "mililitro") medidaFormatada = "mililitros";
+      else if (medidaAtual === "pitada") medidaFormatada = "pitadas";
+    }
+
     setIngredientes([
       ...ingredientes,
       {
         nome: ingredienteAtual.trim(),
         quantidade: quantidadeAtual.trim(),
+        medida: medidaFormatada,
         secao: secaoAtual,
       },
     ]);
+
     setIngredienteAtual("");
     setQuantidadeAtual("");
+    setMedidaAtual("unidade");
+
+    setTimeout(() => {
+      inputIngredienteRef.current?.focus();
+    }, 100);
   };
 
   const formatarTempo = (texto: string) => {
@@ -153,19 +198,61 @@ export default function FormularioReceita({
 
       <View style={styles.blocoPadrao}>
         <Text style={styles.tituloBloco}>Ingredientes</Text>
-        <View style={styles.listaIngrediente}>
-          <TextInput
-            placeholder="Ingrediente"
-            value={ingredienteAtual}
-            onChangeText={setIngredienteAtual}
-            style={[styles.inputPadrao, { flex: 1 }]}
-          />
+
+        {/* Nome do Ingrediente */}
+        <TextInput
+          placeholder="Ingrediente"
+          value={ingredienteAtual}
+          onChangeText={setIngredienteAtual}
+          style={[styles.inputPadrao, { marginBottom: 8 }]}
+        />
+
+        {/* Quantidade e Unidade */}
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            marginBottom: 8,
+          }}
+        >
           <TextInput
             placeholder="Qtd"
             value={quantidadeAtual}
             onChangeText={setQuantidadeAtual}
-            style={[styles.inputPadrao, { width: 80 }]}
+            keyboardType="numeric"
+            style={[styles.inputPadrao, { width: 80, marginRight: 8 }]}
           />
+
+          <Picker
+            selectedValue={medidaAtual}
+            onValueChange={(itemValue) => setMedidaAtual(itemValue)}
+            style={[styles.inputPadrao, { flex: 1 }]}
+          >
+            {opcoesMedidas.map((medida) => (
+              <Picker.Item key={medida} label={medida} value={medida} />
+            ))}
+          </Picker>
+        </View>
+
+        {/* Botão Adicionar Ingrediente */}
+        <TouchableOpacity
+          style={styles.botaoAdicionar}
+          onPress={handleAdicionarIngrediente}
+        >
+          <Text style={styles.textoBotao}>Adicionar Ingrediente</Text>
+        </TouchableOpacity>
+
+        {/* Lista de Ingredientes já adicionados */}
+        <View style={{ marginTop: 16 }}>
+          {ingredientes.length > 0 && (
+            <>
+              {ingredientes.map((item, idx) => (
+                <Text key={idx} style={styles.listaItemTexto}>
+                  • {item.quantidade} {item.medida} de {item.nome}
+                </Text>
+              ))}
+            </>
+          )}
         </View>
       </View>
 
@@ -190,28 +277,6 @@ export default function FormularioReceita({
           </TouchableOpacity>
         ))}
       </View>
-
-      <TouchableOpacity
-        style={styles.botaoAdicionar}
-        onPress={handleAdicionarIngrediente}
-      >
-        <Text style={styles.textoBotao}>Adicionar Ingrediente</Text>
-      </TouchableOpacity>
-
-      {secoes.map((s) => (
-        <View key={s}>
-          {ingredientes.some((i) => i.secao === s) && (
-            <Text style={styles.secaoTitulo}>{s}</Text>
-          )}
-          {ingredientes
-            .filter((i) => i.secao === s)
-            .map((i, idx) => (
-              <Text key={idx} style={styles.listaItemTexto}>
-                • {i.nome} - {i.quantidade}
-              </Text>
-            ))}
-        </View>
-      ))}
 
       <View style={styles.blocoPadrao}>
         <Text style={styles.tituloBloco}>👩‍🍳 Modo de Preparo</Text>

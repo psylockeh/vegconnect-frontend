@@ -15,7 +15,10 @@ import { uploadImageToCloudinary } from "@/utils/cloudinary";
 import * as ImagePicker from "expo-image-picker";
 import Toast from "react-native-toast-message";
 import { useAuth } from "@/context/AuthContext";
-import FormularioReceita from "@/components/postagens/FormularioReceita";
+import FormularioReceita from "./postagens/FormularioReceita";
+import FormularioEvento from "@/components/postagens/FormularioEventos";
+import FormularioEstabelecimento from "./postagens/FormularioEstabelecimento";
+import FormularioPromocao from "./postagens/FormularioPromocao";
 
 type Props = {
   visivel: boolean;
@@ -60,6 +63,14 @@ export default function ModalCriarPostagem({
   const [dificuldade, setDificuldade] = useState("");
   const [rendimentoQuantidade, setRendimentoQuantidade] = useState("");
   const [tipoRendimento, setTipoRendimento] = useState("porções");
+  const [tpEvento, setTpEvento] = useState("");
+  const [categoriaEvento, setCategoriaEvento] = useState("");
+  const [modalidadeEvento, setModalidadeEvento] = useState<string[]>([]);
+  const [medidaAtual, setMedidaAtual] = useState("unidade");
+  const [tpComida, setTpComida] = useState("");
+  const [tpProduto, setTpProduto] = useState("");
+  const [tpServico, setTpServico] = useState("");
+  const [tipoComercio, setTipoComercio] = useState("");
 
   const { perfilUsuario } = useAuth();
 
@@ -105,6 +116,22 @@ export default function ModalCriarPostagem({
       descricao_comercio: descricaoComercio,
       descricao_resumida: descricaoResumida,
     };
+    if (tp_post === "promocao") {
+      Object.assign(novaPostagem, {
+        descricao_resumida: descricaoResumida,
+        titulo,
+        conteudo,
+        data,
+        links,
+      });
+    }
+    if (tp_post === "evento") {
+      Object.assign(novaPostagem, {
+        tp_evento: tpEvento,
+        categoria_evento: categoriaEvento,
+        modalidade_evento: modalidadeEvento.join(", "),
+      });
+    }
 
     const erro = validarPostagem(tp_post, novaPostagem);
     if (erro) return alert(`⚠️ ${erro}`);
@@ -161,6 +188,18 @@ export default function ModalCriarPostagem({
     setDescricaoComercio("");
     setEndereco("");
     setDescricaoResumida("");
+    setCalorias("");
+    setDificuldade("");
+    setRendimentoQuantidade("");
+    setTipoRendimento("porções");
+    setTpEvento("");
+    setCategoriaEvento("");
+    setModalidadeEvento([]);
+    setMedidaAtual("unidade");
+    setTpComida("");
+    setTpProduto("");
+    setTpServico("");
+    setTipoComercio("");
   };
 
   const fecharModal = () => {
@@ -215,160 +254,78 @@ export default function ModalCriarPostagem({
               setTipoRendimento={setTipoRendimento}
               descricao_resumida={descricaoResumida}
               setDescricaoResumida={setDescricaoResumida}
+              medidaAtual={medidaAtual}
+              setMedidaAtual={setMedidaAtual}
             />
           </>
         );
 
       case "evento":
         return (
-          <>
-            <TextInput
-              placeholder="Este será o resumo que aparecerá no feed para atrair pessoas para sua postagem completa"
-              value={descricaoResumida}
-              onChangeText={setDescricaoResumida}
-              style={ModalStyles.input}
-            />
-            <TextInput
-              placeholder="Título"
-              value={titulo}
-              onChangeText={setTitulo}
-              style={ModalStyles.input}
-            />
-            <TextInput
-              placeholder="Descrição do Evento"
-              value={conteudo}
-              onChangeText={setConteudo}
-              multiline
-              style={ModalStyles.input}
-            />
-            <TextInput
-              placeholder="Data"
-              value={data}
-              onChangeText={setData}
-              style={ModalStyles.input}
-            />
-            <TextInput
-              placeholder="Localização"
-              value={localizacao}
-              onChangeText={setLocalizacao}
-              style={ModalStyles.input}
-            />
-            <TextInput
-              placeholder="Valor"
-              value={valor}
-              onChangeText={setValor}
-              style={ModalStyles.input}
-            />
-            <TextInput
-              placeholder="Links"
-              value={links}
-              onChangeText={setLinks}
-              style={ModalStyles.input}
-            />
-          </>
+          <FormularioEvento
+            descricao_resumida={descricaoResumida}
+            setDescricaoResumida={setDescricaoResumida}
+            titulo={titulo}
+            setTitulo={setTitulo}
+            conteudo={conteudo}
+            setConteudo={setConteudo}
+            data={data}
+            setData={setData}
+            localizacao={localizacao}
+            setLocalizacao={setLocalizacao}
+            valor={valor}
+            setValor={setValor}
+            links={links}
+            setLinks={setLinks}
+            tpEvento={tpEvento}
+            setTpEvento={setTpEvento}
+            categoriaEvento={categoriaEvento}
+            setCategoriaEvento={setCategoriaEvento}
+            modalidadeEvento={modalidadeEvento}
+            setModalidadeEvento={setModalidadeEvento}
+          />
         );
 
       case "estabelecimento":
         return (
-          <>
-            <TextInput
-              placeholder="Este será o resumo que aparecerá no feed para atrair pessoas para sua postagem completa"
-              value={descricaoResumida}
-              onChangeText={setDescricaoResumida}
-              style={ModalStyles.input}
-            />
-            <TextInput
-              placeholder="Nome do Comércio"
-              value={nomeComercio}
-              onChangeText={setNomeComercio}
-              style={ModalStyles.input}
-            />
-            <TextInput
-              placeholder="Descrição"
-              value={descricaoComercio}
-              onChangeText={setDescricaoComercio}
-              multiline
-              style={ModalStyles.input}
-            />
-            <TextInput
-              placeholder="Tipo de Comida"
-              value={tipoComida}
-              onChangeText={setTipoComida}
-              style={ModalStyles.input}
-            />
-            <TextInput
-              placeholder="Horário de Abertura"
-              value={horarioAbertura}
-              onChangeText={setHorarioAbertura}
-              style={ModalStyles.input}
-            />
-            <TextInput
-              placeholder="Horário de Fechamento"
-              value={horarioFechamento}
-              onChangeText={setHorarioFechamento}
-              style={ModalStyles.input}
-            />
-            <TextInput
-              placeholder="CEP"
-              value={cep}
-              onChangeText={setCep}
-              style={ModalStyles.input}
-            />
-            <TextInput
-              placeholder="Endereço"
-              value={endereco}
-              onChangeText={setEndereco}
-              style={ModalStyles.input}
-            />
-          </>
+          <FormularioEstabelecimento
+            nomeComercio={nomeComercio}
+            setNomeComercio={setNomeComercio}
+            descricaoComercio={descricaoComercio}
+            setDescricaoComercio={setDescricaoComercio}
+            tipoComercio={tipoComercio}
+            setTipoComercio={setTipoComercio}
+            tpComida={tpComida}
+            setTpComida={setTpComida}
+            tpProduto={tpProduto}
+            setTpProduto={setTpProduto}
+            tpServico={tpServico}
+            setTpServico={setTpServico}
+            horarioAbertura={horarioAbertura}
+            setHorarioAbertura={setHorarioAbertura}
+            horarioFechamento={horarioFechamento}
+            setHorarioFechamento={setHorarioFechamento}
+            cep={cep}
+            setCep={setCep}
+            endereco={endereco}
+            setEndereco={setEndereco}
+            descricao_resumida={descricaoResumida}
+            setDescricaoResumida={setDescricaoResumida}
+          />
         );
-
       case "promocao":
         return (
-          <>
-            <TextInput
-              placeholder="Este será o resumo que aparecerá no feed para atrair pessoas para sua postagem completa"
-              value={descricaoResumida}
-              onChangeText={setDescricaoResumida}
-              style={ModalStyles.input}
-            />
-            <TextInput
-              placeholder="Título"
-              value={titulo}
-              onChangeText={setTitulo}
-              style={ModalStyles.input}
-            />
-            <TextInput
-              placeholder="Conteúdo da Promoção"
-              value={conteudo}
-              onChangeText={setConteudo}
-              multiline
-              style={ModalStyles.input}
-            />
-            <TextInput
-              placeholder="Validade"
-              value={data}
-              onChangeText={setData}
-              style={ModalStyles.input}
-            />
-            <TextInput
-              placeholder="Link da Promoção"
-              value={links}
-              onChangeText={setLinks}
-              style={ModalStyles.input}
-            />
-          </>
-        );
-
-      case "recado":
-      default:
-        return (
-          <TextInput
-            placeholder="Digite seu recado"
-            value={conteudo}
-            onChangeText={setConteudo}
-            multiline
-            style={ModalStyles.input}
+          <FormularioPromocao
+            titulo={titulo}
+            setTitulo={setTitulo}
+            conteudo={conteudo}
+            setConteudo={setConteudo}
+            data={data}
+            setData={setData}
+            links={links}
+            setLinks={setLinks}
+            descricao_resumida={descricaoResumida}
+            setDescricaoResumida={setDescricaoResumida}
           />
         );
     }
