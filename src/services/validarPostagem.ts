@@ -1,3 +1,4 @@
+import { Instrucao } from "@/types";
 const validarPostagem = (tp_post: string, dados: any): string | null => {
   const {
     titulo,
@@ -58,15 +59,12 @@ const validarPostagem = (tp_post: string, dados: any): string | null => {
       return "Todos os ingredientes precisam ter nome e quantidade.";
     }
 
-    if (!Array.isArray(instrucoes) || instrucoes.length === 0) {
-      return "Adicione pelo menos uma instrução.";
-    }
-
-    const instrucoesInvalidas = instrucoes.some(
-      (i) => typeof i !== "string" || i.trim() === ""
+    const temInstrucaoValida = instrucoes.some(
+      (i: Instrucao) => i.texto.trim() !== "" && i.secao.trim() !== ""
     );
-    if (instrucoesInvalidas) {
-      return "Nenhuma instrução pode estar vazia.";
+
+    if (!temInstrucaoValida) {
+      alert("Adicione pelo menos uma instrução.");
     }
 
     if (!temp_prep || temp_prep.trim() === "") {

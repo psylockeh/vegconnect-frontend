@@ -138,4 +138,21 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#ccc",
   },
+  tituloSessao: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginTop: 16,
+    marginBottom: 8,
+    color: "#2E2E2E",
+  },
+  botaoExcluir: {
+    backgroundColor: "#eee",
+    padding: 8,
+    borderRadius: 4,
+  },
+
+  textoBotaoExcluir: {
+    color: "red",
+    fontSize: 16,
+  },
 });

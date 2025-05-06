@@ -6,6 +6,11 @@ import { API_URL } from "@/config/api";
 import { styles } from "@/styles/CardPostagemStyles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+import VisualizacaoReceita from "@/components/postagens/VisualizacaoReceita";
+import VisualizacaoEstabelecimento from "@/components/postagens/VisualizacaoEstabelecimento";
+import VisualizacaoPromocao from "@/components/postagens/VisualizacaoPromocao";
+import VisualizacaoEvento from "@/components/postagens/VisualizacaoEvento";
+
 export default function DetalhesPostagem() {
   const { id } = useLocalSearchParams();
   const [postagem, setPostagem] = useState<any>(null);
@@ -32,60 +37,20 @@ export default function DetalhesPostagem() {
   };
 
   useEffect(() => {
-    console.log("ID recebido:", id);
     carregarPostagem();
   }, []);
 
-  const renderCamposEspecificos = () => {
+  const renderVisualizacaoTipo = () => {
     if (!postagem) return null;
-    const { tp_post } = postagem;
-
-    switch (tp_post) {
-      case "evento":
-        return (
-          <>
-            <Text style={styles.subTitulo}>Local: {postagem.localizacao}</Text>
-            <Text style={styles.campo}>Valor: R$ {postagem.valor}</Text>
-            <Text style={styles.campo}>Links: {postagem.links}</Text>
-          </>
-        );
+    switch (postagem.tp_post) {
       case "receita":
-        return (
-          <>
-            <Text style={styles.subTitulo}>
-              Nome da Receita: {postagem.nome_receita}
-            </Text>
-            <Text style={styles.campo}>
-              Ingredientes: {postagem.ingredientes}
-            </Text>
-            <Text style={styles.campo}>Instruções: {postagem.instrucoes}</Text>
-            <Text style={styles.campo}>
-              Tempo de Preparo: {postagem.temp_prep}
-            </Text>
-          </>
-        );
+        return <VisualizacaoReceita postagem={postagem} />;
+      case "evento":
+        return <VisualizacaoEvento postagem={postagem} />;
+      case "promocao":
+        return <VisualizacaoPromocao postagem={postagem} />;
       case "estabelecimento":
-        return (
-          <>
-            <Text style={styles.subTitulo}>
-              Comércio: {postagem.nome_comercio}
-            </Text>
-            <Text style={styles.campo}>
-              Descrição: {postagem.descricao_comercio}
-            </Text>
-            <Text style={styles.campo}>
-              Tipo de Comida: {postagem.tp_comida}
-            </Text>
-            <Text style={styles.campo}>
-              Horário: {postagem.hora_abertura} - {postagem.hora_fechamento}
-            </Text>
-            <Text style={styles.campo}>
-              Endereço: {postagem.endereco}, CEP {postagem.cep}
-            </Text>
-          </>
-        );
-      default:
-        return null;
+        return <VisualizacaoEstabelecimento postagem={postagem} />;
     }
   };
 
@@ -101,22 +66,24 @@ export default function DetalhesPostagem() {
     );
   }
 
-  // ✅ Definindo foto de perfil com fallback
-  const fotoPerfilUrl = postagem?.usuario?.foto_perfil?.startsWith("http")
-    ? postagem.usuario.foto_perfil
+  const usuario = postagem.autor;
+  const fotoPerfilUrl = usuario?.foto_perfil?.startsWith("http")
+    ? usuario.foto_perfil
     : "https://res.cloudinary.com/demo/image/upload/v1682620184/default-profile.png";
 
   return (
     <ScrollView contentContainerStyle={{ padding: 16 }}>
       <View style={[styles.card, { borderColor: "#ccc" }]}>
+        {/* Cabeçalho */}
         <View style={styles.headerUsuario}>
           <Image source={{ uri: fotoPerfilUrl }} style={styles.fotoPerfil} />
           <View>
-            <Text style={styles.nomeUsuario}>{postagem.usuario?.nome}</Text>
-            <Text style={styles.nickname}>@{postagem.usuario?.nickname}</Text>
+            <Text style={styles.nomeUsuario}>{usuario?.nome}</Text>
+            <Text style={styles.nickname}>@{usuario?.nickname}</Text>
           </View>
         </View>
 
+        {/* Tag do tipo da postagem */}
         <View
           style={[
             styles.tagTipoPost,
@@ -140,19 +107,23 @@ export default function DetalhesPostagem() {
           </Text>
         </View>
 
+        {/* Título e conteúdo comum */}
+
         {postagem.titulo && (
           <Text style={styles.titulo}>{postagem.titulo}</Text>
         )}
-        <Text style={styles.conteudo}>{postagem.conteudo}</Text>
+        {postagem.tp_post !== "receita" && postagem.conteudo && (
+          <Text style={styles.conteudo}>{postagem.conteudo}</Text>
+        )}
 
-        {renderCamposEspecificos()}
+        {/* Conteúdo específico por tipo */}
+        {renderVisualizacaoTipo()}
 
-        <View>
-          <Text style={styles.data}>
-            Publicado em:{" "}
-            {new Date(postagem.createdAt).toLocaleDateString("pt-BR")}
-          </Text>
-        </View>
+        {/* Data */}
+        <Text style={styles.data}>
+          Publicado em:{" "}
+          {new Date(postagem.createdAt).toLocaleDateString("pt-BR")}
+        </Text>
       </View>
     </ScrollView>
   );

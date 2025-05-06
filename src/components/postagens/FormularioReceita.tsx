@@ -10,23 +10,18 @@ import { styles } from "@/styles/FormularioReceitaStyles";
 import { Picker } from "@react-native-picker/picker";
 import { Platform } from "react-native";
 import { useRef } from "react";
+import { Ingrediente } from "@/types";
+import { Instrucao } from "@/types";
 
 const inputIngredienteRef = useRef<TextInput>(null);
-
-type Ingrediente = {
-  nome: string;
-  quantidade: string;
-  medida: string;
-  secao: string;
-};
 
 type Props = {
   nomeReceita: string;
   setNomeReceita: (value: string) => void;
-  ingredientes: any[];
-  setIngredientes: (value: any[]) => void;
-  instrucoes: string[];
-  setInstrucoes: (value: string[]) => void;
+  ingredientes: Ingrediente[];
+  setIngredientes: (value: Ingrediente[]) => void;
+  instrucoes: Instrucao[];
+  setInstrucoes: (value: Instrucao[]) => void;
   tempoPreparo: string;
   setTempoPreparo: (value: string) => void;
   categoria: string[];
@@ -50,8 +45,6 @@ export default function FormularioReceita({
   setNomeReceita,
   ingredientes,
   setIngredientes,
-  instrucoes,
-  setInstrucoes,
   tempoPreparo,
   setTempoPreparo,
   categoria,
@@ -71,7 +64,8 @@ export default function FormularioReceita({
   const [quantidadeAtual, setQuantidadeAtual] = useState("");
   const [secaoAtual, setSecaoAtual] = useState("Geral");
   const [medidaAtual, setMedidaAtual] = useState("unidade");
-
+  const [secaoInstrucaoAtual, setSecaoInstrucaoAtual] = useState("Geral");
+  const [instrucoes, setInstrucoes] = useState<Instrucao[]>([]);
   const secoes = ["Geral", "Massa", "Recheio", "Cobertura", "Molho"];
 
   const opcoesCategorias: Record<string, string[]> = {
@@ -155,12 +149,12 @@ export default function FormularioReceita({
   };
 
   const handleAdicionarInstrucao = () => {
-    setInstrucoes([...instrucoes, ""]);
+    setInstrucoes([...instrucoes, { texto: "", secao: secaoInstrucaoAtual }]);
   };
 
   const handleAlterarInstrucao = (index: number, texto: string) => {
     const novas = [...instrucoes];
-    novas[index] = texto;
+    novas[index] = { ...novas[index], texto };
     setInstrucoes(novas);
   };
 
@@ -247,49 +241,87 @@ export default function FormularioReceita({
           {ingredientes.length > 0 && (
             <>
               {ingredientes.map((item, idx) => (
-                <Text key={idx} style={styles.listaItemTexto}>
-                  • {item.quantidade} {item.medida} de {item.nome}
-                </Text>
+                <View
+                  key={idx}
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    marginBottom: 8,
+                  }}
+                >
+                  <Text style={styles.listaItemTexto}>
+                    • {item.quantidade} {item.medida} de {item.nome}
+                  </Text>
+                  <TouchableOpacity
+                    onPress={() => {
+                      const novos = ingredientes.filter((_, i) => i !== idx);
+                      setIngredientes(novos);
+                    }}
+                    style={styles.botaoExcluir}
+                  >
+                    <Text style={styles.textoBotaoExcluir}>🗑️</Text>
+                  </TouchableOpacity>
+                </View>
               ))}
             </>
           )}
         </View>
       </View>
 
-      <View style={styles.secoesContainer}>
-        {secoes.map((s) => (
-          <TouchableOpacity
-            key={s}
-            onPress={() => setSecaoAtual(s)}
-            style={[
-              styles.botaoSecao,
-              secaoAtual === s && styles.botaoSecaoAtivo,
-            ]}
-          >
-            <Text
-              style={[
-                styles.textoSecao,
-                secaoAtual === s && styles.textoSecaoAtivo,
-              ]}
-            >
-              {s}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-
       <View style={styles.blocoPadrao}>
         <Text style={styles.tituloBloco}>👩‍🍳 Modo de Preparo</Text>
 
-        {instrucoes.map((inst, idx) => (
-          <TextInput
-            key={idx}
-            value={inst}
-            onChangeText={(texto) => handleAlterarInstrucao(idx, texto)}
-            placeholder={`Passo ${idx + 1}`}
-            style={styles.inputPadrao}
-          />
-        ))}
+        {secoes.map((secao) => {
+          const instrucoesDaSecao = instrucoes.filter((i) => i.secao === secao);
+          if (instrucoesDaSecao.length === 0) return null;
+
+          return (
+            <View key={secao}>
+              <Text style={styles.tituloSessao}>{secao}</Text>
+              {instrucoesDaSecao.map((inst, idx) => (
+                <View
+                  key={idx}
+                  style={{ flexDirection: "row", alignItems: "center" }}
+                >
+                  <TextInput
+                    value={inst.texto}
+                    onChangeText={(texto) => {
+                      const novas = [...instrucoes];
+                      const index = instrucoes.findIndex((i) => i === inst);
+                      novas[index] = { ...inst, texto };
+                      setInstrucoes(novas);
+                    }}
+                    placeholder={`Passo ${idx + 1}`}
+                    style={[styles.inputPadrao, { flex: 1, marginRight: 8 }]}
+                  />
+                  <TouchableOpacity
+                    onPress={() => {
+                      const novas = instrucoes.filter((i) => i !== inst);
+                      setInstrucoes(novas);
+                    }}
+                    style={styles.botaoExcluir}
+                  >
+                    <Text style={styles.textoBotaoExcluir}>🗑️</Text>
+                  </TouchableOpacity>
+                </View>
+              ))}
+            </View>
+          );
+        })}
+
+        <View style={{ marginTop: 16 }}>
+          <Text style={styles.tituloBloco}>Escolha a seção da instrução:</Text>
+          <Picker
+            selectedValue={secaoInstrucaoAtual}
+            onValueChange={(itemValue) => setSecaoInstrucaoAtual(itemValue)}
+            style={styles.input}
+          >
+            {secoes.map((secao) => (
+              <Picker.Item key={secao} label={secao} value={secao} />
+            ))}
+          </Picker>
+        </View>
 
         <TouchableOpacity
           style={styles.botaoAdicionar}

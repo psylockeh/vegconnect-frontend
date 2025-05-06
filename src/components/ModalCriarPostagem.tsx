@@ -19,18 +19,14 @@ import FormularioReceita from "./postagens/FormularioReceita";
 import FormularioEvento from "@/components/postagens/FormularioEventos";
 import FormularioEstabelecimento from "./postagens/FormularioEstabelecimento";
 import FormularioPromocao from "./postagens/FormularioPromocao";
+import { Ingrediente } from "@/types";
+import { Instrucao } from "@/types";
 
 type Props = {
   visivel: boolean;
   fechar: () => void;
   tp_post: string;
   onPostagemCriada?: () => void;
-};
-
-type Ingrediente = {
-  nome: string;
-  quantidade: string;
-  secao: string;
 };
 
 export default function ModalCriarPostagem({
@@ -47,7 +43,7 @@ export default function ModalCriarPostagem({
   const [links, setLinks] = useState("");
   const [nomeReceita, setNomeReceita] = useState("");
   const [ingredientes, setIngredientes] = useState<Ingrediente[]>([]);
-  const [instrucoes, setInstrucoes] = useState<string[]>([]);
+  const [instrucoes, setInstrucoes] = useState<Instrucao[]>([]);
   const [tempoPreparo, setTempoPreparo] = useState("");
   const [categoria, setCategoria] = useState<string[]>([]);
   const [tipoComida, setTipoComida] = useState("");
@@ -91,7 +87,10 @@ export default function ModalCriarPostagem({
     let conteudoFormatado = conteudo?.trim();
 
     if (tp_post === "receita" && !conteudoFormatado && instrucoes.length > 0) {
-      conteudoFormatado = instrucoes.join("\n").trim();
+      conteudoFormatado = instrucoes
+        .map((i) => i.texto)
+        .join("\n")
+        .trim();
     }
 
     const novaPostagem: any = {
@@ -116,6 +115,15 @@ export default function ModalCriarPostagem({
       descricao_comercio: descricaoComercio,
       descricao_resumida: descricaoResumida,
     };
+    if (tp_post === "receita") {
+      Object.assign(novaPostagem, {
+        calorias,
+        dificuldade,
+        rendimento_quantidade: rendimentoQuantidade,
+        tipo_rendimento: tipoRendimento,
+      });
+    }
+
     if (tp_post === "promocao") {
       Object.assign(novaPostagem, {
         descricao_resumida: descricaoResumida,
@@ -144,9 +152,11 @@ export default function ModalCriarPostagem({
       }
 
       novaPostagem.ingredientes = JSON.stringify(ingredientes);
-      novaPostagem.instrucoes = JSON.stringify(instrucoes);
+      novaPostagem.instrucoes = instrucoes;
       novaPostagem.categoria = JSON.stringify(categoria);
       novaPostagem.midia_urls = midia_urls;
+
+      console.log("📦 Payload final da postagem:", novaPostagem);
 
       await enviarPostagem(novaPostagem);
       onPostagemCriada?.();
@@ -339,26 +349,22 @@ export default function ModalCriarPostagem({
             Criar{" "}
             {tp_post ? tp_post[0].toUpperCase() + tp_post.slice(1) : "Postagem"}
           </Text>
-
           <ScrollView style={{ flex: 1 }}>
             {renderHeaderUsuario()}
             {renderFormulario()}
           </ScrollView>
-
           <TouchableOpacity
             onPress={selecionarImagens}
             style={ModalStyles.botaoFechar}
           >
             <Text style={ModalStyles.textoBotao}>Selecionar Imagem</Text>
           </TouchableOpacity>
-
           <TouchableOpacity
             onPress={handleSubmitPostagem}
             style={ModalStyles.botaoPublicar}
           >
             <Text style={ModalStyles.textoBotaoPublicar}>Publicar</Text>
           </TouchableOpacity>
-
           <TouchableOpacity
             onPress={fecharModal}
             style={ModalStyles.botaoFechar}

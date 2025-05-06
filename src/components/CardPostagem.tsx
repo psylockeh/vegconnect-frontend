@@ -88,7 +88,13 @@ const CardPostagem = ({ postagem }: Props) => {
 
         {/* Descrição resumida */}
         {descricao_resumida && (
-          <Text style={styles.descricaoResumida}>{descricao_resumida}</Text>
+          <Text
+            style={styles.descricaoResumida}
+            numberOfLines={3}
+            ellipsizeMode="tail"
+          >
+            {descricao_resumida}
+          </Text>
         )}
 
         {/* Data e hora */}

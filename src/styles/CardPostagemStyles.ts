@@ -113,8 +113,8 @@ export const styles = StyleSheet.create({
     marginBottom: 4,
   },
   descricaoResumida: {
-    fontSize: 13,
-    color: "#444",
-    marginTop: 4,
+    fontSize: 14,
+    color: "#555",
+    marginBottom: 6,
   },
 });
