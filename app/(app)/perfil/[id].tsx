@@ -4,10 +4,9 @@ import { useRouter, useLocalSearchParams } from "expo-router";
 import axios from "axios";
 import { API_URL } from "@/config/api";
 import Sidebar from "@/components/Sidebar";
-import { FontAwesome } from "@expo/vector-icons";
+import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { styles } from "@/styles/PerfilStyles";
-
 
 export default function PerfilUsuario() {
   const router = useRouter();
@@ -15,11 +14,16 @@ export default function PerfilUsuario() {
   const [usuario, setUsuario] = useState<any>(null);
   const [carregando, setCarregando] = useState(true);
   const [erroImagem, setErroImagem] = useState(false); // Importe novo=controlar erro da imagem
-
+  const [showInfo, setShowInfo] = useState(false); // Controlar a visualização das informações do comércio
+  const [usuarioAutenticadoId, setUsuarioAutenticadoId] = useState<string | null>(null);
 
   const carregarPerfil = async () => {
     try {
       const token = await AsyncStorage.getItem("@token");
+      const idUsuarioLogado = await AsyncStorage.getItem("@usuario_id");// recuperar id
+
+      setUsuarioAutenticadoId(idUsuarioLogado);
+
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -36,8 +40,15 @@ export default function PerfilUsuario() {
   };
 
   useEffect(() => {
-    carregarPerfil();
-  }, []);
+    if (id) {
+      carregarPerfil();
+    }
+  }, [id]);
+
+
+  const toggleInfo = () => {
+    setShowInfo(!showInfo); // Alterna a visualização das informações
+  };
 
   if (carregando) {
     return <ActivityIndicator size="large" color="#3C6E47" style={{ marginTop: 100 }} />;
@@ -50,7 +61,6 @@ export default function PerfilUsuario() {
       </Text>
     );
   }
-
 
   const fotoPerfilUrl = usuario?.foto_perfil?.startsWith("http")
     ? usuario.foto_perfil
@@ -89,22 +99,23 @@ export default function PerfilUsuario() {
                   {usuario?.tp_user || "Público"}
                 </Text>
 
+                {/* Botão de alternância para exibir as informações de comércio */}
                 {usuario?.tp_user === "Comerciante" && (
-                  <>
-                    <Text style={styles.info}>Nome do Comércio: {usuario?.nome_com}</Text>
-                    <Text style={styles.info}>Telefone: {usuario?.tel_com}</Text>
-                    <Text style={styles.info}>Tipo do Comércio: {usuario?.tipo_com }</Text>
-                    <Text style={styles.info}>Tipo de Produto: {usuario?.tipo_prod}</Text>
-                    <Text style={styles.info}>Endereço do Comércio: {usuario?.ender_com}</Text>
-                    <Text style={styles.info}>CEP: {usuario?.cep_com}</Text>
-                    <Text style={styles.info}>CNPJ: {usuario?.cnpj}</Text>
-                  </>
+                  <TouchableOpacity onPress={toggleInfo}>
+                    <View style={styles.infoContainer}>
+                      <MaterialIcons
+                        name={showInfo ? "keyboard-arrow-up" : "keyboard-arrow-down"}
+                        style={styles.iconInfoCom}
+                      />
+                      <Text style={styles.info}>Exibir Informações do Comércio</Text>
+                    </View>
+                  </TouchableOpacity>
                 )}
 
                 {usuario?.tp_user === "Chef" && (
                   <>
-                  <Text style={styles.info}>Especialidade: {usuario?.especialidade}</Text>
-                  <Text style={styles.info}>Certificações: {usuario?.certificacoes}</Text>
+                    <Text style={styles.info}>Especialidade: {usuario?.especialidade}</Text>
+                    <Text style={styles.info}>Certificações: {usuario?.certificacoes}</Text>
                   </>
                 )}
 
@@ -114,20 +125,35 @@ export default function PerfilUsuario() {
               </View>
             </View>
 
+            {/* Exibir as informações de comércio fora do headerUsuario */}
+            {showInfo && usuario?.tp_user === "Comerciante" && (
+              <View style={styles.contInfoComercio}>
+                <Text style={styles.infoComer}>Nome do Comércio:  {usuario?.nome_com}</Text>
+                <Text style={styles.infoComer}>Tipo do Comércio: {usuario?.tipo_com}</Text>
+                <Text style={styles.infoComer}>Telefone: {usuario?.tel_com}</Text>
+                <Text style={styles.infoComer}>Tipo de Produto: {usuario?.tipo_prod}</Text>
+                <Text style={styles.infoComer}>Endereço do Comércio: {usuario?.ender_com}</Text>
+                <Text style={styles.infoComer}>CEP: {usuario?.cep_com}</Text>
+                <Text style={styles.infoComer}>CNPJ: {usuario?.cnpj}</Text>
+              </View>
+            )}
+
             {usuario?.bio && (
               <Text style={styles.bio}>{usuario.bio}</Text>
             )}
 
-            {/* Botão de editar perfil*/}
-
-            <TouchableOpacity
-              onPress={() => router.push("/editar-perfil")}
-              style={styles.botaoAlterarPerfil}
-            >
-              <Text style={styles.textoBotaoAlterar}>Editar Perfil</Text>
-            </TouchableOpacity>
-
+            {/* Botão de editar perfil */}
+            {/* {usuarioAutenticadoId === String(id) && ( */}
+              <TouchableOpacity
+                onPress={() => router.push("/editar-perfil")}
+                style={styles.botaoAlterarPerfil}
+              >
+                <Text style={styles.textoBotaoAlterar}>Editar Perfil</Text>
+              </TouchableOpacity>
+            {/* )} */}
           </View>
+
+          
         </ScrollView>
       </View>
     </View>

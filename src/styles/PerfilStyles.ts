@@ -71,6 +71,7 @@ export const styles = StyleSheet.create({
     marginLeft: 3,
     marginTop: 15,
   },
+
   bio: {
     fontSize: 14,
     fontStyle: "italic",
@@ -79,5 +80,40 @@ export const styles = StyleSheet.create({
     backgroundColor: "#F0F4F2",
     paddingVertical: 12,
     borderRadius: 10,
-  }
+  },
+
+  contInfoComercio: {
+    textAlign: "center",
+    backgroundColor: "#F0F4F2",
+    paddingVertical: 12,
+    borderRadius: 10,
+    marginBottom: 15,
+    paddingLeft: 20,
+  },
+
+  infoComer: {
+    backgroundColor: "#F5FAF6",
+    padding: 10,
+    borderRadius: 10,
+    fontSize: 16,
+    marginRight: "5%",
+    margin:1,
+    marginLeft: 10,
+    borderWidth: 1,
+    borderColor: "#D7E2DA",
+    color: "#666",
+    fontWeight: "bold",
+  },
+  
+  infoContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+
+  iconInfoCom: {
+    fontSize: 25,
+    color: "#666",
+    marginRight: 1,
+    marginTop:15,
+  },
 });
