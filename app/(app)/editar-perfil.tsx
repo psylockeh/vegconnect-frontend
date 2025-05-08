@@ -119,19 +119,40 @@ export default function EditarPerfilScreen() {
 
   const salvarPerfil = async () => {
     setLoading(true);
-
+    setMensagemAlerta("");
+  
     try {
       const formData: any = {
         nome,
         telefone,
         nickname,
-        senha,
         email,
         data_nascimento,
         bio,
         foto_perfil,
       };
-
+  
+      // Validação senha
+      if (senha || confirmarSenha) {
+        if (senha !== confirmarSenha) {
+          setMensagemAlerta("🔐 As senhas não coincidem. Tente novamente.");
+          setLoading(false);
+          return;
+        }
+  
+        if (
+          !/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(senha)
+        ) {
+          setMensagemAlerta(
+            "🔐 A senha deve ter pelo menos 8 caracteres, incluindo um número, uma letra maiúscula e um caractere especial."
+          );
+          setLoading(false);
+          return;
+        }
+  
+        formData.senha = senha;
+      }
+  
       if (tipo === "Comerciante") {
         formData.nome_com = nomeComercio;
         formData.tel_com = telCom;
@@ -141,43 +162,33 @@ export default function EditarPerfilScreen() {
         formData.cep_com = cepCom;
         formData.tipo_prod = tipoProd;
       }
-
+  
       if (tipo === "Chef") {
         formData.especialidade = especialidade;
         formData.certificacoes = certificacoes;
       }
-
+  
       if (tipo === "Comum") {
         formData.pref_alim = prefAlim;
       }
-      if (senha !== confirmarSenha) {
-        setMensagemAlerta("🔐 As senhas não coincidem. Tente novamente.");
-        setLoading(false);
-        return;
-      }
-      if (
-        !/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(senha)
-      ) {
-        setMensagemAlerta(
-          "🔐 A senha deve ter pelo menos 8 caracteres, incluindo um número, uma letra maiúscula e um caractere especial."
-        );
-      }
+  
       const token = await AsyncStorage.getItem("@token");
+  
       await axios.put(`${API_URL}/usuario/perfil`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-
+  
       console.log("Enviando dados:", formData);
       await carregarPerfil();
       setMensagemAlerta("🌱 Perfil atualizado com sucesso!");
       setTimeout(() => setMensagemAlerta(""), 3000);
     } catch (error) {
       console.error("Erro ao atualizar perfil:", error);
-      setMensagemAlerta("❌ Erro ao atualizar o perfil!!");
+      setMensagemAlerta("❌ Erro ao atualizar o perfil!");
     }
-
+  
     setLoading(false);
   };
 
