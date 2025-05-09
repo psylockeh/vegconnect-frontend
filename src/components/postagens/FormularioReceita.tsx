@@ -59,13 +59,15 @@ export default function FormularioReceita({
   setTipoRendimento,
   descricao_resumida,
   setDescricaoResumida,
+  instrucoes,
+  setInstrucoes,
 }: Props) {
   const [ingredienteAtual, setIngredienteAtual] = useState("");
   const [quantidadeAtual, setQuantidadeAtual] = useState("");
   const [secaoAtual, setSecaoAtual] = useState("Geral");
   const [medidaAtual, setMedidaAtual] = useState("unidade");
   const [secaoInstrucaoAtual, setSecaoInstrucaoAtual] = useState("Geral");
-  const [instrucoes, setInstrucoes] = useState<Instrucao[]>([]);
+
   const secoes = ["Geral", "Massa", "Recheio", "Cobertura", "Molho"];
 
   const opcoesCategorias: Record<string, string[]> = {

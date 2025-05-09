@@ -42,4 +42,17 @@ export const styles = StyleSheet.create({
     color: "#444",
     lineHeight: 22,
   },
+  tituloSubSessao: {
+    fontWeight: "bold",
+    fontSize: 16,
+    marginTop: 20,
+    marginBottom: 8,
+    color: "#3C6E47",
+  },
+  carrosselImagem: {
+    width: 320,
+    height: 200,
+    borderRadius: 8,
+    marginRight: 10,
+  },
 });

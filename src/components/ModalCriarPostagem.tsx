@@ -152,7 +152,7 @@ export default function ModalCriarPostagem({
       }
 
       novaPostagem.ingredientes = JSON.stringify(ingredientes);
-      novaPostagem.instrucoes = instrucoes;
+      novaPostagem.instrucoes = JSON.stringify(instrucoes);
       novaPostagem.categoria = JSON.stringify(categoria);
       novaPostagem.midia_urls = midia_urls;
 

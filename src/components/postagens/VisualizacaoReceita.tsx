@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, Image } from "react-native";
 import { styles } from "@/styles/CardReceitaStyles";
+import { ScrollView } from "react-native-gesture-handler";
 
 interface Props {
   postagem: any;
@@ -15,13 +16,31 @@ export default function VisualizacaoReceita({ postagem }: Props) {
     ? postagem.instrucoes
     : JSON.parse(postagem.instrucoes || "[]");
 
+  const secoes = ["Geral", "Massa", "Recheio", "Cobertura", "Molho"];
+
   return (
     <View>
       {postagem.midia_urls?.length > 0 && (
-        <Image
-          source={{ uri: postagem.midia_urls[0] }}
-          style={styles.imagemCapa}
-        />
+        <ScrollView
+          horizontal
+          pagingEnabled
+          showsHorizontalScrollIndicator={false}
+          style={styles.carrosselImagem}
+        >
+          {postagem.midia_urls.map((url: string, index: number) => (
+            <Image
+              key={index}
+              source={{ uri: url }}
+              style={{
+                width: 320, // ou Dimensions.get("window").width
+                height: 200,
+                borderRadius: 8,
+                marginRight: 10,
+              }}
+              resizeMode="cover"
+            />
+          ))}
+        </ScrollView>
       )}
 
       <View style={styles.topicos}>
@@ -54,11 +73,23 @@ export default function VisualizacaoReceita({ postagem }: Props) {
       ))}
 
       <Text style={styles.tituloSessao}>MODO DE PREPARO</Text>
-      {instrucoes.map((passo: string, idx: number) => (
-        <Text key={idx} style={styles.itemTexto}>
-          {idx + 1}. {passo}
-        </Text>
-      ))}
+      {secoes.map((secao) => {
+        const passosDaSecao = instrucoes.filter((p: any) => p.secao === secao);
+        if (passosDaSecao.length === 0) return null;
+
+        return (
+          <View key={secao} style={{ marginBottom: 12 }}>
+            <Text style={[styles.tituloSubSessao, { marginBottom: 4 }]}>
+              {secao}
+            </Text>
+            {passosDaSecao.map((p: any, idx: number) => (
+              <Text key={idx} style={styles.itemTexto}>
+                {idx + 1}. {p.texto}
+              </Text>
+            ))}
+          </View>
+        );
+      })}
     </View>
   );
 }

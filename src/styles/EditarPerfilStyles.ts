@@ -3,14 +3,26 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F5FAF6",
+    backgroundColor: "#F4F4F4",
     flexDirection: "row",
   },
+
   mainContent: {
     flex: 1,
-    padding: 16,
-    marginTop: -10,
-    marginBottom: -10,
+    padding: 24,
+    backgroundColor: "#fff",
+    borderTopLeftRadius: 16,
+    borderBottomLeftRadius: 16,
+    marginLeft: 8,
+  },
+  linhaInputs: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: 16,
+    marginBottom: 16,
+  },
+  inputColuna: {
+    flex: 1,
   },
 
   cardEditarPerfil: {

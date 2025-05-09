@@ -20,6 +20,9 @@ import { MaterialIcons } from "@expo/vector-icons";
 import LottieView from "lottie-react-native";
 import { Picker } from "@react-native-picker/picker";
 import { useRouter } from "expo-router";
+import { useRef } from "react";
+
+const dadosOriginais = useRef<Record<string, string | null>>({});
 
 export default function EditarPerfilScreen() {
   const { carregarPerfil, perfilUsuario } = useAuth();
@@ -60,6 +63,29 @@ export default function EditarPerfilScreen() {
   }, []);
 
   useEffect(() => {
+    dadosOriginais.current = {
+      nome: perfilUsuario.nome || "",
+      nickname: perfilUsuario.nickname || "",
+      email: perfilUsuario.email || "",
+      telefone: perfilUsuario.telefone || "",
+      data_nascimento: perfilUsuario.data_nascimento || "",
+      bio: perfilUsuario.bio || "",
+      foto_perfil: perfilUsuario.foto_perfil || null,
+      // comerciais
+      nome_com: perfilUsuario.nome_com || "",
+      tel_com: perfilUsuario.tel_com || "",
+      tipo_prod: perfilUsuario.tipo_prod || "",
+      tipo_com: perfilUsuario.tipo_com || "",
+      ender_com: perfilUsuario.ender_com || "",
+      cnpj: perfilUsuario.cnpj || "",
+      cep_com: perfilUsuario.cep_com || "",
+      // chef
+      especialidade: perfilUsuario.especialidade || "",
+      certificacoes: perfilUsuario.certificacoes || "",
+      // comum
+      pref_alim: perfilUsuario.pref_alim || "",
+    };
+
     if (perfilUsuario) {
       setNome(perfilUsuario.nome || "");
       setNickname(perfilUsuario.nickname || "");
@@ -117,10 +143,93 @@ export default function EditarPerfilScreen() {
     }
   };
 
+  const validarCamposObrigatorios = () => {
+    if (!nome || nome.length < 3)
+      return "❗ O nome deve ter ao menos 3 letras.";
+    if (!nickname || nickname.includes(" ") || nickname.length < 3)
+      return "❗ O nickname deve ter ao menos 3 letras e não conter espaços.";
+    if (!email || !/^\S+@\S+\.\S+$/.test(email)) return "📧 E-mail inválido.";
+    if (!telefone || telefone.replace(/\D/g, "").length < 10)
+      return "📞 Telefone inválido. Digite ao menos 10 números.";
+    if (!data_nascimento || !/^\d{4}-\d{2}-\d{2}$/.test(data_nascimento))
+      return "📅 Use o formato de data: AAAA-MM-DD.";
+
+    if (senha || confirmarSenha) {
+      if (senha !== confirmarSenha) return "🔐 As senhas não coincidem.";
+      if (
+        !/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(senha)
+      )
+        return "🔐 A senha deve ter no mínimo 8 caracteres, com 1 número, 1 letra maiúscula e 1 símbolo.";
+    }
+
+    if (tipo === "Comum" && !prefAlim)
+      return "🌱 Informe sua preferência alimentar.";
+    if (tipo === "Chef" && (!especialidade || !certificacoes))
+      return "👨‍🍳 Preencha especialidade e certificações.";
+
+    if (tipo === "Comerciante") {
+      if (
+        !nomeComercio ||
+        !telCom ||
+        !tipoProd ||
+        !tipoCom ||
+        !enderCom ||
+        !cepCom ||
+        !cnpj
+      )
+        return "🏪 Preencha todos os dados obrigatórios do comércio.";
+      if (telCom.replace(/\D/g, "").length < 10)
+        return "📞 Telefone do comércio inválido.";
+      if (cepCom.replace(/\D/g, "").length !== 8)
+        return "📍 CEP deve conter 8 dígitos.";
+      if (cnpj.replace(/\D/g, "").length !== 14)
+        return "📄 CNPJ deve conter 14 dígitos numéricos.";
+    }
+
+    return null;
+  };
+
   const salvarPerfil = async () => {
+    const dadosAtuais = {
+      nome,
+      nickname,
+      email,
+      telefone,
+      data_nascimento,
+      bio,
+      foto_perfil,
+      nome_com: nomeComercio,
+      tel_com: telCom,
+      tipo_prod: tipoProd,
+      tipo_com: tipoCom,
+      ender_com: enderCom,
+      cnpj,
+      cep_com: cepCom,
+      especialidade,
+      certificacoes,
+      pref_alim: prefAlim,
+    };
+
+    const houveMudanca = Object.entries(dadosAtuais).some(
+      ([campo, valor]) => dadosOriginais.current[campo] !== valor
+    );
+
+    if (!houveMudanca && !senha && !confirmarSenha) {
+      setMensagemAlerta("⚠️ Nenhuma alteração detectada.");
+      setLoading(false);
+      return;
+    }
+
     setLoading(true);
     setMensagemAlerta("");
-  
+
+    const erroValidacao = validarCamposObrigatorios();
+    if (erroValidacao) {
+      setMensagemAlerta(erroValidacao);
+      setLoading(false);
+      return;
+    }
+
     try {
       const formData: any = {
         nome,
@@ -131,7 +240,7 @@ export default function EditarPerfilScreen() {
         bio,
         foto_perfil,
       };
-  
+
       // Validação senha
       if (senha || confirmarSenha) {
         if (senha !== confirmarSenha) {
@@ -139,9 +248,11 @@ export default function EditarPerfilScreen() {
           setLoading(false);
           return;
         }
-  
+
         if (
-          !/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(senha)
+          !/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
+            senha
+          )
         ) {
           setMensagemAlerta(
             "🔐 A senha deve ter pelo menos 8 caracteres, incluindo um número, uma letra maiúscula e um caractere especial."
@@ -149,10 +260,10 @@ export default function EditarPerfilScreen() {
           setLoading(false);
           return;
         }
-  
+
         formData.senha = senha;
       }
-  
+
       if (tipo === "Comerciante") {
         formData.nome_com = nomeComercio;
         formData.tel_com = telCom;
@@ -162,33 +273,39 @@ export default function EditarPerfilScreen() {
         formData.cep_com = cepCom;
         formData.tipo_prod = tipoProd;
       }
-  
+
       if (tipo === "Chef") {
         formData.especialidade = especialidade;
         formData.certificacoes = certificacoes;
       }
-  
+
       if (tipo === "Comum") {
         formData.pref_alim = prefAlim;
       }
-  
+
       const token = await AsyncStorage.getItem("@token");
-  
+
       await axios.put(`${API_URL}/usuario/perfil`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-  
+
       console.log("Enviando dados:", formData);
       await carregarPerfil();
       setMensagemAlerta("🌱 Perfil atualizado com sucesso!");
       setTimeout(() => setMensagemAlerta(""), 3000);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Erro ao atualizar perfil:", error);
-      setMensagemAlerta("❌ Erro ao atualizar o perfil!");
+
+      const erroMsg =
+        error?.response?.data?.erro ||
+        error?.response?.data?.msg ||
+        "❌ Erro ao atualizar o perfil!";
+
+      setMensagemAlerta(erroMsg);
     }
-  
+
     setLoading(false);
   };
 
@@ -212,7 +329,7 @@ export default function EditarPerfilScreen() {
       setMensagemAlerta("📌 Perfil deletado com sucesso!");
       setTimeout(async () => {
         await AsyncStorage.removeItem("@token");
-        router.push("/login"); 
+        router.push("/login");
       }, 5000);
     } catch (error) {
       console.error("Erro ao deletar perfil:", error);
@@ -222,7 +339,7 @@ export default function EditarPerfilScreen() {
 
   return (
     <View style={styles.container}>
-      <Sidebar onPostPress={() => { }} />
+      <Sidebar onPostPress={() => {}} />
       <View style={styles.mainContent}>
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.cardEditarPerfil}>
@@ -241,14 +358,31 @@ export default function EditarPerfilScreen() {
                     />
                   ) : (
                     <View style={styles.avatar}>
-                      <Text style={{ color: "#black", fontSize: 16, textAlign: "center", marginTop: 35 }}>Sem foto</Text>
-                      <MaterialIcons style={{ alignSelf: "flex-end", marginTop: 30 }} name="add-a-photo" size={24} color="black" />
+                      <Text
+                        style={{
+                          color: "#black",
+                          fontSize: 16,
+                          textAlign: "center",
+                          marginTop: 35,
+                        }}
+                      >
+                        Sem foto
+                      </Text>
+                      <MaterialIcons
+                        style={{ alignSelf: "flex-end", marginTop: 30 }}
+                        name="add-a-photo"
+                        size={24}
+                        color="black"
+                      />
                     </View>
                   )}
                 </View>
               </TouchableOpacity>
+            </View>
 
-              <View>
+            {/* Campos principais em colunas */}
+            <View style={styles.linhaInputs}>
+              <View style={styles.inputColuna}>
                 <Text style={styles.label}>Nome Completo:</Text>
                 <TextInput
                   style={styles.inputEditarPerfil}
@@ -256,7 +390,9 @@ export default function EditarPerfilScreen() {
                   value={nome}
                   onChangeText={setNome}
                 />
+              </View>
 
+              <View style={styles.inputColuna}>
                 <Text style={styles.label}>Nickname (único):</Text>
                 <TextInput
                   style={styles.inputEditarPerfil}
@@ -264,15 +400,21 @@ export default function EditarPerfilScreen() {
                   value={nickname}
                   onChangeText={setNickname}
                 />
+              </View>
+            </View>
 
-                <Text style={styles.label}>E-mail: (único):</Text>
+            <View style={styles.linhaInputs}>
+              <View style={styles.inputColuna}>
+                <Text style={styles.label}>E-mail:</Text>
                 <TextInput
                   style={styles.inputEditarPerfil}
                   placeholder="Digite seu E-mail"
                   value={email}
                   onChangeText={setEmail}
                 />
+              </View>
 
+              <View style={styles.inputColuna}>
                 <Text style={styles.label}>Telefone:</Text>
                 <TextInput
                   style={styles.inputEditarPerfil}
@@ -281,148 +423,160 @@ export default function EditarPerfilScreen() {
                   onChangeText={setTelefone}
                   keyboardType="phone-pad"
                 />
+              </View>
+            </View>
 
+            <View style={styles.linhaInputs}>
+              <View style={styles.inputColuna}>
                 <Text style={styles.label}>Data de Nascimento:</Text>
                 <TextInput
                   style={styles.inputEditarPerfil}
-                  placeholder="Digite seu Data de Nascimento"
+                  placeholder="Digite sua data de nascimento"
                   value={data_nascimento}
                   onChangeText={setDataNascimento}
                 />
+              </View>
 
+              <View style={styles.inputColuna}>
                 <Text style={styles.label}>Senha:</Text>
                 <TextInput
                   style={styles.inputEditarPerfil}
-                  placeholder="Senha"
+                  placeholder="Nova senha (opcional)"
                   value={senha}
                   onChangeText={setSenha}
                   secureTextEntry
                 />
+              </View>
+            </View>
 
+            <View style={styles.linhaInputs}>
+              <View style={styles.inputColuna}>
                 <Text style={styles.label}>Confirmar Senha:</Text>
                 <TextInput
                   style={styles.inputEditarPerfil}
-                  placeholder="Confirmar Senha"
+                  placeholder="Confirmar senha"
                   value={confirmarSenha}
                   onChangeText={setConfirmarSenha}
                   secureTextEntry
                 />
-
-
-                {/* Campo de Usuario Chef*/}
-                {tipo === "Chef" && (
-                  <>
-                    <Text style={styles.label}>Especialidade:</Text>
-                    <TextInput
-                      style={styles.inputEditarPerfil}
-                      placeholder="Especialidade"
-                      value={especialidade}
-                      onChangeText={setEspecialidade}
-                    />
-
-                    <Text style={styles.label}>Certificações:</Text>
-                    <TextInput
-                      style={styles.inputEditarPerfil}
-                      placeholder="Certificações"
-                      value={certificacoes}
-                      onChangeText={setCertificacoes}
-                    />
-                  </>
-                )}
-
-                {/* Campo de Usuario Comerciante*/}
-                {tipo === "Comerciante" && (
-                  <>
-                    <Text style={styles.label}>Nome do Comércio:</Text>
-                    <TextInput
-                      style={styles.inputEditarPerfil}
-                      placeholder="Nome do Comércio"
-                      value={nomeComercio}
-                      onChangeText={setNomeComercio}
-                    />
-
-                    <Text style={styles.label}>Telefone do Comércio:</Text>
-                    <TextInput
-                      style={styles.inputEditarPerfil}
-                      placeholder="Telefone do Comércio"
-                      value={telCom}
-                      onChangeText={setTelCom}
-                    />
-
-                    <Text style={styles.label}>CNPJ:</Text>
-                    <TextInput
-                      style={styles.inputEditarPerfil}
-                      placeholder="CNPJ"
-                      value={cnpj}
-                      onChangeText={setCnpj}
-                    />
-
-                    <Text style={styles.label}>Tipo do Comércio:</Text>
-                    <TextInput
-                      style={styles.inputEditarPerfil}
-                      placeholder="Tipo do Comércio"
-                      value={tipoCom}
-                      onChangeText={setTipoCom}
-                    />
-
-                    <Text style={styles.label}>Tipo do Produto:</Text>
-                    <TextInput
-                      style={styles.inputEditarPerfil}
-                      placeholder="Tipo do Produto"
-                      value={tipoProd}
-                      onChangeText={setTipoProd}
-                    />
-
-                    <Text style={styles.label}>Endereço do Comércio:</Text>
-                    <TextInput
-                      style={styles.inputEditarPerfil}
-                      placeholder="Endereço do Comércio"
-                      value={enderCom}
-                      onChangeText={setEnderCom}
-                    />
-
-                    <Text style={styles.label}>CEP do Comércio:</Text>
-                    <TextInput
-                      style={styles.inputEditarPerfil}
-                      placeholder="CEP do Comércio"
-                      value={cepCom}
-                      onChangeText={setCepCom}
-                    />
-                  </>
-                )}
-
-                {tipo === "Comum" && (
-                  <>
-                    {/* Campo de Preferência Alimentar*/}
-                    <Text style={styles.label}>Sua preferência alimentar:</Text>
-                    <Picker
-                      selectedValue={prefAlim}
-                      onValueChange={(itemValue) => setPrefAlim(itemValue)}
-                      style={styles.picker}
-                    >
-                      <Picker.Item label="Selecione sua preferência alimentar" value="" />
-                      <Picker.Item label="Vegano" value="Vegano" />
-                      <Picker.Item label="Vegetariano" value="Vegetariano" />
-                      <Picker.Item label="Dieta Restritiva" value="Dieta restritiva" />
-                    </Picker>
-                  </>
-                )}
-
-                <Text style={styles.label}>Biografia:</Text>
-                <TextInput
-                  style={styles.inputEditarPerfil}
-                  placeholder="Digite uma breve descrição"
-                  value={bio}
-                  onChangeText={setBio}
-                  multiline
-                />
               </View>
             </View>
 
+            {/* Campos adicionais por tipo */}
+            {tipo === "Chef" && (
+              <>
+                <Text style={styles.label}>Especialidade:</Text>
+                <TextInput
+                  style={styles.inputEditarPerfil}
+                  placeholder="Especialidade"
+                  value={especialidade}
+                  onChangeText={setEspecialidade}
+                />
+
+                <Text style={styles.label}>Certificações:</Text>
+                <TextInput
+                  style={styles.inputEditarPerfil}
+                  placeholder="Certificações"
+                  value={certificacoes}
+                  onChangeText={setCertificacoes}
+                />
+              </>
+            )}
+
+            {tipo === "Comerciante" && (
+              <>
+                <Text style={styles.label}>Nome do Comércio:</Text>
+                <TextInput
+                  style={styles.inputEditarPerfil}
+                  placeholder="Nome do Comércio"
+                  value={nomeComercio}
+                  onChangeText={setNomeComercio}
+                />
+
+                <Text style={styles.label}>Telefone do Comércio:</Text>
+                <TextInput
+                  style={styles.inputEditarPerfil}
+                  placeholder="Telefone do Comércio"
+                  value={telCom}
+                  onChangeText={setTelCom}
+                />
+
+                <Text style={styles.label}>CNPJ:</Text>
+                <TextInput
+                  style={styles.inputEditarPerfil}
+                  placeholder="CNPJ"
+                  value={cnpj}
+                  onChangeText={setCnpj}
+                />
+
+                <Text style={styles.label}>Tipo do Comércio:</Text>
+                <TextInput
+                  style={styles.inputEditarPerfil}
+                  placeholder="Tipo do Comércio"
+                  value={tipoCom}
+                  onChangeText={setTipoCom}
+                />
+
+                <Text style={styles.label}>Tipo do Produto:</Text>
+                <TextInput
+                  style={styles.inputEditarPerfil}
+                  placeholder="Tipo do Produto"
+                  value={tipoProd}
+                  onChangeText={setTipoProd}
+                />
+
+                <Text style={styles.label}>Endereço do Comércio:</Text>
+                <TextInput
+                  style={styles.inputEditarPerfil}
+                  placeholder="Endereço do Comércio"
+                  value={enderCom}
+                  onChangeText={setEnderCom}
+                />
+
+                <Text style={styles.label}>CEP do Comércio:</Text>
+                <TextInput
+                  style={styles.inputEditarPerfil}
+                  placeholder="CEP do Comércio"
+                  value={cepCom}
+                  onChangeText={setCepCom}
+                />
+              </>
+            )}
+
+            {tipo === "Comum" && (
+              <>
+                <Text style={styles.label}>Sua preferência alimentar:</Text>
+                <Picker
+                  selectedValue={prefAlim}
+                  onValueChange={(itemValue) => setPrefAlim(itemValue)}
+                  style={styles.picker}
+                >
+                  <Picker.Item
+                    label="Selecione sua preferência alimentar"
+                    value=""
+                  />
+                  <Picker.Item label="Vegano" value="Vegano" />
+                  <Picker.Item label="Vegetariano" value="Vegetariano" />
+                  <Picker.Item
+                    label="Dieta Restritiva"
+                    value="Dieta restritiva"
+                  />
+                </Picker>
+              </>
+            )}
+
+            <Text style={styles.label}>Biografia:</Text>
+            <TextInput
+              style={styles.inputEditarPerfil}
+              placeholder="Digite uma breve descrição"
+              value={bio}
+              onChangeText={setBio}
+              multiline
+            />
+
+            {/* Mensagem e Botões */}
             {mensagemAlerta !== "" && (
-              <Text style={styles.error}>
-                {mensagemAlerta}
-              </Text>
+              <Text style={styles.error}>{mensagemAlerta}</Text>
             )}
 
             <TouchableOpacity
@@ -450,7 +604,7 @@ export default function EditarPerfilScreen() {
             </TouchableOpacity>
           </View>
         </ScrollView>
-      </View >
-    </View >
+      </View>
+    </View>
   );
 }
