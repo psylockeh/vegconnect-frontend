@@ -16,6 +16,8 @@ export default function PerfilUsuario() {
   const [erroImagem, setErroImagem] = useState(false); // Importe novo=controlar erro da imagem
   const [showInfo, setShowInfo] = useState(false); // Controlar a visualização das informações do comércio
   const [usuarioAutenticadoId, setUsuarioAutenticadoId] = useState<string | null>(null);
+  // const [abaSelecionada, setAbaSelecionada] = useState("postagens"); // 'postagens' ou 'favoritos'
+  const [filtroSelecionado, setFiltroSelecionado] = useState("recado");
 
   const carregarPerfil = async () => {
     try {
@@ -144,16 +146,52 @@ export default function PerfilUsuario() {
 
             {/* Botão de editar perfil */}
             {/* {usuarioAutenticadoId === String(id) && ( */}
-              <TouchableOpacity
-                onPress={() => router.push("/editar-perfil")}
-                style={styles.botaoAlterarPerfil}
-              >
-                <Text style={styles.textoBotaoAlterar}>Editar Perfil</Text>
-              </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => router.push("/editar-perfil")}
+              style={styles.botaoAlterarPerfil}
+            >
+              <Text style={styles.textoBotaoAlterar}>Editar Perfil</Text>
+            </TouchableOpacity>
             {/* )} */}
+            
+            {/* Mural do usuario */}
+            <View style={styles.postagensFavoritosContainer}>
+              {["recado", "receita", "estabelecimento", "evento", "promoção"].map((item) => (
+                <TouchableOpacity
+                  key={item}
+                  onPress={() => setFiltroSelecionado(item)}
+                  style={[
+                    styles.postOptionRow,
+                    filtroSelecionado === item && styles.postOptionSelecionadoRow,
+                  ]}
+                >
+                  <MaterialIcons
+                    name={
+                      item === "recado"
+                        ? "message"
+                        : item === "receita"
+                          ? "restaurant-menu"
+                          : item === "estabelecimento"
+                            ? "store"
+                            : item === "evento"
+                              ? "event"
+                              : "local-offer"
+                    }
+                    size={20}
+                    color={filtroSelecionado === item ? "#fff" : "#3C6E47"}
+                  />
+                  <Text
+                    style={[
+                      styles.postOptionText,
+                      filtroSelecionado === item && { color: "#fff" },
+                    ]}
+                  >
+                    {item.charAt(0).toUpperCase() + item.slice(1)}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
           </View>
-
-          
         </ScrollView>
       </View>
     </View>

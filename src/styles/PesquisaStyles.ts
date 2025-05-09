@@ -40,22 +40,37 @@ export const pesquisarStyles = StyleSheet.create({
     flexWrap: 'wrap',
     gap: 5,
     marginBottom: 2,
+
+
+    backgroundColor: '#F5FAF6',
+    paddingVertical: 10,
+    borderRadius: 10,
+ 
+    shadowColor: "#000",
+    shadowOpacity: 0.05,
+    shadowOffset: { width: 0, height: 3 },
+    shadowRadius: 5,
+    elevation: 3,
   },
   botaoFiltro: {
-    backgroundColor: "#E6F1EB",
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#F5FAF6",
+    paddingHorizontal: 12,
     paddingVertical: 8,
-    paddingHorizontal: 10,
     borderRadius: 8,
+    marginHorizontal: 5,
+    marginVertical: 4,
   },
   botaoFiltroSelecionado: {
-    backgroundColor: '#4CAF50',
-    borderColor: '#4CAF50',
-    color: "#FFF"
+    backgroundColor: "#3C6E47",
   },
   textoBotao: {
-    fontSize: 14,
-    fontWeight: "500",
-    color: "#2E4F36",
+    color: "#3C6E47",
+    fontWeight: "600",
+  },
+  textoBotaoSelecionado: {
+    color: "#fff",
   },
   carregando: {
     marginVertical: 16,

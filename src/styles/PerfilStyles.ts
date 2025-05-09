@@ -116,4 +116,46 @@ export const styles = StyleSheet.create({
     marginRight: 1,
     marginTop:15,
   },
+
+  postagensFavoritosContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginTop: 20,
+    backgroundColor: '#F5FAF6',
+    paddingVertical: 10,
+    borderRadius: 10,
+    marginHorizontal: 10,
+    shadowColor: "#000",
+    shadowOpacity: 0.05,
+    shadowOffset: { width: 0, height: 3 },
+    shadowRadius: 5,
+    elevation: 3,
+  },
+
+  postOptionText: {
+    fontSize: 16,
+    color: '#333',
+    marginLeft: 6,
+    fontWeight: '600',
+  },
+
+  postOpcaoSelecionado: {
+    borderBottomWidth: 2,
+    borderBottomColor: "#3C6E47",
+    color: "#3C6E47",
+  },
+  
+  postOptionRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#F5FAF6",
+    padding: 10,
+    marginVertical: 5,
+    borderRadius: 8,
+    gap: 8,
+  },
+  
+  postOptionSelecionadoRow: {
+    backgroundColor: "#3C6E47",
+  },
 });

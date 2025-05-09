@@ -78,18 +78,28 @@ const PesquisaGeral = () => {
 
           {/* Menu de filtros */}
           <View style={pesquisarStyles.menuFiltro}>
-            {opcoes.map((opcao) => (
-              <TouchableOpacity
-                key={opcao.valor}
-                onPress={() => handleFiltroClick(opcao.valor)}  // Define o filtro
-                style={[
-                  pesquisarStyles.botaoFiltro,
-                  tipo === opcao.valor ? pesquisarStyles.botaoFiltroSelecionado : null
-                ]}
-              >
-                <Text style={pesquisarStyles.textoBotao}>{opcao.label}</Text>
-              </TouchableOpacity>
-            ))}
+            {opcoes.map((opcao) => {
+              const selecionado = tipo === opcao.valor;
+              return (
+                <TouchableOpacity
+                  key={opcao.valor}
+                  onPress={() => handleFiltroClick(opcao.valor)}
+                  style={[
+                    pesquisarStyles.botaoFiltro,
+                    selecionado && pesquisarStyles.botaoFiltroSelecionado,
+                  ]}
+                >
+                  <Text
+                    style={[
+                      pesquisarStyles.textoBotao,
+                      selecionado && pesquisarStyles.textoBotaoSelecionado,
+                    ]}
+                  >
+                    {opcao.label}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
           </View>
         </View>
 
@@ -129,7 +139,7 @@ const PesquisaGeral = () => {
                       <Text style={pesquisarStyles.nomeUsuario}> {item.nome || "Usuário"} </Text>
                       <Text style={pesquisarStyles.nickname}> @{item.nickname || "usuário"} </Text>
                       <Text style={pesquisarStyles.textoResultado}>
-                        <FontAwesome name="leaf" style={{ color: "#67b26f", fontSize: 20, marginRight: 8 }}/>
+                        <FontAwesome name="leaf" style={{ color: "#67b26f", fontSize: 20, marginRight: 8 }} />
                         {item.tp_user || "Público"} </Text>
                     </View>
                   </View>
