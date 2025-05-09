@@ -132,20 +132,20 @@ export const styles = StyleSheet.create({
     elevation: 3,
   },
 
-  postOptionText: {
+  posteOpTexto: {
     fontSize: 16,
     color: '#333',
     marginLeft: 6,
     fontWeight: '600',
   },
 
-  postOpcaoSelecionado: {
+  posteOpSelecionado: {
     borderBottomWidth: 2,
     borderBottomColor: "#3C6E47",
     color: "#3C6E47",
   },
   
-  postOptionRow: {
+  posteOpRow: {
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#F5FAF6",
@@ -155,7 +155,7 @@ export const styles = StyleSheet.create({
     gap: 8,
   },
   
-  postOptionSelecionadoRow: {
+  posteOpSelecionadoRow: {
     backgroundColor: "#3C6E47",
   },
 });

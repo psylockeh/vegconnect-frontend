@@ -27,7 +27,7 @@ export const pesquisarStyles = StyleSheet.create({
     backgroundColor: "#FAFDFB",
     padding: 16,
     marginTop: -10,
-    marginBottom: 20,
+    marginBottom: -10,
     borderRadius: 16,
     shadowColor: "#000",
     shadowOpacity: 0.05,
@@ -40,12 +40,9 @@ export const pesquisarStyles = StyleSheet.create({
     flexWrap: 'wrap',
     gap: 5,
     marginBottom: 2,
-
-
     backgroundColor: '#F5FAF6',
     paddingVertical: 10,
     borderRadius: 10,
- 
     shadowColor: "#000",
     shadowOpacity: 0.05,
     shadowOffset: { width: 0, height: 3 },
@@ -66,7 +63,7 @@ export const pesquisarStyles = StyleSheet.create({
     backgroundColor: "#3C6E47",
   },
   textoBotao: {
-    color: "#3C6E47",
+    color: "#333",
     fontWeight: "600",
   },
   textoBotaoSelecionado: {
@@ -86,7 +83,7 @@ export const pesquisarStyles = StyleSheet.create({
     padding: 16,
     backgroundColor: '#fff',
     borderRadius: 8,
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: '#ddd',
     marginBottom: 16,
     shadowColor: '#000',
@@ -121,6 +118,7 @@ export const pesquisarStyles = StyleSheet.create({
     color: "#666",
     fontSize: 14,
   },
+  
 });
 
 

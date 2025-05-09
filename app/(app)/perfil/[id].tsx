@@ -13,8 +13,8 @@ export default function PerfilUsuario() {
   const { id } = useLocalSearchParams(); // Pegar ID do usuário da URL
   const [usuario, setUsuario] = useState<any>(null);
   const [carregando, setCarregando] = useState(true);
-  const [erroImagem, setErroImagem] = useState(false); // Importe novo=controlar erro da imagem
-  const [showInfo, setShowInfo] = useState(false); // Controlar a visualização das informações do comércio
+  const [erroImagem, setErroImagem] = useState(false);
+  const [showInfo, setShowInfo] = useState(false);
   const [usuarioAutenticadoId, setUsuarioAutenticadoId] = useState<string | null>(null);
   // const [abaSelecionada, setAbaSelecionada] = useState("postagens"); // 'postagens' ou 'favoritos'
   const [filtroSelecionado, setFiltroSelecionado] = useState("recado");
@@ -22,8 +22,8 @@ export default function PerfilUsuario() {
   const carregarPerfil = async () => {
     try {
       const token = await AsyncStorage.getItem("@token");
-      const idUsuarioLogado = await AsyncStorage.getItem("@usuario_id");// recuperar id
 
+      const idUsuarioLogado = await AsyncStorage.getItem("@usuario_id");// recuperar id
       setUsuarioAutenticadoId(idUsuarioLogado);
 
       const config = {
@@ -48,9 +48,7 @@ export default function PerfilUsuario() {
   }, [id]);
 
 
-  const toggleInfo = () => {
-    setShowInfo(!showInfo); // Alterna a visualização das informações
-  };
+  const toggleInfo = () => { setShowInfo(!showInfo); };
 
   if (carregando) {
     return <ActivityIndicator size="large" color="#3C6E47" style={{ marginTop: 100 }} />;
@@ -66,7 +64,7 @@ export default function PerfilUsuario() {
 
   const fotoPerfilUrl = usuario?.foto_perfil?.startsWith("http")
     ? usuario.foto_perfil
-    : null; // <- Verifica se a URL é válida
+    : null;
 
   return (
     <View style={styles.container}>
@@ -140,7 +138,7 @@ export default function PerfilUsuario() {
               </View>
             )}
 
-            {usuario?.bio && (
+            {typeof usuario?.bio === "string" && usuario.bio.trim().length > 0 && (
               <Text style={styles.bio}>{usuario.bio}</Text>
             )}
 
@@ -153,7 +151,7 @@ export default function PerfilUsuario() {
               <Text style={styles.textoBotaoAlterar}>Editar Perfil</Text>
             </TouchableOpacity>
             {/* )} */}
-            
+
             {/* Mural do usuario */}
             <View style={styles.postagensFavoritosContainer}>
               {["recado", "receita", "estabelecimento", "evento", "promoção"].map((item) => (
@@ -161,8 +159,8 @@ export default function PerfilUsuario() {
                   key={item}
                   onPress={() => setFiltroSelecionado(item)}
                   style={[
-                    styles.postOptionRow,
-                    filtroSelecionado === item && styles.postOptionSelecionadoRow,
+                    styles.posteOpRow,
+                    filtroSelecionado === item && styles.posteOpSelecionadoRow,
                   ]}
                 >
                   <MaterialIcons
@@ -182,7 +180,7 @@ export default function PerfilUsuario() {
                   />
                   <Text
                     style={[
-                      styles.postOptionText,
+                      styles.posteOpTexto,
                       filtroSelecionado === item && { color: "#fff" },
                     ]}
                   >

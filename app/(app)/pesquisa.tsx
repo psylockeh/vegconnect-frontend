@@ -9,7 +9,6 @@ import CardPostagem from "@/components/CardPostagem";
 import { useRouter } from "expo-router";
 import { FontAwesome } from "@expo/vector-icons";
 
-
 const PesquisaGeral = () => {
   const [termo, setTermo] = useState('');
   const [tipo, setTipo] = useState('usuario');
@@ -105,7 +104,7 @@ const PesquisaGeral = () => {
 
         {carregando && <ActivityIndicator size="large" color="#3C6E47" style={pesquisarStyles.carregando} />}
 
-        {erro && <Text style={pesquisarStyles.erro}>{erro}</Text>}
+        <Text style={pesquisarStyles.erro}>{erro}</Text>
 
         {/* Exibição dos resultados da pesquisa */}
         <FlatList
