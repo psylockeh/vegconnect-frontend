@@ -15,7 +15,7 @@ import { CadastroStyles as styles } from "@/styles/CadastroStyles";
 import { Picker } from "@react-native-picker/picker";
 import { ToastAndroid, Platform } from "react-native";
 import LottieView from "lottie-react-native";
-
+import { MaskedTextInput } from "react-native-mask-text";
 
 export default function CadastroScreen() {
   const router = useRouter();
@@ -40,7 +40,6 @@ export default function CadastroScreen() {
   const [cepComercio, setCepComercio] = useState("");
   const [telefoneComercio, setTelefoneComercio] = useState("");
   const [confirmarSenha, setConfirmarSenha] = useState("");
-
 
   const formatarDataParaAPI = (data: string) => {
     const regex = /^(\d{2})\/(\d{2})\/(\d{4})$/;
@@ -234,12 +233,13 @@ export default function CadastroScreen() {
         />
 
         {/* Campo de Data de Nascimento */}
-        <TextInput
-          style={styles.input}
-          placeholder="Data de Nascimento - Ex.(DD/MM/AAAA)"
-          value={dataNascimento}
-          onChangeText={setDataNascimento}
+        <MaskedTextInput
+          mask="99/99/9999"
           keyboardType="numeric"
+          onChangeText={(text) => setDataNascimento(text)}
+          value={dataNascimento}
+          placeholder="DD/MM/AAAA"
+          style={styles.input}
         />
 
         {/* Campo de Senha */}
@@ -367,9 +367,7 @@ export default function CadastroScreen() {
           <Picker.Item label="Dieta Restritiva" value="Dieta restritiva" />
         </Picker>
 
-
         {error ? <Text style={styles.error}>{error}</Text> : null}
-
 
         {/* Campo de Button*/}
         <TouchableOpacity
@@ -391,7 +389,9 @@ export default function CadastroScreen() {
 
         {/* Campo de Voltar Login*/}
         <TouchableOpacity onPress={() => router.push("/login")}>
-          <Text style={styles.link}>Já tem conta? <Text style={{ fontWeight: "bold" }}>Faça Login</Text></Text>
+          <Text style={styles.link}>
+            Já tem conta? <Text style={{ fontWeight: "bold" }}>Faça Login</Text>
+          </Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
