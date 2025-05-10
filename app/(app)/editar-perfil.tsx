@@ -58,6 +58,31 @@ export default function EditarPerfilScreen() {
   // Comum
   const [prefAlim, setPrefAlim] = useState("");
 
+  // Após os useState
+  const dadosAtuais = {
+    nome,
+    nickname,
+    email,
+    telefone,
+    data_nascimento,
+    bio,
+    foto_perfil,
+    nome_com: nomeComercio,
+    tel_com: telCom,
+    tipo_prod: tipoProd,
+    tipo_com: tipoCom,
+    ender_com: enderCom,
+    cnpj,
+    cep_com: cepCom,
+    especialidade,
+    certificacoes,
+    pref_alim: prefAlim,
+  };
+
+  const houveMudanca = Object.entries(dadosAtuais).some(
+    ([campo, valor]) => dadosOriginais.current[campo] !== valor
+  );
+
   useEffect(() => {
     carregarPerfil();
   }, []);
@@ -209,16 +234,6 @@ export default function EditarPerfilScreen() {
       certificacoes,
       pref_alim: prefAlim,
     };
-
-    const houveMudanca = Object.entries(dadosAtuais).some(
-      ([campo, valor]) => dadosOriginais.current[campo] !== valor
-    );
-
-    if (!houveMudanca && !senha && !confirmarSenha) {
-      setMensagemAlerta("⚠️ Nenhuma alteração detectada.");
-      setLoading(false);
-      return;
-    }
 
     setLoading(true);
     setMensagemAlerta("");
@@ -580,9 +595,14 @@ export default function EditarPerfilScreen() {
             )}
 
             <TouchableOpacity
-              style={styles.botaoSalvarPerfil}
+              style={[
+                styles.botaoSalvarPerfil,
+                !houveMudanca &&
+                  !senha &&
+                  !confirmarSenha && { backgroundColor: "#ccc" },
+              ]}
               onPress={salvarPerfil}
-              disabled={loading}
+              disabled={loading || (!houveMudanca && !senha && !confirmarSenha)}
             >
               {loading ? (
                 <LottieView

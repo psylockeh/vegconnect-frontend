@@ -1,4 +1,5 @@
 import { Instrucao } from "@/types";
+
 const validarPostagem = (tp_post: string, dados: any): string | null => {
   const {
     titulo,
@@ -13,8 +14,15 @@ const validarPostagem = (tp_post: string, dados: any): string | null => {
     horario_abertura,
     horario_fechamento,
     cep,
+    endereco,
     descricao_resumida,
+    tipo_comercio,
+    tipo_produto,
+    tipo_servico,
   } = dados;
+
+  console.log("🧪 Validação em execução para tipo:", tp_post);
+  console.log("📦 Dados recebidos:", dados);
 
   if (tp_post === "recado") {
     if (!conteudo || typeof conteudo !== "string" || conteudo.trim() === "") {
@@ -73,17 +81,47 @@ const validarPostagem = (tp_post: string, dados: any): string | null => {
   }
 
   if (tp_post === "estabelecimento") {
-    if (
-      !titulo?.trim() ||
-      !conteudo?.trim() ||
-      !tipo_comida?.trim() ||
-      !horario_abertura?.trim() ||
-      !horario_fechamento?.trim() ||
-      !cep?.trim() ||
-      !localizacao?.trim() ||
-      !descricao_resumida?.trim()
-    ) {
-      return "Título, conteúdo, tipo de comida, horário de abertura, horário de fechamento, CEP, local e a descrição são obrigatórios para estabelecimentos.";
+    const {
+      tipo_comercio,
+      tp_comida,
+      tipo_produto,
+      tipo_servico,
+      horario_abertura,
+      horario_fechamento,
+      cep,
+      endereco,
+      titulo,
+      conteudo,
+      descricao_resumida,
+    } = dados;
+
+    if (!tipo_comercio) return "Informe o tipo de comércio.";
+
+    const baseObrigatorios = [
+      titulo?.trim(),
+      conteudo?.trim(),
+      descricao_resumida?.trim(),
+      cep?.trim(),
+      endereco?.trim(),
+    ];
+
+    const obrigatoriosPorTipo: Record<string, (string | undefined)[]> = {
+      restaurante: [
+        tp_comida?.trim(),
+        horario_abertura?.trim(),
+        horario_fechamento?.trim(),
+      ],
+      feira: [tp_comida?.trim()],
+      loja: [tipo_produto?.trim()],
+      servico: [tipo_servico?.trim()],
+    };
+
+    const extras = obrigatoriosPorTipo[tipo_comercio] || [];
+
+    const algumVazio = [...baseObrigatorios, ...extras].some((campo) => !campo);
+
+    if (algumVazio) {
+      return "Preencha todos os campos obrigatórios conforme o tipo de comércio.";
     }
   }
 

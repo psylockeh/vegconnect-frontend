@@ -17,11 +17,14 @@ import { API_URL } from "@/config/api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAuth } from "@/context/AuthContext";
 import * as ImagePicker from "expo-image-picker";
-import { MaterialIcons, FontAwesome} from "@expo/vector-icons";
+import { MaterialIcons, FontAwesome } from "@expo/vector-icons";
 import Toast from "react-native-toast-message";
 import { uploadImageToCloudinary } from "@/utils/cloudinary";
 import { enviarPostagem } from "@/services/postagemService";
 import CardPostagem from "@/components/CardPostagem";
+import { useContext } from "react";
+import { AuthContext } from "@/context/AuthContext";
+import { AuthContextProps } from "@/context/AuthContext";
 
 type Postagem = {
   id: number;
@@ -36,7 +39,14 @@ type Postagem = {
   };
 };
 
+const permissoesPorTipoUsuario: Record<string, string[]> = {
+  Comum: ["recado", "receita", "evento"],
+  Chef: ["recado", "receita", "evento"],
+  Comerciante: ["recado", "receita", "evento", "estabelecimento", "promocao"],
+};
+
 export default function Feed() {
+  const { usuario } = useContext(AuthContext) as AuthContextProps;
   const router = useRouter();
   const [postagens, setPostagens] = useState<Postagem[]>([]);
   const [mostrarModal, setMostrarModal] = useState(false);
@@ -48,21 +58,29 @@ export default function Feed() {
   const carregarPostagens = async () => {
     try {
       const token = await AsyncStorage.getItem("@token");
-      if (!token) return;
+      if (!token || !usuario?.tp_user) return;
 
       const response = await axios.get(`${API_URL}/usuario/postagens`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      setPostagens(response.data);
+      const permissoes = permissoesPorTipoUsuario[usuario.tp_user] || [];
+
+      const postagensFiltradas = response.data.filter((post: any) =>
+        permissoes.includes(post.tp_post)
+      );
+
+      setPostagens(postagensFiltradas);
     } catch (error) {
       console.error("Erro ao carregar postagens:", error);
     }
   };
 
   useEffect(() => {
-    carregarPostagens();
-  }, []);
+    if (usuario?.tp_user) {
+      carregarPostagens();
+    }
+  }, [usuario?.tp_user]);
 
   const abrirModal = (tipo: string) => {
     setTpPost(tipo.toLowerCase());
@@ -118,10 +136,9 @@ export default function Feed() {
 
   return (
     <View style={feedStyles.container}>
-      <Sidebar onPostPress={() => { }} />
+      <Sidebar onPostPress={() => {}} />
 
       <View style={feedStyles.mainContent}>
-
         <ScrollView showsVerticalScrollIndicator={false}>
           {/* Card de criação de recado */}
           <View style={feedStyles.cardCriarPost}>
@@ -133,7 +150,17 @@ export default function Feed() {
                 />
               ) : (
                 <View style={feedStyles.avatar}>
-                  <Text style={{ color: "#black", fontSize: 10, textAlign: "auto", marginTop: 15, paddingLeft: 5 }}>Sem foto</Text>
+                  <Text
+                    style={{
+                      color: "#black",
+                      fontSize: 10,
+                      textAlign: "auto",
+                      marginTop: 15,
+                      paddingLeft: 5,
+                    }}
+                  >
+                    Sem foto
+                  </Text>
                 </View>
               )}
 
@@ -142,13 +169,23 @@ export default function Feed() {
                   {perfilUsuario?.nome || "Usuário"}
                 </Text>
                 <Text style={feedStyles.tipoUsuario}>
-                  <FontAwesome name="leaf" style={{ color: "#67b26f", fontSize: 20, marginRight: 8 }} />
+                  <FontAwesome
+                    name="leaf"
+                    style={{ color: "#67b26f", fontSize: 20, marginRight: 8 }}
+                  />
                   {perfilUsuario?.tp_user || "Público"}
                 </Text>
               </View>
 
               {/* Botão Sair */}
-              <View style={{ flex: 1, justifyContent: "center", alignItems: "flex-end", padding: 8 }}>
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: "center",
+                  alignItems: "flex-end",
+                  padding: 8,
+                }}
+              >
                 <TouchableOpacity
                   onPress={logout}
                   style={{
@@ -158,7 +195,9 @@ export default function Feed() {
                     borderRadius: 6,
                   }}
                 >
-                  <Text style={{ color: "#fff", fontWeight: "bold" }}>Sair</Text>
+                  <Text style={{ color: "#fff", fontWeight: "bold" }}>
+                    Sair
+                  </Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -208,9 +247,19 @@ export default function Feed() {
 
             <View style={feedStyles.cardLinhaPostagem}>
               <Text style={feedStyles.ouLabel}> </Text>
+
               <View style={feedStyles.botoesTipoPostagem}>
-                {["Receita", "Evento", "Estabelecimento", "Promoção"].map(
-                  (tipo: string) => (
+                {["Receita", "Evento", "Estabelecimento", "Promoção"]
+                  .filter((tipo) => {
+                    const tipoMin = tipo.toLowerCase();
+                    const permissoes =
+                      permissoesPorTipoUsuario[
+                        usuario?.tp_user as keyof typeof permissoesPorTipoUsuario
+                      ] || [];
+
+                    return permissoes.includes(tipoMin);
+                  })
+                  .map((tipo: string) => (
                     <TouchableOpacity
                       key={tipo}
                       style={feedStyles.botaoTipo}
@@ -218,9 +267,9 @@ export default function Feed() {
                     >
                       <Text style={feedStyles.textoBotaoTipo}>{tipo}</Text>
                     </TouchableOpacity>
-                  )
-                )}
+                  ))}
               </View>
+
               <View style={feedStyles.iconesAcoes}>
                 <TouchableOpacity onPress={selecionarImagem}>
                   <MaterialIcons name="image" size={22} color="#3C6E47" />

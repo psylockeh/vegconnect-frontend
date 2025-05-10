@@ -11,10 +11,17 @@ import axios from "../utils/axiosInstance";
 import { API_URL } from "../config/api";
 import { isAxiosError } from "axios";
 
-interface AuthContextProps {
+type UsuarioLogado = {
+  nome: string;
+  tp_user: "Comum" | "Chef" | "Comerciante";
+  email: string;
+  id_user: number;
+};
+
+export interface AuthContextProps {
   userToken: string | null;
   perfilUsuario: any;
-  isLoading: boolean;
+  usuario: UsuarioLogado | null;
   login: (
     email: string,
     senha: string,
@@ -28,6 +35,7 @@ interface AuthContextProps {
     pref_alim?: string;
     senha?: string;
   }) => Promise<void>;
+  isLoading: boolean;
   register: (
     nome: string,
     email: string,
@@ -51,9 +59,12 @@ interface AuthContextProps {
   resetPassword: (token: string, novaSenha: string) => Promise<void>;
 }
 
-const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
+export const AuthContext = createContext<AuthContextProps>(
+  {} as AuthContextProps
+);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const [usuario, setUsuario] = useState<UsuarioLogado | null>(null);
   const [userToken, setUserToken] = useState<string | null>(null);
   const [perfilUsuario, setPerfilUsuario] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -122,7 +133,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
 
       const response = await axios.get(`/usuario/perfil`);
-      setPerfilUsuario(response.data);
+      const dados = response.data;
+      setPerfilUsuario(dados);
+      setUsuario({
+        nome: dados.nome,
+        tp_user: dados.tp_user,
+        email: dados.email,
+        id_user: dados.id_user,
+      });
     } catch (error: any) {
       console.error("Erro ao carregar perfil:", error);
 
@@ -267,6 +285,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         register,
         forgotPassword,
         resetPassword,
+        usuario,
       }}
     >
       {children}

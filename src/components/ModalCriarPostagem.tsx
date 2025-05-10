@@ -93,30 +93,50 @@ export default function ModalCriarPostagem({
         .trim();
     }
 
-    const novaPostagem: any = {
-      tp_post,
-      titulo: nomeReceita,
-      conteudo: conteudoFormatado,
-      data,
-      localizacao,
-      valor,
-      links,
-      nome_receita: nomeReceita,
-      ingredientes,
-      instrucoes,
-      temp_prep: tempoPreparo,
-      categoria,
-      tipo_comida: tipoComida,
-      horario_abertura: horarioAbertura,
-      horario_fechamento: horarioFechamento,
-      cep,
-      endereco,
-      nome_comercio: nomeComercio,
-      descricao_comercio: descricaoComercio,
-      descricao_resumida: descricaoResumida,
+    type NovaPostagem = {
+      tp_post: string;
+      titulo?: string;
+      conteudo: string;
+      data?: string;
+      localizacao?: string;
+      valor?: string;
+      links?: string;
+      nome_receita?: string;
+      ingredientes?: string;
+      instrucoes?: string;
+      temp_prep?: string;
+      categoria?: string;
+      calorias?: string;
+      dificuldade?: string;
+      rendimento_quantidade?: string;
+      tipo_rendimento?: string;
+      tp_evento?: string;
+      categoria_evento?: string;
+      modalidade_evento?: string | string[];
+      descricao_resumida?: string;
+      nome_comercio?: string;
+      descricao_comercio?: string;
+      tp_comida?: string;
+      hora_abertura?: string;
+      hora_fechamento?: string;
+      cep?: string;
+      endereco?: string;
+      midia_urls?: string[];
+      tipo_comercio?: string;
+      tipo_produto?: string;
+      tipo_servico?: string;
     };
+
+    const novaPostagem: NovaPostagem = {
+      tp_post,
+      conteudo: conteudoFormatado,
+    };
+
+    // RECEITA
     if (tp_post === "receita") {
       Object.assign(novaPostagem, {
+        titulo: nomeReceita,
+        nome_receita: nomeReceita,
         calorias,
         dificuldade,
         rendimento_quantidade: rendimentoQuantidade,
@@ -124,20 +144,52 @@ export default function ModalCriarPostagem({
       });
     }
 
+    // PROMOÇÃO
     if (tp_post === "promocao") {
       Object.assign(novaPostagem, {
-        descricao_resumida: descricaoResumida,
         titulo,
-        conteudo,
+        descricao_resumida: descricaoResumida,
+        conteudo: conteudoFormatado,
         data,
         links,
       });
     }
+
+    // EVENTO
     if (tp_post === "evento") {
       Object.assign(novaPostagem, {
+        titulo,
+        descricao_resumida: descricaoResumida,
+        conteudo: conteudoFormatado,
+        data,
+        localizacao,
         tp_evento: tpEvento,
         categoria_evento: categoriaEvento,
-        modalidade_evento: modalidadeEvento.join(", "),
+        modalidade_evento: Array.isArray(modalidadeEvento)
+          ? modalidadeEvento
+          : [modalidadeEvento],
+      });
+    }
+
+    // ESTABELECIMENTO
+    if (tp_post === "estabelecimento") {
+      const conteudoEstabelecimento = descricaoComercio?.trim();
+      conteudoFormatado = descricaoComercio; // garante que conteudo não venha vazio
+
+      Object.assign(novaPostagem, {
+        conteudo: conteudoEstabelecimento,
+        titulo: nomeComercio,
+        nome_comercio: nomeComercio,
+        descricao_comercio: descricaoComercio,
+        tp_comida: tipoComida,
+        hora_abertura: horarioAbertura,
+        hora_fechamento: horarioFechamento,
+        cep,
+        endereco,
+        descricao_resumida: descricaoResumida,
+        tipo_comercio: tipoComercio,
+        tipo_produto: tpProduto,
+        tipo_servico: tpServico,
       });
     }
 
@@ -145,7 +197,7 @@ export default function ModalCriarPostagem({
     if (erro) return alert(`⚠️ ${erro}`);
 
     try {
-      const midia_urls: string[] = [];
+      const midia_urls = [];
       for (const uri of midiasSelecionadas) {
         const uploadedUrl = await uploadImageToCloudinary(uri);
         if (uploadedUrl) midia_urls.push(uploadedUrl);
@@ -160,6 +212,7 @@ export default function ModalCriarPostagem({
 
       await enviarPostagem(novaPostagem);
       onPostagemCriada?.();
+
       Toast.show({
         type: "success",
         text1: "Postagem publicada!",
@@ -168,7 +221,7 @@ export default function ModalCriarPostagem({
 
       fechar();
       resetarCampos();
-    } catch (err: any) {
+    } catch (err) {
       Toast.show({
         type: "error",
         text1: "Erro ao publicar",
