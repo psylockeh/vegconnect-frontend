@@ -272,14 +272,19 @@ export default function ModalCriarPostagem({
 
   const renderHeaderUsuario = () => (
     <View style={ModalStyles.headerUsuario}>
-      <Image
-        source={{
-          uri: perfilUsuario?.foto_perfil?.startsWith("http")
-            ? perfilUsuario.foto_perfil
-            : "https://res.cloudinary.com/demo/image/upload/v1682620184/default-profile.png",
-        }}
-        style={ModalStyles.avatar}
-      />
+      {perfilUsuario?.foto_perfil?.startsWith("http") ? (
+        <Image
+          source={{ uri: perfilUsuario.foto_perfil }}
+          onError={() => console.log("❌ Erro ao carregar imagem de perfil")}
+          style={ModalStyles.avatar}
+        />
+      ) : (
+        <Image
+          source={require("@/assets/default-avatar.png")}
+          style={ModalStyles.avatar}
+        />
+      )}
+
       <View>
         <Text style={ModalStyles.nomeUsuario}>
           {perfilUsuario?.nome || "Usuário"}
@@ -293,6 +298,13 @@ export default function ModalCriarPostagem({
 
   const renderFormulario = () => {
     switch (tp_post) {
+      default:
+        return (
+          <Text style={{ padding: 12, textAlign: "center", color: "#999" }}>
+            Selecione um tipo de postagem para continuar.
+          </Text>
+        );
+
       case "receita":
         return (
           <>

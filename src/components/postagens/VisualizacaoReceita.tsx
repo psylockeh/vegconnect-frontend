@@ -8,13 +8,24 @@ interface Props {
 }
 
 export default function VisualizacaoReceita({ postagem }: Props) {
-  const ingredientes = Array.isArray(postagem.ingredientes)
-    ? postagem.ingredientes
-    : JSON.parse(postagem.ingredientes || "[]");
+  let ingredientes = [];
+  let instrucoes = [];
 
-  const instrucoes = Array.isArray(postagem.instrucoes)
-    ? postagem.instrucoes
-    : JSON.parse(postagem.instrucoes || "[]");
+  try {
+    ingredientes = Array.isArray(postagem.ingredientes)
+      ? postagem.ingredientes
+      : JSON.parse(postagem.ingredientes || "[]");
+  } catch (err) {
+    console.warn("❌ Erro ao processar ingredientes:", err);
+  }
+
+  try {
+    instrucoes = Array.isArray(postagem.instrucoes)
+      ? postagem.instrucoes
+      : JSON.parse(postagem.instrucoes || "[]");
+  } catch (err) {
+    console.warn("❌ Erro ao processar instruções:", err);
+  }
 
   const secoes = ["Geral", "Massa", "Recheio", "Cobertura", "Molho"];
 

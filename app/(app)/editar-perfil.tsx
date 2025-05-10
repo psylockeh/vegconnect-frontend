@@ -253,7 +253,12 @@ export default function EditarPerfilScreen() {
         email,
         data_nascimento,
         bio,
-        foto_perfil,
+        foto_perfil:
+          foto_perfil &&
+          typeof foto_perfil === "string" &&
+          foto_perfil.startsWith("http")
+            ? foto_perfil
+            : null,
       };
 
       // Validação senha
@@ -366,30 +371,19 @@ export default function EditarPerfilScreen() {
                 activeOpacity={0.7}
               >
                 <View style={styles.avatarContainer}>
-                  {perfilUsuario?.foto_perfil ? (
+                  {foto_perfil &&
+                  typeof foto_perfil === "string" &&
+                  foto_perfil.startsWith("http") ? (
                     <Image
-                      source={{ uri: perfilUsuario.foto_perfil }}
+                      source={{ uri: foto_perfil }}
                       style={styles.avatar}
+                      onError={() => setFotoPerfil(null)}
                     />
                   ) : (
-                    <View style={styles.avatar}>
-                      <Text
-                        style={{
-                          color: "#black",
-                          fontSize: 16,
-                          textAlign: "center",
-                          marginTop: 35,
-                        }}
-                      >
-                        Sem foto
-                      </Text>
-                      <MaterialIcons
-                        style={{ alignSelf: "flex-end", marginTop: 30 }}
-                        name="add-a-photo"
-                        size={24}
-                        color="black"
-                      />
-                    </View>
+                    <Image
+                      source={require("@/assets/default-avatar.png")}
+                      style={styles.avatar}
+                    />
                   )}
                 </View>
               </TouchableOpacity>

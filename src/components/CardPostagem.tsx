@@ -54,23 +54,21 @@ const CardPostagem = ({ postagem }: Props) => {
       <View style={[styles.card, { borderColor: definirCorBorda() }]}>
         {/* Cabeçalho */}
         <View style={styles.headerUsuario}>
-          {usuario?.foto_perfil ? (
-            <Image source={{ uri: fotoPerfilUrl }} style={styles.fotoPerfil} />
+          {usuario?.foto_perfil?.startsWith("http") ? (
+            <Image
+              source={{ uri: usuario.foto_perfil }}
+              style={styles.fotoPerfil}
+              onError={() =>
+                console.log("❌ Erro ao carregar imagem de perfil")
+              }
+            />
           ) : (
-            <View style={styles.fotoPerfil}>
-              <Text
-                style={{
-                  color: "#black",
-                  fontSize: 10,
-                  textAlign: "auto",
-                  marginTop: 15,
-                  paddingLeft: 5,
-                }}
-              >
-                Sem foto
-              </Text>
-            </View>
+            <Image
+              source={require("@/assets/default-avatar.png")}
+              style={styles.fotoPerfil}
+            />
           )}
+
           <View>
             <Text style={styles.nomeUsuario}>{usuario?.nome}</Text>
             <Text style={styles.nickname}>@{usuario?.nickname}</Text>

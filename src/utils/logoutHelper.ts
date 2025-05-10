@@ -3,5 +3,5 @@ import { router } from "expo-router";
 
 export async function logoutUsuario() {
   await AsyncStorage.removeItem("@token");
-  router.replace("../app/(auth)/login");
+  router.replace("/login");
 }

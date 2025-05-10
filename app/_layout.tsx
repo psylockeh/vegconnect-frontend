@@ -1,11 +1,13 @@
-import { Slot } from "expo-router";
+import { Stack } from "expo-router";
 import { AuthProvider } from "@/context/AuthContext";
-import Toast from "react-native-toast-message";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function RootLayout() {
   return (
     <AuthProvider>
-      <Slot />
+      <SafeAreaView style={{ flex: 1 }}>
+        <Stack screenOptions={{ headerShown: false }} />
+      </SafeAreaView>
     </AuthProvider>
   );
 }

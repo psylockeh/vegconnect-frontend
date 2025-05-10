@@ -1,26 +1,17 @@
 import { useEffect } from "react";
-import { useRouter, useNavigationContainerRef } from "expo-router";
+import { useRouter } from "expo-router";
+import { useAuth } from "@/context/AuthContext";
 import { View, ActivityIndicator } from "react-native";
 
 export default function Index() {
+  const { usuario, isLoading } = useAuth();
   const router = useRouter();
-  const navigationRef = useNavigationContainerRef();
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      // Garante que o router está pronto
-      if (navigationRef.isReady()) {
-        router.replace("/(auth)/login");
-      } else {
-        // fallback se não estiver pronto ainda
-        setTimeout(() => {
-          router.replace("/(auth)/login");
-        }, 200);
-      }
-    }, 10);
-
-    return () => clearTimeout(timeout);
-  }, []);
+    if (!isLoading) {
+      router.replace(usuario ? "/feed" : "/login");
+    }
+  }, [usuario, isLoading]);
 
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>

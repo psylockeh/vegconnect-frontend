@@ -153,7 +153,7 @@ export default function CadastroScreen() {
       };
 
       showToast("🌱 Cadastro realizado com sucesso!");
-      router.replace("/login");
+      router.replace("/feed");
     } catch (error: any) {
       console.error("❌ Erro ao cadastrar usuário:", error);
 

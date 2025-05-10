@@ -41,8 +41,7 @@ export default function DetalhesPostagem() {
   }, []);
 
   const renderVisualizacaoTipo = () => {
-    if (!postagem) return null;
-    switch (postagem.tp_post) {
+    switch (postagem?.tp_post) {
       case "receita":
         return <VisualizacaoReceita postagem={postagem} />;
       case "evento":
@@ -51,6 +50,8 @@ export default function DetalhesPostagem() {
         return <VisualizacaoPromocao postagem={postagem} />;
       case "estabelecimento":
         return <VisualizacaoEstabelecimento postagem={postagem} />;
+      default:
+        return <Text>Tipo de postagem não reconhecido.</Text>;
     }
   };
 
@@ -60,23 +61,33 @@ export default function DetalhesPostagem() {
 
   if (!postagem) {
     return (
-      <Text style={{ marginTop: 100, textAlign: "center" }}>
-        Postagem não encontrada.
-      </Text>
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Text>Carregando postagem...</Text>
+      </View>
     );
   }
 
   const usuario = postagem.autor;
-  const fotoPerfilUrl = usuario?.foto_perfil?.startsWith("http")
-    ? usuario.foto_perfil
-    : "https://res.cloudinary.com/demo/image/upload/v1682620184/default-profile.png";
 
   return (
     <ScrollView contentContainerStyle={{ padding: 16 }}>
       <View style={[styles.card, { borderColor: "#ccc" }]}>
-        {/* Cabeçalho */}
         <View style={styles.headerUsuario}>
-          <Image source={{ uri: fotoPerfilUrl }} style={styles.fotoPerfil} />
+          {usuario?.foto_perfil?.startsWith("http") ? (
+            <Image
+              source={{ uri: usuario.foto_perfil }}
+              style={styles.fotoPerfil}
+              onError={() =>
+                console.log("❌ Erro ao carregar imagem de perfil")
+              }
+            />
+          ) : (
+            <Image
+              source={require("@/assets/default-avatar.png")}
+              style={styles.fotoPerfil}
+            />
+          )}
+
           <View>
             <Text style={styles.nomeUsuario}>{usuario?.nome}</Text>
             <Text style={styles.nickname}>@{usuario?.nickname}</Text>
@@ -107,8 +118,6 @@ export default function DetalhesPostagem() {
           </Text>
         </View>
 
-        {/* Título e conteúdo comum */}
-
         {postagem.titulo && (
           <Text style={styles.titulo}>{postagem.titulo}</Text>
         )}
@@ -116,10 +125,8 @@ export default function DetalhesPostagem() {
           <Text style={styles.conteudo}>{postagem.conteudo}</Text>
         )}
 
-        {/* Conteúdo específico por tipo */}
         {renderVisualizacaoTipo()}
 
-        {/* Data */}
         <Text style={styles.data}>
           Publicado em:{" "}
           {new Date(postagem.createdAt).toLocaleDateString("pt-BR")}

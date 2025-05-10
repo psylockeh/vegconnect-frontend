@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, ScrollView, Image, ActivityIndicator, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  Image,
+  ActivityIndicator,
+  TouchableOpacity,
+} from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import axios from "axios";
 import { API_URL } from "@/config/api";
@@ -15,7 +22,9 @@ export default function PerfilUsuario() {
   const [carregando, setCarregando] = useState(true);
   const [erroImagem, setErroImagem] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
-  const [usuarioAutenticadoId, setUsuarioAutenticadoId] = useState<string | null>(null);
+  const [usuarioAutenticadoId, setUsuarioAutenticadoId] = useState<
+    string | null
+  >(null);
   // const [abaSelecionada, setAbaSelecionada] = useState("postagens"); // 'postagens' ou 'favoritos'
   const [filtroSelecionado, setFiltroSelecionado] = useState("recado");
 
@@ -23,7 +32,7 @@ export default function PerfilUsuario() {
     try {
       const token = await AsyncStorage.getItem("@token");
 
-      const idUsuarioLogado = await AsyncStorage.getItem("@usuario_id");// recuperar id
+      const idUsuarioLogado = await AsyncStorage.getItem("@usuario_id"); // recuperar id
       setUsuarioAutenticadoId(idUsuarioLogado);
 
       const config = {
@@ -31,9 +40,11 @@ export default function PerfilUsuario() {
           Authorization: `Bearer ${token}`,
         },
       };
-      const response = await axios.get(`${API_URL}/usuario/perfil/${id}`, config);
+      const response = await axios.get(
+        `${API_URL}/usuario/perfil/${id}`,
+        config
+      );
       setUsuario(response.data);
-
     } catch (error) {
       console.error("Erro ao carregar perfil do usuário:", error);
     } finally {
@@ -47,11 +58,18 @@ export default function PerfilUsuario() {
     }
   }, [id]);
 
-
-  const toggleInfo = () => { setShowInfo(!showInfo); };
+  const toggleInfo = () => {
+    setShowInfo(!showInfo);
+  };
 
   if (carregando) {
-    return <ActivityIndicator size="large" color="#3C6E47" style={{ marginTop: 100 }} />;
+    return (
+      <ActivityIndicator
+        size="large"
+        color="#3C6E47"
+        style={{ marginTop: 100 }}
+      />
+    );
   }
 
   if (!usuario) {
@@ -68,7 +86,7 @@ export default function PerfilUsuario() {
 
   return (
     <View style={styles.container}>
-      <Sidebar onPostPress={() => { }} />
+      <Sidebar onPostPress={() => {}} />
       <View style={styles.mainContent}>
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.cardPerfil}>
@@ -77,20 +95,22 @@ export default function PerfilUsuario() {
                 <Image
                   source={{ uri: fotoPerfilUrl }}
                   style={styles.avatar}
-                  onError={() => setErroImagem(true)} // <- Se imagem der erro, troca para fallback
+                  onError={() => setErroImagem(true)}
                 />
               ) : (
-                <View style={styles.avatar}>
-                  <Text
-                    style={{ color: "#000", fontSize: 16, textAlign: "center", marginTop: 35 }}>
-                    Sem foto
-                  </Text>
-                </View>
+                <Image
+                  source={require("@/assets/default-avatar.png")}
+                  style={styles.avatar}
+                />
               )}
 
               <View>
-                <Text style={styles.nomeUsuario}>{usuario?.nome || "Usuário"}</Text>
-                <Text style={styles.nickname}>@{usuario?.nickname || "usuário"}</Text>
+                <Text style={styles.nomeUsuario}>
+                  {usuario?.nome || "Usuário"}
+                </Text>
+                <Text style={styles.nickname}>
+                  @{usuario?.nickname || "usuário"}
+                </Text>
                 <Text style={styles.tpUser}>
                   <FontAwesome
                     name="leaf"
@@ -104,23 +124,33 @@ export default function PerfilUsuario() {
                   <TouchableOpacity onPress={toggleInfo}>
                     <View style={styles.infoContainer}>
                       <MaterialIcons
-                        name={showInfo ? "keyboard-arrow-up" : "keyboard-arrow-down"}
+                        name={
+                          showInfo ? "keyboard-arrow-up" : "keyboard-arrow-down"
+                        }
                         style={styles.iconInfoCom}
                       />
-                      <Text style={styles.info}>Exibir Informações do Comércio</Text>
+                      <Text style={styles.info}>
+                        Exibir Informações do Comércio
+                      </Text>
                     </View>
                   </TouchableOpacity>
                 )}
 
                 {usuario?.tp_user === "Chef" && (
                   <>
-                    <Text style={styles.info}>Especialidade: {usuario?.especialidade}</Text>
-                    <Text style={styles.info}>Certificações: {usuario?.certificacoes}</Text>
+                    <Text style={styles.info}>
+                      Especialidade: {usuario?.especialidade}
+                    </Text>
+                    <Text style={styles.info}>
+                      Certificações: {usuario?.certificacoes}
+                    </Text>
                   </>
                 )}
 
                 {usuario?.tp_user === "Comum" && (
-                  <Text style={styles.info}>Preferência alimentar: {usuario?.pref_alim}</Text>
+                  <Text style={styles.info}>
+                    Preferência alimentar: {usuario?.pref_alim}
+                  </Text>
                 )}
               </View>
             </View>
@@ -128,19 +158,30 @@ export default function PerfilUsuario() {
             {/* Exibir as informações de comércio fora do headerUsuario */}
             {showInfo && usuario?.tp_user === "Comerciante" && (
               <View style={styles.contInfoComercio}>
-                <Text style={styles.infoComer}>Nome do Comércio:  {usuario?.nome_com}</Text>
-                <Text style={styles.infoComer}>Tipo do Comércio: {usuario?.tipo_com}</Text>
-                <Text style={styles.infoComer}>Telefone: {usuario?.tel_com}</Text>
-                <Text style={styles.infoComer}>Tipo de Produto: {usuario?.tipo_prod}</Text>
-                <Text style={styles.infoComer}>Endereço do Comércio: {usuario?.ender_com}</Text>
+                <Text style={styles.infoComer}>
+                  Nome do Comércio: {usuario?.nome_com}
+                </Text>
+                <Text style={styles.infoComer}>
+                  Tipo do Comércio: {usuario?.tipo_com}
+                </Text>
+                <Text style={styles.infoComer}>
+                  Telefone: {usuario?.tel_com}
+                </Text>
+                <Text style={styles.infoComer}>
+                  Tipo de Produto: {usuario?.tipo_prod}
+                </Text>
+                <Text style={styles.infoComer}>
+                  Endereço do Comércio: {usuario?.ender_com}
+                </Text>
                 <Text style={styles.infoComer}>CEP: {usuario?.cep_com}</Text>
                 <Text style={styles.infoComer}>CNPJ: {usuario?.cnpj}</Text>
               </View>
             )}
 
-            {typeof usuario?.bio === "string" && usuario.bio.trim().length > 0 && (
-              <Text style={styles.bio}>{usuario.bio}</Text>
-            )}
+            {typeof usuario?.bio === "string" &&
+              usuario.bio.trim().length > 0 && (
+                <Text style={styles.bio}>{usuario.bio}</Text>
+              )}
 
             {/* Botão de editar perfil */}
             {/* {usuarioAutenticadoId === String(id) && ( */}
@@ -154,7 +195,13 @@ export default function PerfilUsuario() {
 
             {/* Mural do usuario */}
             <View style={styles.postagensFavoritosContainer}>
-              {["recado", "receita", "estabelecimento", "evento", "promoção"].map((item) => (
+              {[
+                "recado",
+                "receita",
+                "estabelecimento",
+                "evento",
+                "promoção",
+              ].map((item) => (
                 <TouchableOpacity
                   key={item}
                   onPress={() => setFiltroSelecionado(item)}
