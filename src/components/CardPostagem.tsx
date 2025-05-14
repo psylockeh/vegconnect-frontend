@@ -3,6 +3,8 @@ import { View, Text, Image, TouchableOpacity } from "react-native";
 import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import { styles } from "@/styles/CardPostagemStyles";
 import { useRouter } from "expo-router";
+import { useState } from "react";
+import ModalCriarPostagemStyles from "@/styles/ModalCriarPostagemStyles";
 
 interface Props {
   postagem: any;
@@ -12,6 +14,15 @@ const CardPostagem = ({ postagem }: Props) => {
   const { tp_post, autor: usuario, createdAt, descricao_resumida } = postagem;
   const router = useRouter();
   const { id } = postagem;
+
+  const [erroImagem, setErroImagem] = useState(false);
+
+  const fotoPerfilFinal =
+    usuario?.foto_perfil?.startsWith("http") && !erroImagem
+      ? { uri: usuario.foto_perfil }
+      : {
+          uri: "https://res.cloudinary.com/dyhzz5baz/image/upload/v1746917561/default-avatar_jvqpsg.png",
+        };
 
   const fotoPerfilUrl =
     usuario?.foto_perfil && usuario.foto_perfil.startsWith("http")
@@ -64,8 +75,9 @@ const CardPostagem = ({ postagem }: Props) => {
             />
           ) : (
             <Image
-              source={require("@/assets/default-avatar.png")}
-              style={styles.fotoPerfil}
+              source={fotoPerfilFinal}
+              style={ModalCriarPostagemStyles.avatar}
+              onError={() => setErroImagem(true)}
             />
           )}
 

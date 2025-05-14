@@ -97,7 +97,11 @@ export default function PerfilUsuario() {
                 />
               ) : (
                 <Image
-                  source={require("@/assets/default-avatar.png")}
+                  source={{
+                    uri: usuario.foto_perfil?.startsWith("http")
+                      ? usuario.foto_perfil
+                      : "https://res.cloudinary.com/dyhzz5baz/image/upload/v1746917561/default-avatar_jvqpsg.png",
+                  }}
                   style={styles.avatar}
                 />
               )}
