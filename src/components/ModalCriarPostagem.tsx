@@ -70,6 +70,15 @@ export default function ModalCriarPostagem({
 
   const { perfilUsuario } = useAuth();
 
+  const [erroImagem, setErroImagem] = useState(false);
+
+  const fotoPerfilFinal =
+    perfilUsuario?.foto_perfil?.startsWith("http") && !erroImagem
+      ? { uri: perfilUsuario.foto_perfil }
+      : {
+          uri: "https://res.cloudinary.com/dyhzz5baz/image/upload/v1746917561/default-avatar_jvqpsg.png",
+        };
+
   const selecionarImagens = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images as any,
@@ -274,13 +283,17 @@ export default function ModalCriarPostagem({
     <View style={ModalStyles.headerUsuario}>
       {perfilUsuario?.foto_perfil?.startsWith("http") ? (
         <Image
-          source={{ uri: perfilUsuario.foto_perfil }}
-          onError={() => console.log("❌ Erro ao carregar imagem de perfil")}
+          source={fotoPerfilFinal}
           style={ModalStyles.avatar}
+          onError={() => setErroImagem(true)}
         />
       ) : (
         <Image
-          source={require("@/assets/default-avatar.png")}
+          source={{
+            uri: perfilUsuario.foto_perfil?.startsWith("http")
+              ? perfilUsuario.foto_perfil
+              : "https://res.cloudinary.com/dyhzz5baz/image/upload/v1746917561/default-avatar_jvqpsg.png",
+          }}
           style={ModalStyles.avatar}
         />
       )}

@@ -1,17 +1,9 @@
-# Node & Expo
 node_modules/
 .expo/
 .expo-shared/
 dist/
 build/
 *.log
+/android
+/ios
 
-# Android
-android/.gradle/
-android/.idea/
-android/local.properties
-android/build/
-android/app/build/
-
-# iOS (caso adicione futuramente)
-ios/

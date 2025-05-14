@@ -10,6 +10,7 @@ import VisualizacaoReceita from "@/components/postagens/VisualizacaoReceita";
 import VisualizacaoEstabelecimento from "@/components/postagens/VisualizacaoEstabelecimento";
 import VisualizacaoPromocao from "@/components/postagens/VisualizacaoPromocao";
 import VisualizacaoEvento from "@/components/postagens/VisualizacaoEvento";
+import ModalCriarPostagemStyles from "@/styles/ModalCriarPostagemStyles";
 
 export default function DetalhesPostagem() {
   const { id } = useLocalSearchParams();
@@ -83,8 +84,12 @@ export default function DetalhesPostagem() {
             />
           ) : (
             <Image
-              source={require("@/assets/default-avatar.png")}
-              style={styles.fotoPerfil}
+              source={{
+                uri: usuario.foto_perfil?.startsWith("http")
+                  ? usuario.foto_perfil
+                  : "https://res.cloudinary.com/dyhzz5baz/image/upload/v1746917561/default-avatar_jvqpsg.png",
+              }}
+              style={ModalCriarPostagemStyles.avatar}
             />
           )}
 
