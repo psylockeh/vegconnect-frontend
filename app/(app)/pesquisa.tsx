@@ -19,7 +19,7 @@ const PesquisaGeral = () => {
 
   const opcoes = [
     { label: 'Perfil', valor: 'usuario' },
-    { label: 'Post', valor: 'recado' },
+    { label: 'Recado', valor: 'recado' },
     { label: 'Receita', valor: 'receita' },
     { label: 'Estabelecimento', valor: 'estabelecimento' },
     { label: 'Evento', valor: 'evento' },
@@ -128,11 +128,10 @@ const PesquisaGeral = () => {
                         source={{ uri: item.foto_perfil }} style={pesquisarStyles.fotoPerfil}
                       />
                     ) : (
-                      <View style={pesquisarStyles.fotoPerfil}>
-                        <Text style={{ color: "black", fontSize: 10, textAlign: "center", marginTop: 15, }} >
-                          Sem foto
-                        </Text>
-                      </View>
+                      <Image
+                        source={require("@/assets/default-avatar.png")}
+                        style={pesquisarStyles.fotoPerfil}
+                      />
                     )}
                     <View>
                       <Text style={pesquisarStyles.nomeUsuario}> {item.nome || "Usuário"} </Text>

@@ -41,7 +41,7 @@ export const pesquisarStyles = StyleSheet.create({
     gap: 5,
     marginBottom: 2,
     backgroundColor: '#F5FAF6',
-    paddingVertical: 10,
+    paddingVertical: 5,
     borderRadius: 10,
     shadowColor: "#000",
     shadowOpacity: 0.05,
@@ -58,6 +58,7 @@ export const pesquisarStyles = StyleSheet.create({
     borderRadius: 8,
     marginHorizontal: 5,
     marginVertical: 4,
+    marginLeft: 10,
   },
   botaoFiltroSelecionado: {
     backgroundColor: "#3C6E47",

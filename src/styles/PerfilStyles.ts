@@ -28,15 +28,36 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 12,
   },
-  botaoAlterarPerfil: {
+  containerBotoes: {
+    flexDirection: 'row',
+    width: '100%',
     marginTop: 15,
-    backgroundColor: "#3C6E47",
-    paddingVertical: 12,
-    borderRadius: 10,
+  },
+  botaoAlterarPerfil: {
+    flex: 1,
     alignItems: "center",
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    marginRight: 10,
+    borderWidth: 3,
+    borderColor: '#3C6E47',
+  },
+  botaoGerenciarFavoritos: {
+    flex: 1,
+    alignItems: "center",
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    borderWidth: 3,
+    borderColor: '#3C6E47',
+  },
+  botaoPressionado: {
+    backgroundColor: '#94cca0',
+    opacity: 0.9,
   },
   textoBotaoAlterar: {
-    color: "#fff",
+    color: "#3C6E47",
     fontSize: 15,
     fontWeight: "bold",
   },
@@ -97,14 +118,14 @@ export const styles = StyleSheet.create({
     borderRadius: 10,
     fontSize: 16,
     marginRight: "5%",
-    margin:1,
+    margin: 1,
     marginLeft: 10,
     borderWidth: 1,
     borderColor: "#D7E2DA",
     color: "#666",
     fontWeight: "bold",
   },
-  
+
   infoContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -114,48 +135,12 @@ export const styles = StyleSheet.create({
     fontSize: 25,
     color: "#666",
     marginRight: 1,
-    marginTop:15,
-  },
-
-  postagensFavoritosContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginTop: 20,
-    backgroundColor: '#F5FAF6',
-    paddingVertical: 10,
-    borderRadius: 10,
-    marginHorizontal: 10,
-    shadowColor: "#000",
-    shadowOpacity: 0.05,
-    shadowOffset: { width: 0, height: 3 },
-    shadowRadius: 5,
-    elevation: 3,
-  },
-
-  posteOpTexto: {
-    fontSize: 16,
-    color: '#333',
-    marginLeft: 6,
-    fontWeight: '600',
+    marginTop: 15,
   },
 
   posteOpSelecionado: {
     borderBottomWidth: 2,
     borderBottomColor: "#3C6E47",
     color: "#3C6E47",
-  },
-  
-  posteOpRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#F5FAF6",
-    padding: 10,
-    marginVertical: 5,
-    borderRadius: 8,
-    gap: 8,
-  },
-  
-  posteOpSelecionadoRow: {
-    backgroundColor: "#3C6E47",
   },
 });

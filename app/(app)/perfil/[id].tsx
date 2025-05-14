@@ -6,6 +6,7 @@ import {
   Image,
   ActivityIndicator,
   TouchableOpacity,
+  Pressable,
 } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import axios from "axios";
@@ -14,26 +15,24 @@ import Sidebar from "@/components/Sidebar";
 import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { styles } from "@/styles/PerfilStyles";
+import { AuthContext } from "@/context/AuthContext";
+import { useContext } from "react";
+import GerenciamentoMural from "@/components/GerenciamentoMural";
+
 
 export default function PerfilUsuario() {
   const router = useRouter();
-  const { id } = useLocalSearchParams(); // Pegar ID do usuário da URL
+  const { id } = useLocalSearchParams();
   const [usuario, setUsuario] = useState<any>(null);
   const [carregando, setCarregando] = useState(true);
   const [erroImagem, setErroImagem] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
-  const [usuarioAutenticadoId, setUsuarioAutenticadoId] = useState<
-    string | null
-  >(null);
-  // const [abaSelecionada, setAbaSelecionada] = useState("postagens"); // 'postagens' ou 'favoritos'
-  const [filtroSelecionado, setFiltroSelecionado] = useState("recado");
+  const [filtroSelecionado, setFiltroSelecionado] = useState("receita");
+  const { usuario: usuarioLogado } = useContext(AuthContext);
 
   const carregarPerfil = async () => {
     try {
       const token = await AsyncStorage.getItem("@token");
-
-      const idUsuarioLogado = await AsyncStorage.getItem("@usuario_id"); // recuperar id
-      setUsuarioAutenticadoId(idUsuarioLogado);
 
       const config = {
         headers: {
@@ -53,10 +52,8 @@ export default function PerfilUsuario() {
   };
 
   useEffect(() => {
-    if (id) {
-      carregarPerfil();
-    }
-  }, [id]);
+    carregarPerfil();
+  }, []);
 
   const toggleInfo = () => {
     setShowInfo(!showInfo);
@@ -86,11 +83,12 @@ export default function PerfilUsuario() {
 
   return (
     <View style={styles.container}>
-      <Sidebar onPostPress={() => {}} />
+      <Sidebar onPostPress={() => { }} />
       <View style={styles.mainContent}>
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.cardPerfil}>
             <View style={styles.headerUsuario}>
+
               {fotoPerfilUrl && !erroImagem ? (
                 <Image
                   source={{ uri: fotoPerfilUrl }}
@@ -119,7 +117,6 @@ export default function PerfilUsuario() {
                   {usuario?.tp_user || "Público"}
                 </Text>
 
-                {/* Botão de alternância para exibir as informações de comércio */}
                 {usuario?.tp_user === "Comerciante" && (
                   <TouchableOpacity onPress={toggleInfo}>
                     <View style={styles.infoContainer}>
@@ -155,7 +152,7 @@ export default function PerfilUsuario() {
               </View>
             </View>
 
-            {/* Exibir as informações de comércio fora do headerUsuario */}
+            {/* Informações Comerciante */}
             {showInfo && usuario?.tp_user === "Comerciante" && (
               <View style={styles.contInfoComercio}>
                 <Text style={styles.infoComer}>
@@ -184,58 +181,37 @@ export default function PerfilUsuario() {
               )}
 
             {/* Botão de editar perfil */}
-            {/* {usuarioAutenticadoId === String(id) && ( */}
-            <TouchableOpacity
-              onPress={() => router.push("/editar-perfil")}
-              style={styles.botaoAlterarPerfil}
-            >
-              <Text style={styles.textoBotaoAlterar}>Editar Perfil</Text>
-            </TouchableOpacity>
-            {/* )} */}
-
-            {/* Mural do usuario */}
-            <View style={styles.postagensFavoritosContainer}>
-              {[
-                "recado",
-                "receita",
-                "estabelecimento",
-                "evento",
-                "promoção",
-              ].map((item) => (
-                <TouchableOpacity
-                  key={item}
-                  onPress={() => setFiltroSelecionado(item)}
-                  style={[
-                    styles.posteOpRow,
-                    filtroSelecionado === item && styles.posteOpSelecionadoRow,
+            {usuarioLogado?.id_user === Number(id) && (
+              <View style={styles.containerBotoes}>
+                <Pressable
+                  onPress={() => router.push("/editar-perfil")}
+                  style={({ pressed }) => [
+                    styles.botaoAlterarPerfil,
+                    pressed && styles.botaoPressionado
                   ]}
                 >
-                  <MaterialIcons
-                    name={
-                      item === "recado"
-                        ? "message"
-                        : item === "receita"
-                          ? "restaurant-menu"
-                          : item === "estabelecimento"
-                            ? "store"
-                            : item === "evento"
-                              ? "event"
-                              : "local-offer"
-                    }
-                    size={20}
-                    color={filtroSelecionado === item ? "#fff" : "#3C6E47"}
-                  />
-                  <Text
-                    style={[
-                      styles.posteOpTexto,
-                      filtroSelecionado === item && { color: "#fff" },
-                    ]}
-                  >
-                    {item.charAt(0).toUpperCase() + item.slice(1)}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
+                  <Text style={styles.textoBotaoAlterar}>Editar Perfil</Text>
+                </Pressable>
+
+                {/* Botão de Gerenciar Favoritos */}
+                <Pressable
+                  onPress={() => router.push("/gerenciar-favoritos")}
+                  style={({ pressed }) => [
+                    styles.botaoGerenciarFavoritos,
+                    pressed && styles.botaoPressionado
+                  ]}
+                >
+                  <Text style={styles.textoBotaoAlterar}>Gerenciar Favoritos</Text>
+                </Pressable>
+              </View>
+            )}
+
+            {/* Mural gerenciamento de postagens */}
+            <GerenciamentoMural
+              filtroSelecionado={filtroSelecionado}
+              setFiltroSelecionado={setFiltroSelecionado}
+              tipoUsuario={usuario?.tp_user?.toLowerCase()}
+            />
           </View>
         </ScrollView>
       </View>
