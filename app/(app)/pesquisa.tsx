@@ -129,7 +129,11 @@ const PesquisaGeral = () => {
                       />
                     ) : (
                       <Image
-                        source={require("@/assets/default-avatar.png")}
+                        source={{
+                          uri: item.foto_perfil?.startsWith("http")
+                            ? item.foto_perfil
+                            : "https://res.cloudinary.com/dyhzz5baz/image/upload/v1746917561/default-avatar_jvqpsg.png",
+                        }}
                         style={pesquisarStyles.fotoPerfil}
                       />
                     )}
