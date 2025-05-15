@@ -38,3 +38,55 @@ export const formatarCEP = (texto: string) => {
   const parte2 = numeros.slice(5, 8);
   return parte2 ? `${parte1}-${parte2}` : parte1;
 };
+
+type TipoComercio = "restaurante" | "feira" | "loja" | "servico";
+
+interface DadosEstabelecimento {
+  titulo: string;
+  conteudo: string;
+  descricao_resumida: string;
+  cep: string;
+  endereco: string;
+  tipo_comercio: TipoComercio;
+  tp_comida?: string;
+  tipo_produto?: string;
+  tipo_servico?: string;
+  hora_abertura?: string;
+  hora_fechamento?: string;
+}
+
+export function validarFormatoCep(cep: string) {
+  return /^[0-9]{5}-?[0-9]{3}$/.test(cep);
+}
+
+export function validarCamposEstabelecimento(dados: DadosEstabelecimento) {
+  const camposComuns = [
+    "titulo",
+    "conteudo",
+    "descricao_resumida",
+    "cep",
+    "endereco",
+  ];
+
+  const obrigatorios: Record<TipoComercio, string[]> = {
+    restaurante: ["tp_comida", "hora_abertura", "hora_fechamento"],
+    feira: ["tp_comida"],
+    loja: ["tipo_produto"],
+    servico: ["tipo_servico"],
+  };
+
+  const campos = [
+    ...camposComuns,
+    ...(obrigatorios[dados.tipo_comercio] || []),
+  ];
+
+  const faltando = campos.filter((c) => {
+    const valor = dados[c as keyof DadosEstabelecimento];
+    return !valor || valor.toString().trim() === "";
+  });
+
+  return {
+    valido: faltando.length === 0,
+    faltando,
+  };
+}

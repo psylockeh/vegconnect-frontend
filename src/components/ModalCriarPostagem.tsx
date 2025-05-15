@@ -111,8 +111,8 @@ export default function ModalCriarPostagem({
       valor?: string;
       links?: string;
       nome_receita?: string;
-      ingredientes?: string;
-      instrucoes?: string;
+      ingredientes?: Ingrediente[];
+      instrucoes?: Instrucao[];
       temp_prep?: string;
       categoria?: string;
       calorias?: string;
@@ -135,7 +135,6 @@ export default function ModalCriarPostagem({
       tipo_produto?: string;
       tipo_servico?: string;
     };
-
     const novaPostagem: NovaPostagem = {
       tp_post,
       conteudo: conteudoFormatado,
@@ -190,7 +189,7 @@ export default function ModalCriarPostagem({
         titulo: nomeComercio,
         nome_comercio: nomeComercio,
         descricao_comercio: descricaoComercio,
-        tp_comida: tipoComida,
+        tp_comida: tpComida,
         hora_abertura: horarioAbertura,
         hora_fechamento: horarioFechamento,
         cep,
@@ -212,9 +211,10 @@ export default function ModalCriarPostagem({
         if (uploadedUrl) midia_urls.push(uploadedUrl);
       }
 
-      novaPostagem.ingredientes = JSON.stringify(ingredientes);
-      novaPostagem.instrucoes = JSON.stringify(instrucoes);
+      novaPostagem.ingredientes = ingredientes;
+      novaPostagem.instrucoes = instrucoes;
       novaPostagem.categoria = JSON.stringify(categoria);
+
       novaPostagem.midia_urls = midia_urls;
 
       console.log("📦 Payload final da postagem:", novaPostagem);
