@@ -284,7 +284,7 @@ export default function EditarPerfilScreen() {
         formData.senha = senha;
       }
 
-      if (tipo === "Comerciante") {
+      if (perfilUsuario.tp_user === "Comerciante") {
         formData.nome_com = nomeComercio;
         formData.tel_com = telCom;
         formData.tipo_com = tipoCom;
@@ -294,12 +294,12 @@ export default function EditarPerfilScreen() {
         formData.tipo_prod = tipoProd;
       }
 
-      if (tipo === "Chef") {
+      if (perfilUsuario.tp_user === "Chef") {
         formData.especialidade = especialidade;
         formData.certificacoes = certificacoes;
       }
 
-      if (tipo === "Comum") {
+      if (perfilUsuario.tp_user === "Comum") {
         formData.pref_alim = prefAlim;
       }
 

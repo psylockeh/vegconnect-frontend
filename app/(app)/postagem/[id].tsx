@@ -11,11 +11,13 @@ import VisualizacaoEstabelecimento from "@/components/postagens/VisualizacaoEsta
 import VisualizacaoPromocao from "@/components/postagens/VisualizacaoPromocao";
 import VisualizacaoEvento from "@/components/postagens/VisualizacaoEvento";
 import ModalCriarPostagemStyles from "@/styles/ModalCriarPostagemStyles";
+import ModalValidarReceita from "@/components/postagens/ModalValidarReceita";
 
 export default function DetalhesPostagem() {
   const { id } = useLocalSearchParams();
   const [postagem, setPostagem] = useState<any>(null);
   const [carregando, setCarregando] = useState(true);
+  const [modalVisivel, setModalVisivel] = useState(false);
 
   const carregarPostagem = async () => {
     try {
@@ -44,7 +46,13 @@ export default function DetalhesPostagem() {
   const renderVisualizacaoTipo = () => {
     switch (postagem?.tp_post) {
       case "receita":
-        return <VisualizacaoReceita postagem={postagem} />;
+        return (
+          <VisualizacaoReceita
+            postagem={postagem}
+            perfilUsuario={postagem.autor}
+            setModalVisivel={setModalVisivel}
+          />
+        );
       case "evento":
         return <VisualizacaoEvento postagem={postagem} />;
       case "promocao":
@@ -99,7 +107,6 @@ export default function DetalhesPostagem() {
           </View>
         </View>
 
-        {/* Tag do tipo da postagem */}
         <View
           style={[
             styles.tagTipoPost,
@@ -137,6 +144,14 @@ export default function DetalhesPostagem() {
           {new Date(postagem.createdAt).toLocaleDateString("pt-BR")}
         </Text>
       </View>
+
+      {modalVisivel && (
+        <ModalValidarReceita
+          visible={modalVisivel}
+          postagemId={postagem.id}
+          onClose={() => setModalVisivel(false)}
+        />
+      )}
     </ScrollView>
   );
 }

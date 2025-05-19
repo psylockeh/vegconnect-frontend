@@ -124,7 +124,8 @@ export default function LoginScreen() {
         {/* Link para Cadastro */}
         <TouchableOpacity onPress={() => router.push("/cadastro")}>
           <Text style={styles.link}>
-            Não tem uma conta? <Text style={{ fontWeight: "bold" }}>Criar uma Conta</Text>
+            Não tem uma conta?{" "}
+            <Text style={{ fontWeight: "bold" }}>Criar uma Conta</Text>
           </Text>
         </TouchableOpacity>
       </View>

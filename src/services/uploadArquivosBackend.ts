@@ -8,7 +8,7 @@ export async function uploadArquivosParaBackend(
   arquivos.forEach((arquivo, index) => {
     formData.append("arquivos", {
       uri: arquivo.uri,
-      name: arquivo.name || `arquivo-${index}.jpg`,
+      name: arquivo.name || `arquivo-${index}.png`,
       type: arquivo.type || "image/jpeg",
     } as any);
   });

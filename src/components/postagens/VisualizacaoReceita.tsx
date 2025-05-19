@@ -2,12 +2,19 @@ import React from "react";
 import { View, Text, Image } from "react-native";
 import { styles } from "@/styles/CardReceitaStyles";
 import { ScrollView } from "react-native-gesture-handler";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 interface Props {
   postagem: any;
+  perfilUsuario: any;
+  setModalVisivel: (v: boolean) => void;
 }
 
-export default function VisualizacaoReceita({ postagem }: Props) {
+export default function VisualizacaoReceita({
+  postagem,
+  perfilUsuario,
+  setModalVisivel,
+}: Props) {
   let ingredientes = [];
   let instrucoes = [];
 
@@ -101,6 +108,17 @@ export default function VisualizacaoReceita({ postagem }: Props) {
           </View>
         );
       })}
+
+      {perfilUsuario?.tp_user === "Chef" &&
+        postagem.tp_post === "receita" &&
+        !postagem.selo_confianca && (
+          <TouchableOpacity
+            style={styles.botaoValidar}
+            onPress={() => setModalVisivel(true)}
+          >
+            <Text style={styles.botaoTexto}>✅ Validar Receita</Text>
+          </TouchableOpacity>
+        )}
     </View>
   );
 }

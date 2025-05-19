@@ -53,7 +53,9 @@ export default function ResetPasswordScreen() {
           />
           <Text style={styles.title}>VegConnect</Text>
         </View>
-        <Text style={styles.instrucoesInicio}>Insira a nova credencial para Redefinir Senha</Text>
+        <Text style={styles.instrucoesInicio}>
+          Insira a nova credencial para Redefinir Senha
+        </Text>
 
         <TextInput
           style={styles.input}
@@ -86,7 +88,10 @@ export default function ResetPasswordScreen() {
 
         {/* Campo de votar ao Login */}
         <TouchableOpacity onPress={() => router.push("/login")}>
-          <Text style={styles.link}> <Text style={{ fontWeight: "bold" }}>Voltar para o Login</Text></Text>
+          <Text style={styles.link}>
+            {" "}
+            <Text style={{ fontWeight: "bold" }}>Voltar para o Login</Text>
+          </Text>
         </TouchableOpacity>
       </View>
     </View>

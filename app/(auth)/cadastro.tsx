@@ -183,8 +183,11 @@ export default function CadastroScreen() {
         {/* Campo de Logo */}
         <View style={styles.logoContainer}>
           <Image
-            source={require("..//../assets/logo.png")}
+            source={{
+              uri: "https://res.cloudinary.com/dyhzz5baz/image/upload/v1747613147/Imagem_do_WhatsApp_de_2025-05-08_%C3%A0_s_13.08.26_a421e819_dkrthf.jpg",
+            }}
             style={styles.logo}
+            resizeMode="contain"
           />
           <Text style={styles.title}>VegConnect</Text>
         </View>
