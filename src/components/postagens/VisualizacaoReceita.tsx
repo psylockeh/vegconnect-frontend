@@ -50,7 +50,7 @@ export default function VisualizacaoReceita({
               key={index}
               source={{ uri: url }}
               style={{
-                width: 320, // ou Dimensions.get("window").width
+                width: 320,
                 height: 200,
                 borderRadius: 8,
                 marginRight: 10,
@@ -59,6 +59,20 @@ export default function VisualizacaoReceita({
             />
           ))}
         </ScrollView>
+      )}
+
+      {postagem.selo_confianca && postagem.verificado_por && (
+        <View style={styles.verificadoPor}>
+          <Image
+            source={{
+              uri: "https://res.cloudinary.com/dyhzz5baz/image/upload/v1747699449/verified_30dp_314D1C_FILL0_wght400_GRAD0_opsz24_mvxkh2.png",
+            }}
+            style={{ width: 20, height: 20, marginRight: 6 }}
+          />
+          <Text style={styles.verificadoPorTexto}>
+            Validado por @{postagem.verificado_por.nickname}
+          </Text>
+        </View>
       )}
 
       <View style={styles.topicos}>

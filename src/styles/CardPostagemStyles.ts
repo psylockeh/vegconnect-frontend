@@ -117,4 +117,10 @@ export const styles = StyleSheet.create({
     color: "#555",
     marginBottom: 6,
   },
+  verificadoPor: {
+    fontSize: 12,
+    color: "#666",
+    marginTop: 2,
+    fontStyle: "italic",
+  },
 });

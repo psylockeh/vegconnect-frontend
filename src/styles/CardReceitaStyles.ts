@@ -76,4 +76,28 @@ export const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
   },
+
+  seloContainer: {
+    backgroundColor: "#E9C46A",
+    padding: 10,
+    borderRadius: 6,
+    marginVertical: 12,
+    alignItems: "center",
+  },
+  seloTexto: {
+    fontWeight: "bold",
+    color: "#264653",
+    fontSize: 16,
+  },
+  verificadoPor: {
+    fontSize: 12,
+    color: "#666",
+    marginTop: 2,
+    fontStyle: "italic",
+  },
+  verificadoPorTexto: {
+    fontSize: 14,
+    color: "#355E3B",
+    fontWeight: "600",
+  },
 });

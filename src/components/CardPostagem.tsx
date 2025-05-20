@@ -80,10 +80,28 @@ const CardPostagem = ({ postagem }: Props) => {
               onError={() => setErroImagem(true)}
             />
           )}
-
           <View>
-            <Text style={styles.nomeUsuario}>{usuario?.nome}</Text>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Text style={styles.nomeUsuario}>{usuario?.nome}</Text>
+              {postagem.tp_post === "receita" && postagem.selo_confianca && (
+                <Image
+                  source={{
+                    uri: "https://res.cloudinary.com/dyhzz5baz/image/upload/v1747699449/verified_30dp_314D1C_FILL0_wght400_GRAD0_opsz24_mvxkh2.png",
+                  }}
+                  style={{ width: 18, height: 18, marginLeft: 6 }}
+                />
+              )}
+            </View>
+
             <Text style={styles.nickname}>@{usuario?.nickname}</Text>
+
+            {postagem.tp_post === "receita" &&
+              postagem.selo_confianca &&
+              postagem.nome_chef_aprovador && (
+                <Text style={styles.verificadoPor}>
+                  Receita verificada por @{postagem.nickname_chef_aprovador}
+                </Text>
+              )}
           </View>
         </View>
 

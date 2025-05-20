@@ -111,7 +111,7 @@ export default function ModalCriarPostagem({
       valor?: string;
       links?: string;
       nome_receita?: string;
-      ingredientes?: Ingrediente[];
+      ingredientes?: string;
       instrucoes?: Instrucao[];
       temp_prep?: string;
       categoria?: string;
@@ -149,6 +149,13 @@ export default function ModalCriarPostagem({
         dificuldade,
         rendimento_quantidade: rendimentoQuantidade,
         tipo_rendimento: tipoRendimento,
+        descricao_resumida: descricaoResumida,
+        ingredientes,
+        instrucoes,
+        temp_prep: tempoPreparo,
+        categoria,
+        localizacao,
+        valor,
       });
     }
 
@@ -211,7 +218,7 @@ export default function ModalCriarPostagem({
         if (uploadedUrl) midia_urls.push(uploadedUrl);
       }
 
-      novaPostagem.ingredientes = ingredientes;
+      novaPostagem.ingredientes = JSON.stringify(ingredientes);
       novaPostagem.instrucoes = instrucoes;
       novaPostagem.categoria = JSON.stringify(categoria);
 
