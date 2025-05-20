@@ -1,18 +1,21 @@
 import React from "react";
 import { View, Text, Image } from "react-native";
 import { styles } from "@/styles/CardReceitaStyles";
-import { ScrollView } from "react-native-gesture-handler";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 
 interface Props {
   postagem: any;
   perfilUsuario: any;
+  autor: any;
+  verificadoPor: any;
   setModalVisivel: (v: boolean) => void;
 }
 
 export default function VisualizacaoReceita({
   postagem,
   perfilUsuario,
+  autor,
+  verificadoPor,
   setModalVisivel,
 }: Props) {
   let ingredientes = [];
@@ -38,6 +41,7 @@ export default function VisualizacaoReceita({
 
   return (
     <View>
+      {/* Carrossel de mídias */}
       {postagem.midia_urls?.length > 0 && (
         <ScrollView
           horizontal
@@ -61,20 +65,30 @@ export default function VisualizacaoReceita({
         </ScrollView>
       )}
 
-      {postagem.selo_confianca && postagem.verificado_por && (
-        <View style={styles.verificadoPor}>
-          <Image
-            source={{
-              uri: "https://res.cloudinary.com/dyhzz5baz/image/upload/v1747699449/verified_30dp_314D1C_FILL0_wght400_GRAD0_opsz24_mvxkh2.png",
-            }}
-            style={{ width: 20, height: 20, marginRight: 6 }}
-          />
-          <Text style={styles.verificadoPorTexto}>
-            Validado por @{postagem.verificado_por.nickname}
-          </Text>
+      {/* Tag + Selo */}
+      <View style={styles.tagWrapper}>
+        <View style={[styles.tagTipoPost, { backgroundColor: "#CB997E" }]}>
+          <Text style={styles.tagTipoText}>Receita</Text>
         </View>
-      )}
 
+        {postagem.selo_confianca && (
+          <View style={styles.verificadoWrapper}>
+            <Image
+              source={{
+                uri: "https://res.cloudinary.com/dyhzz5baz/image/upload/v1747699449/verified_30dp_314D1C_FILL0_wght400_GRAD0_opsz24_mvxkh2.png",
+              }}
+              style={styles.verificadoIcon}
+            />
+            <Text style={styles.verificadoTexto}>
+              {verificadoPor?.id_user === autor?.id_user
+                ? `Criada e verificada por @${autor.nickname}`
+                : `Verificada por @${verificadoPor?.nickname}`}
+            </Text>
+          </View>
+        )}
+      </View>
+
+      {/* Metadados da receita */}
       <View style={styles.topicos}>
         <View style={styles.itemTopico}>
           <Text style={styles.tituloTopico}>⏱ PREPARO</Text>
@@ -97,6 +111,7 @@ export default function VisualizacaoReceita({
         </View>
       </View>
 
+      {/* Ingredientes */}
       <Text style={styles.tituloSessao}>INGREDIENTES</Text>
       {ingredientes.map((item: any, idx: number) => (
         <Text key={idx} style={styles.itemTexto}>
@@ -104,6 +119,7 @@ export default function VisualizacaoReceita({
         </Text>
       ))}
 
+      {/* Modo de Preparo */}
       <Text style={styles.tituloSessao}>MODO DE PREPARO</Text>
       {secoes.map((secao) => {
         const passosDaSecao = instrucoes.filter((p: any) => p.secao === secao);
@@ -123,6 +139,7 @@ export default function VisualizacaoReceita({
         );
       })}
 
+      {/* Botão de validação */}
       {perfilUsuario?.tp_user === "Chef" &&
         postagem.tp_post === "receita" &&
         !postagem.selo_confianca && (

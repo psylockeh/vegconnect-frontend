@@ -123,4 +123,29 @@ export const styles = StyleSheet.create({
     marginTop: 2,
     fontStyle: "italic",
   },
+  tagWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
+    flexWrap: "wrap",
+    marginTop: 4,
+    marginBottom: 4,
+  },
+
+  verificadoWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginLeft: 8,
+  },
+
+  verificadoIcon: {
+    width: 18,
+    height: 18,
+    marginRight: 4,
+  },
+
+  verificadoTexto: {
+    fontSize: 12,
+    color: "#4B4B4B",
+    fontStyle: "italic",
+  },
 });

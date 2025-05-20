@@ -100,4 +100,40 @@ export const styles = StyleSheet.create({
     color: "#355E3B",
     fontWeight: "600",
   },
+  tagWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 6,
+    marginBottom: 10,
+  },
+
+  verificadoWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginLeft: 8,
+  },
+
+  verificadoIcon: {
+    width: 20,
+    height: 20,
+    marginRight: 4,
+  },
+
+  verificadoTexto: {
+    fontSize: 13,
+    color: "#4B4B4B",
+    fontStyle: "italic",
+  },
+  tagTipoPost: {
+    alignSelf: "flex-start",
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 20,
+    marginBottom: 8,
+  },
+  tagTipoText: {
+    color: "#fff",
+    fontSize: 12,
+    fontWeight: "bold",
+  },
 });

@@ -1,9 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import { styles } from "@/styles/CardPostagemStyles";
 import { useRouter } from "expo-router";
-import { useState } from "react";
 import ModalCriarPostagemStyles from "@/styles/ModalCriarPostagemStyles";
 
 interface Props {
@@ -23,11 +22,6 @@ const CardPostagem = ({ postagem }: Props) => {
       : {
           uri: "https://res.cloudinary.com/dyhzz5baz/image/upload/v1746917561/default-avatar_jvqpsg.png",
         };
-
-  const fotoPerfilUrl =
-    usuario?.foto_perfil && usuario.foto_perfil.startsWith("http")
-      ? usuario.foto_perfil
-      : "https://res.cloudinary.com/demo/image/upload/v1682620184/default-profile.png";
 
   const definirCorBorda = () => {
     switch (tp_post) {
@@ -65,54 +59,50 @@ const CardPostagem = ({ postagem }: Props) => {
       <View style={[styles.card, { borderColor: definirCorBorda() }]}>
         {/* Cabeçalho */}
         <View style={styles.headerUsuario}>
-          {usuario?.foto_perfil?.startsWith("http") ? (
-            <Image
-              source={{ uri: usuario.foto_perfil }}
-              style={styles.fotoPerfil}
-              onError={() =>
-                console.log("❌ Erro ao carregar imagem de perfil")
-              }
-            />
-          ) : (
-            <Image
-              source={fotoPerfilFinal}
-              style={ModalCriarPostagemStyles.avatar}
-              onError={() => setErroImagem(true)}
-            />
-          )}
+          <Image
+            source={fotoPerfilFinal}
+            style={ModalCriarPostagemStyles.avatar}
+            onError={() => setErroImagem(true)}
+          />
           <View>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Text style={styles.nomeUsuario}>{usuario?.nome}</Text>
-              {postagem.tp_post === "receita" && postagem.selo_confianca && (
-                <Image
-                  source={{
-                    uri: "https://res.cloudinary.com/dyhzz5baz/image/upload/v1747699449/verified_30dp_314D1C_FILL0_wght400_GRAD0_opsz24_mvxkh2.png",
-                  }}
-                  style={{ width: 18, height: 18, marginLeft: 6 }}
-                />
-              )}
-            </View>
-
+            <Text style={styles.nomeUsuario}>{usuario?.nome}</Text>
             <Text style={styles.nickname}>@{usuario?.nickname}</Text>
-
-            {postagem.tp_post === "receita" &&
-              postagem.selo_confianca &&
-              postagem.nome_chef_aprovador && (
-                <Text style={styles.verificadoPor}>
-                  Receita verificada por @{postagem.nickname_chef_aprovador}
-                </Text>
-              )}
           </View>
         </View>
 
-        {/* Tipo de Post */}
-        <View
-          style={[styles.tagTipoPost, { backgroundColor: definirCorBorda() }]}
-        >
-          <Text style={styles.tagTipoText}>
-            {tp_post.charAt(0).toUpperCase() + tp_post.slice(1)}
-          </Text>
+        {/* Tag + Selo */}
+        <View style={styles.tagWrapper}>
+          <View
+            style={[styles.tagTipoPost, { backgroundColor: definirCorBorda() }]}
+          >
+            <Text style={styles.tagTipoText}>
+              {tp_post.charAt(0).toUpperCase() + tp_post.slice(1)}
+            </Text>
+          </View>
+
+          {tp_post === "receita" && postagem.selo_confianca && (
+            <View style={styles.verificadoWrapper}>
+              <Image
+                source={{
+                  uri: "https://res.cloudinary.com/dyhzz5baz/image/upload/v1747699449/verified_30dp_314D1C_FILL0_wght400_GRAD0_opsz24_mvxkh2.png",
+                }}
+                style={styles.verificadoIcon}
+              />
+              <Text style={styles.verificadoTexto}>
+                {postagem.verificado_por?.nickname
+                  ? `Verificado por @${postagem.verificado_por.nickname}`
+                  : `Criado e verificado por @${usuario?.nickname}`}
+              </Text>
+            </View>
+          )}
         </View>
+
+        {/* Título */}
+        {postagem.titulo && (
+          <Text style={styles.titulo} numberOfLines={2}>
+            {postagem.titulo}
+          </Text>
+        )}
 
         {/* Descrição resumida */}
         {descricao_resumida && (
