@@ -3,7 +3,7 @@ import {
   View,
   Text,
   TextInput,
-  TouchableOpacity,
+  Pressable,
   ActivityIndicator,
   Alert,
   Image,
@@ -373,7 +373,7 @@ export default function CadastroScreen() {
         {error ? <Text style={styles.error}>{error}</Text> : null}
 
         {/* Campo de Button*/}
-        <TouchableOpacity
+        <Pressable
           style={styles.button}
           onPress={handleCadastro}
           disabled={loading}
@@ -388,14 +388,14 @@ export default function CadastroScreen() {
           ) : (
             <Text style={styles.buttonText}>Criar Conta</Text>
           )}
-        </TouchableOpacity>
+        </Pressable>
 
         {/* Campo de Voltar Login*/}
-        <TouchableOpacity onPress={() => router.push("/login")}>
+        <Pressable onPress={() => router.push("/login")}>
           <Text style={styles.link}>
             Já tem conta? <Text style={{ fontWeight: "bold" }}>Faça Login</Text>
           </Text>
-        </TouchableOpacity>
+        </Pressable>
       </View>
     </ScrollView>
   );

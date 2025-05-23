@@ -3,7 +3,7 @@ import {
   View,
   Text,
   TextInput,
-  TouchableOpacity,
+  Pressable,
   Image,
   ActivityIndicator,
 } from "react-native";
@@ -88,23 +88,23 @@ export default function LoginScreen() {
         />
 
         {/* Link para recuperação de senha */}
-        <TouchableOpacity onPress={() => router.push("/forgot-password")}>
+        <Pressable onPress={() => router.push("/forgot-password")}>
           <Text style={styles.forgotPasswordText}>Esqueci minha senha</Text>
-        </TouchableOpacity>
+        </Pressable>
 
         {error ? <Text style={styles.error}>{error}</Text> : null}
 
         <View style={styles.checkboxContainer}>
-          <TouchableOpacity
+          <Pressable
             onPress={() => setManterConectado(!manterConectado)}
             style={styles.checkbox}
           >
             {manterConectado && <Text style={styles.checkboxMark}>✔</Text>}
-          </TouchableOpacity>
+          </Pressable>
           <Text style={styles.checkboxLabel}>Manter-me conectado</Text>
         </View>
 
-        <TouchableOpacity
+        <Pressable
           style={styles.button}
           onPress={handleLogin}
           disabled={loading}
@@ -119,15 +119,15 @@ export default function LoginScreen() {
           ) : (
             <Text style={styles.buttonText}>Entrar</Text>
           )}
-        </TouchableOpacity>
+        </Pressable>
 
         {/* Link para Cadastro */}
-        <TouchableOpacity onPress={() => router.push("/cadastro")}>
+        <Pressable onPress={() => router.push("/cadastro")}>
           <Text style={styles.link}>
             Não tem uma conta?{" "}
             <Text style={{ fontWeight: "bold" }}>Criar uma Conta</Text>
           </Text>
-        </TouchableOpacity>
+        </Pressable>
       </View>
     </View>
   );

@@ -3,7 +3,7 @@ import {
   View,
   Text,
   TextInput,
-  TouchableOpacity,
+  Pressable,
   Image,
   ActivityIndicator,
 } from "react-native";
@@ -74,7 +74,7 @@ export default function ResetPasswordScreen() {
 
         {message ? <Text style={styles.message}>{message}</Text> : null}
 
-        <TouchableOpacity
+        <Pressable
           style={styles.button}
           onPress={handleReset}
           disabled={loading}
@@ -84,15 +84,15 @@ export default function ResetPasswordScreen() {
           ) : (
             <Text style={styles.buttonText}>Redefinir Senha</Text>
           )}
-        </TouchableOpacity>
+        </Pressable>
 
         {/* Campo de votar ao Login */}
-        <TouchableOpacity onPress={() => router.push("/login")}>
+        <Pressable onPress={() => router.push("/login")}>
           <Text style={styles.link}>
             {" "}
             <Text style={{ fontWeight: "bold" }}>Voltar para o Login</Text>
           </Text>
-        </TouchableOpacity>
+        </Pressable>
       </View>
     </View>
   );

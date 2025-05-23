@@ -3,7 +3,7 @@ import {
   Text,
   Modal,
   TextInput,
-  TouchableOpacity,
+  Pressable,
   ScrollView,
   Image,
 } from "react-native";
@@ -438,24 +438,21 @@ export default function ModalCriarPostagem({
             {renderHeaderUsuario()}
             {renderFormulario()}
           </ScrollView>
-          <TouchableOpacity
+          <Pressable
             onPress={selecionarImagens}
             style={ModalStyles.botaoFechar}
           >
             <Text style={ModalStyles.textoBotao}>Selecionar Imagem</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
+          </Pressable>
+          <Pressable
             onPress={handleSubmitPostagem}
             style={ModalStyles.botaoPublicar}
           >
             <Text style={ModalStyles.textoBotaoPublicar}>Publicar</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={fecharModal}
-            style={ModalStyles.botaoFechar}
-          >
+          </Pressable>
+          <Pressable onPress={fecharModal} style={ModalStyles.botaoFechar}>
             <Text style={ModalStyles.textoBotao}>Fechar</Text>
-          </TouchableOpacity>
+          </Pressable>
         </View>
       </View>
     </Modal>

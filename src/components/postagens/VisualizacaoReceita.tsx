@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, Image } from "react-native";
 import { styles } from "@/styles/CardReceitaStyles";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import { Pressable, ScrollView } from "react-native-gesture-handler";
 
 interface Props {
   postagem: any;
@@ -67,10 +67,9 @@ export default function VisualizacaoReceita({
 
       {/* Tag + Selo */}
       <View style={styles.tagWrapper}>
-        <View style={[styles.tagTipoPost, { backgroundColor: "#CB997E" }]}>
+        <View style={[styles.tagTipoPost, { backgroundColor: "#2E7D32" }]}>
           <Text style={styles.tagTipoText}>Receita</Text>
         </View>
-
         {postagem.selo_confianca && (
           <View style={styles.verificadoWrapper}>
             <Image
@@ -80,9 +79,11 @@ export default function VisualizacaoReceita({
               style={styles.verificadoIcon}
             />
             <Text style={styles.verificadoTexto}>
-              {verificadoPor?.id_user === autor?.id_user
-                ? `Criada e verificada por @${autor.nickname}`
-                : `Verificada por @${verificadoPor?.nickname}`}
+              {postagem.verificado_por?.nickname
+                ? `Verificada por @${postagem.verificado_por.nickname}`
+                : postagem.autor?.tp_user === "Chef"
+                  ? `Receita criada por Chef verificado`
+                  : ""}
             </Text>
           </View>
         )}
@@ -143,12 +144,12 @@ export default function VisualizacaoReceita({
       {perfilUsuario?.tp_user === "Chef" &&
         postagem.tp_post === "receita" &&
         !postagem.selo_confianca && (
-          <TouchableOpacity
+          <Pressable
             style={styles.botaoValidar}
             onPress={() => setModalVisivel(true)}
           >
             <Text style={styles.botaoTexto}>✅ Validar Receita</Text>
-          </TouchableOpacity>
+          </Pressable>
         )}
     </View>
   );

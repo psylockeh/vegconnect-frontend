@@ -3,7 +3,7 @@ import {
   View,
   Text,
   TextInput,
-  TouchableOpacity,
+  Pressable,
   Image,
   ActivityIndicator,
 } from "react-native";
@@ -69,7 +69,7 @@ export default function ForgotPasswordScreen() {
         {mensagem ? <Text style={styles.message}>{mensagem}</Text> : null}
 
         {/* Campo de Button */}
-        <TouchableOpacity
+        <Pressable
           style={styles.button}
           onPress={handleRecuperarSenha}
           disabled={loading}
@@ -85,22 +85,22 @@ export default function ForgotPasswordScreen() {
           ) : (
             <Text style={styles.buttonText}>Recuperar Senha</Text>
           )}
-        </TouchableOpacity>
+        </Pressable>
 
         {/* Link para Cadastro */}
-        <TouchableOpacity onPress={() => router.push("/cadastro")}>
+        <Pressable onPress={() => router.push("/cadastro")}>
           <Text style={styles.link}>
             Não tem uma conta?{" "}
             <Text style={{ fontWeight: "bold" }}>Criar uma Conta</Text>
           </Text>
-        </TouchableOpacity>
+        </Pressable>
 
         {/* Campo de votar ao Login */}
-        <TouchableOpacity onPress={() => router.push("/login")}>
+        <Pressable onPress={() => router.push("/login")}>
           <Text style={styles.link}>
             <Text style={{ fontWeight: "bold" }}>Voltar para o Login</Text>
           </Text>
-        </TouchableOpacity>
+        </Pressable>
       </View>
     </View>
   );

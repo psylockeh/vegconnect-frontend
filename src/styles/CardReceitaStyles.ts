@@ -103,8 +103,8 @@ export const styles = StyleSheet.create({
   tagWrapper: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 6,
-    marginBottom: 10,
+    marginTop: 8,
+    gap: 6,
   },
 
   verificadoWrapper: {
@@ -114,26 +114,29 @@ export const styles = StyleSheet.create({
   },
 
   verificadoIcon: {
-    width: 20,
-    height: 20,
+    width: 18,
+    height: 18,
     marginRight: 4,
   },
 
   verificadoTexto: {
     fontSize: 13,
-    color: "#4B4B4B",
+    color: "#444",
     fontStyle: "italic",
   },
+
   tagTipoPost: {
-    alignSelf: "flex-start",
     paddingHorizontal: 10,
     paddingVertical: 4,
-    borderRadius: 20,
-    marginBottom: 8,
+    borderRadius: 12,
+    alignSelf: "flex-start",
+    marginTop: 8,
+    backgroundColor: "#2E7D32",
   },
+
   tagTipoText: {
-    color: "#fff",
-    fontSize: 12,
+    fontSize: 13,
     fontWeight: "bold",
+    color: "#fff",
   },
 });

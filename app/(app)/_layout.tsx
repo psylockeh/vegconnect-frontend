@@ -1,6 +1,6 @@
 import { Stack, Redirect, useRouter } from "expo-router";
 import { useAuth } from "@/context/AuthContext";
-import { View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
+import { View, Text, Pressable, ActivityIndicator } from "react-native";
 import Toast from "react-native-toast-message";
 
 export default function ProtectedLayout() {
@@ -39,7 +39,7 @@ export default function ProtectedLayout() {
           Para colher os melhores conteúdos da comunidade VegConnect, você
           precisa fazer login primeiro.
         </Text>
-        <TouchableOpacity
+        <Pressable
           onPress={() => router.replace("/login")}
           style={{
             backgroundColor: "#54C6A5",
@@ -51,7 +51,7 @@ export default function ProtectedLayout() {
           <Text style={{ color: "#fff", fontSize: 16, fontWeight: "bold" }}>
             Entrar na Comunidade 🌿
           </Text>
-        </TouchableOpacity>
+        </Pressable>
       </View>
     );
   }

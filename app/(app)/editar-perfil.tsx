@@ -3,7 +3,7 @@ import {
   View,
   Text,
   TextInput,
-  TouchableOpacity,
+  Pressable,
   ActivityIndicator,
   Image,
   ScrollView,
@@ -364,11 +364,10 @@ export default function EditarPerfilScreen() {
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.cardEditarPerfil}>
             <View style={styles.headerUsuario}>
-              <TouchableOpacity
+              <Pressable
                 onPress={escolherFoto}
                 onPressIn={() => setIsCameraHovered(true)}
                 onPressOut={() => setIsCameraHovered(false)}
-                activeOpacity={0.7}
               >
                 <View style={styles.avatarContainer}>
                   {foto_perfil &&
@@ -390,7 +389,7 @@ export default function EditarPerfilScreen() {
                     />
                   )}
                 </View>
-              </TouchableOpacity>
+              </Pressable>
             </View>
 
             {/* Campos principais em colunas */}
@@ -592,7 +591,7 @@ export default function EditarPerfilScreen() {
               <Text style={styles.error}>{mensagemAlerta}</Text>
             )}
 
-            <TouchableOpacity
+            <Pressable
               style={[
                 styles.botaoSalvarPerfil,
                 !houveMudanca &&
@@ -612,14 +611,14 @@ export default function EditarPerfilScreen() {
               ) : (
                 <Text style={styles.textoBotao}>Salvar</Text>
               )}
-            </TouchableOpacity>
+            </Pressable>
 
-            <TouchableOpacity
+            <Pressable
               style={styles.botaoDeletarPerfil}
               onPress={deletarPerfil}
             >
               <Text style={styles.textoBotao}>Excluir Perfil</Text>
-            </TouchableOpacity>
+            </Pressable>
           </View>
         </ScrollView>
       </View>

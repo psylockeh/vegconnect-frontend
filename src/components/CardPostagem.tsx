@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, Image, TouchableOpacity } from "react-native";
+import { View, Text, Image, Pressable } from "react-native";
 import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import { styles } from "@/styles/CardPostagemStyles";
 import { useRouter } from "expo-router";
@@ -52,10 +52,7 @@ const CardPostagem = ({ postagem }: Props) => {
   };
 
   return (
-    <TouchableOpacity
-      onPress={() => router.push(`/postagem/${id}`)}
-      activeOpacity={0.7}
-    >
+    <Pressable onPress={() => router.push(`/postagem/${id}`)}>
       <View style={[styles.card, { borderColor: definirCorBorda() }]}>
         {/* Cabeçalho */}
         <View style={styles.headerUsuario}>
@@ -72,15 +69,10 @@ const CardPostagem = ({ postagem }: Props) => {
 
         {/* Tag + Selo */}
         <View style={styles.tagWrapper}>
-          <View
-            style={[styles.tagTipoPost, { backgroundColor: definirCorBorda() }]}
-          >
-            <Text style={styles.tagTipoText}>
-              {tp_post.charAt(0).toUpperCase() + tp_post.slice(1)}
-            </Text>
+          <View style={[styles.tagTipoPost, { backgroundColor: "#2E7D32" }]}>
+            <Text style={styles.tagTipoText}>Receita</Text>
           </View>
-
-          {tp_post === "receita" && postagem.selo_confianca && (
+          {postagem.selo_confianca && (
             <View style={styles.verificadoWrapper}>
               <Image
                 source={{
@@ -90,8 +82,10 @@ const CardPostagem = ({ postagem }: Props) => {
               />
               <Text style={styles.verificadoTexto}>
                 {postagem.verificado_por?.nickname
-                  ? `Verificado por @${postagem.verificado_por.nickname}`
-                  : `Criado e verificado por @${usuario?.nickname}`}
+                  ? `Verificada por @${postagem.verificado_por.nickname}`
+                  : postagem.autor?.tp_user === "Chef"
+                    ? `Receita criada por Chef verificado`
+                    : ""}
               </Text>
             </View>
           )}
@@ -120,21 +114,21 @@ const CardPostagem = ({ postagem }: Props) => {
 
         {/* Ações */}
         <View style={styles.interacoes}>
-          <TouchableOpacity style={styles.botaoInteracao}>
+          <Pressable style={styles.botaoInteracao}>
             <FontAwesome name="comment-o" size={18} color="#555" />
             <Text style={styles.textoInteracao}>Comentar</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.botaoInteracao}>
+          </Pressable>
+          <Pressable style={styles.botaoInteracao}>
             <FontAwesome name="heart-o" size={18} color="#555" />
             <Text style={styles.textoInteracao}>Curtir</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.botaoInteracao}>
+          </Pressable>
+          <Pressable style={styles.botaoInteracao}>
             <MaterialIcons name="repeat" size={18} color="#555" />
             <Text style={styles.textoInteracao}>Repost</Text>
-          </TouchableOpacity>
+          </Pressable>
         </View>
       </View>
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 

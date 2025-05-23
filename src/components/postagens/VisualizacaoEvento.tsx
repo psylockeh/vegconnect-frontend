@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Linking, TouchableOpacity } from "react-native";
+import { View, Text, Linking, Pressable } from "react-native";
 import { styles } from "@/styles/CardEventoStyles";
 
 interface Props {
@@ -39,9 +39,9 @@ export default function VisualizacaoEvento({ postagem }: Props) {
 
       <View style={styles.bloco}>
         <Text style={styles.titulo}>🔗 Link do Evento</Text>
-        <TouchableOpacity onPress={() => Linking.openURL(postagem.links)}>
+        <Pressable onPress={() => Linking.openURL(postagem.links)}>
           <Text style={styles.link}>{postagem.links}</Text>
-        </TouchableOpacity>
+        </Pressable>
       </View>
     </View>
   );

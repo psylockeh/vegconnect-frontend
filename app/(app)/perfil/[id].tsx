@@ -5,7 +5,6 @@ import {
   ScrollView,
   Image,
   ActivityIndicator,
-  TouchableOpacity,
   Pressable,
 } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
@@ -18,7 +17,6 @@ import { styles } from "@/styles/PerfilStyles";
 import { AuthContext } from "@/context/AuthContext";
 import { useContext } from "react";
 import GerenciamentoMural from "@/components/GerenciamentoMural";
-
 
 export default function PerfilUsuario() {
   const router = useRouter();
@@ -83,12 +81,11 @@ export default function PerfilUsuario() {
 
   return (
     <View style={styles.container}>
-      <Sidebar onPostPress={() => { }} />
+      <Sidebar onPostPress={() => {}} />
       <View style={styles.mainContent}>
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.cardPerfil}>
             <View style={styles.headerUsuario}>
-
               {fotoPerfilUrl && !erroImagem ? (
                 <Image
                   source={{ uri: fotoPerfilUrl }}
@@ -122,7 +119,7 @@ export default function PerfilUsuario() {
                 </Text>
 
                 {usuario?.tp_user === "Comerciante" && (
-                  <TouchableOpacity onPress={toggleInfo}>
+                  <Pressable onPress={toggleInfo}>
                     <View style={styles.infoContainer}>
                       <MaterialIcons
                         name={
@@ -134,7 +131,7 @@ export default function PerfilUsuario() {
                         Exibir Informações do Comércio
                       </Text>
                     </View>
-                  </TouchableOpacity>
+                  </Pressable>
                 )}
 
                 {usuario?.tp_user === "Chef" && (
@@ -191,7 +188,7 @@ export default function PerfilUsuario() {
                   onPress={() => router.push("/editar-perfil")}
                   style={({ pressed }) => [
                     styles.botaoAlterarPerfil,
-                    pressed && styles.botaoPressionado
+                    pressed && styles.botaoPressionado,
                   ]}
                 >
                   <Text style={styles.textoBotaoAlterar}>Editar Perfil</Text>
@@ -202,10 +199,12 @@ export default function PerfilUsuario() {
                   onPress={() => router.push("/gerenciar-favoritos")}
                   style={({ pressed }) => [
                     styles.botaoGerenciarFavoritos,
-                    pressed && styles.botaoPressionado
+                    pressed && styles.botaoPressionado,
                   ]}
                 >
-                  <Text style={styles.textoBotaoAlterar}>Gerenciar Favoritos</Text>
+                  <Text style={styles.textoBotaoAlterar}>
+                    Gerenciar Favoritos
+                  </Text>
                 </Pressable>
               </View>
             )}

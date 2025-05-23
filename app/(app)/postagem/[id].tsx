@@ -13,12 +13,15 @@ import VisualizacaoEstabelecimento from "@/components/postagens/VisualizacaoEsta
 import VisualizacaoPromocao from "@/components/postagens/VisualizacaoPromocao";
 import VisualizacaoEvento from "@/components/postagens/VisualizacaoEvento";
 import ModalValidarReceita from "@/components/postagens/ModalValidarReceita";
+import { useAuth } from "@/context/AuthContext";
+const { perfilUsuario } = useAuth();
 
 export default function DetalhesPostagem() {
   const { id } = useLocalSearchParams();
   const [postagem, setPostagem] = useState<any>(null);
   const [carregando, setCarregando] = useState(true);
   const [modalVisivel, setModalVisivel] = useState(false);
+  const { perfilUsuario } = useAuth();
 
   const carregarPostagem = async () => {
     try {
@@ -64,7 +67,7 @@ export default function DetalhesPostagem() {
         return (
           <VisualizacaoReceita
             postagem={postagem}
-            perfilUsuario={postagem.autor}
+            perfilUsuario={perfilUsuario}
             setModalVisivel={setModalVisivel}
             autor={postagem.autor}
             verificadoPor={postagem.verificado_por}
@@ -100,30 +103,6 @@ export default function DetalhesPostagem() {
             <Text style={styles.nomeUsuario}>{usuario?.nome}</Text>
             <Text style={styles.nickname}>@{usuario?.nickname}</Text>
           </View>
-        </View>
-
-        {/* Tag de tipo */}
-        <View
-          style={[
-            styles.tagTipoPost,
-            {
-              backgroundColor:
-                postagem.tp_post === "receita"
-                  ? "#CB997E"
-                  : postagem.tp_post === "evento"
-                    ? "#D4A373"
-                    : postagem.tp_post === "promocao"
-                      ? "#B7B7A4"
-                      : postagem.tp_post === "estabelecimento"
-                        ? "#DDB892"
-                        : "#A5A58D",
-            },
-          ]}
-        >
-          <Text style={styles.tagTipoText}>
-            {postagem.tp_post.charAt(0).toUpperCase() +
-              postagem.tp_post.slice(1)}
-          </Text>
         </View>
 
         {/* Título e conteúdo */}

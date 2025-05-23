@@ -1,11 +1,5 @@
 import React, { useState } from "react";
-import {
-  ScrollView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { ScrollView, Text, TextInput, Pressable, View } from "react-native";
 import { styles } from "@/styles/FormularioReceitaStyles";
 import { Picker } from "@react-native-picker/picker";
 import { Platform } from "react-native";
@@ -231,12 +225,12 @@ export default function FormularioReceita({
         </View>
 
         {/* Botão Adicionar Ingrediente */}
-        <TouchableOpacity
+        <Pressable
           style={styles.botaoAdicionar}
           onPress={handleAdicionarIngrediente}
         >
           <Text style={styles.textoBotao}>Adicionar Ingrediente</Text>
-        </TouchableOpacity>
+        </Pressable>
 
         {/* Lista de Ingredientes já adicionados */}
         <View style={{ marginTop: 16 }}>
@@ -255,7 +249,7 @@ export default function FormularioReceita({
                   <Text style={styles.listaItemTexto}>
                     • {item.quantidade} {item.medida} de {item.nome}
                   </Text>
-                  <TouchableOpacity
+                  <Pressable
                     onPress={() => {
                       const novos = ingredientes.filter((_, i) => i !== idx);
                       setIngredientes(novos);
@@ -263,7 +257,7 @@ export default function FormularioReceita({
                     style={styles.botaoExcluir}
                   >
                     <Text style={styles.textoBotaoExcluir}>🗑️</Text>
-                  </TouchableOpacity>
+                  </Pressable>
                 </View>
               ))}
             </>
@@ -297,7 +291,7 @@ export default function FormularioReceita({
                     placeholder={`Passo ${idx + 1}`}
                     style={[styles.inputPadrao, { flex: 1, marginRight: 8 }]}
                   />
-                  <TouchableOpacity
+                  <Pressable
                     onPress={() => {
                       const novas = instrucoes.filter((i) => i !== inst);
                       setInstrucoes(novas);
@@ -305,7 +299,7 @@ export default function FormularioReceita({
                     style={styles.botaoExcluir}
                   >
                     <Text style={styles.textoBotaoExcluir}>🗑️</Text>
-                  </TouchableOpacity>
+                  </Pressable>
                 </View>
               ))}
             </View>
@@ -325,12 +319,12 @@ export default function FormularioReceita({
           </Picker>
         </View>
 
-        <TouchableOpacity
+        <Pressable
           style={styles.botaoAdicionar}
           onPress={handleAdicionarInstrucao}
         >
           <Text style={styles.textoBotao}>Adicionar Instrução</Text>
-        </TouchableOpacity>
+        </Pressable>
       </View>
 
       <View style={styles.blocoPadrao}>
@@ -413,7 +407,7 @@ export default function FormularioReceita({
             <Text style={styles.tituloBloco}>{grupo}</Text>
             <View style={styles.secoesContainer}>
               {tags.map((tag) => (
-                <TouchableOpacity
+                <Pressable
                   key={tag}
                   style={[
                     styles.tagCategoria,
@@ -422,7 +416,7 @@ export default function FormularioReceita({
                   onPress={() => toggleCategoria(tag)}
                 >
                   <Text style={styles.tagCategoriaTexto}>{tag}</Text>
-                </TouchableOpacity>
+                </Pressable>
               ))}
             </View>
           </View>

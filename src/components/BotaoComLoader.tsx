@@ -1,6 +1,6 @@
 import React from "react";
 import {
-  TouchableOpacity,
+  Pressable,
   Text,
   View,
   StyleSheet,
@@ -28,7 +28,7 @@ export default function BotaoComLoader({
   disabled,
 }: Props) {
   return (
-    <TouchableOpacity
+    <Pressable
       onPress={onPress}
       disabled={loading || disabled}
       style={[styles.botao, estiloBotao]}
@@ -45,7 +45,7 @@ export default function BotaoComLoader({
       ) : (
         <Text style={[styles.textoBotao, estiloTexto]}>{texto}</Text>
       )}
-    </TouchableOpacity>
+    </Pressable>
   );
 }
 

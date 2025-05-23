@@ -2,7 +2,6 @@ export const uploadImageToCloudinary = async (
   localUri: string
 ): Promise<string | null> => {
   try {
-
     const response = await fetch(localUri);
     const blob = await response.blob();
     const formData = new FormData();
@@ -11,11 +10,10 @@ export const uploadImageToCloudinary = async (
       type: "image/jpeg",
       name: "foto.jpg",
     } as any);
-    
+
     formData.append("upload_preset", "vegconnect_perfil");
     formData.append("folder", "usuarios");
-    
-    
+
     const uploadResponse = await fetch(
       "https://api.cloudinary.com/v1_1/dyhzz5baz/image/upload",
       {

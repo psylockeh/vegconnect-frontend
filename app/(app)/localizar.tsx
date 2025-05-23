@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  ScrollView,
-} from "react-native";
+import { View, Text, TextInput, Pressable, ScrollView } from "react-native";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
@@ -119,7 +113,7 @@ export default function LocalizarEstabelecimento() {
 
         <View style={styles.filtroContainer}>
           {tiposDisponiveis.map((tipo) => (
-            <TouchableOpacity
+            <Pressable
               key={tipo}
               style={[
                 styles.filtroBotao,
@@ -128,20 +122,20 @@ export default function LocalizarEstabelecimento() {
               onPress={() => aplicarFiltro(tipo)}
             >
               <Text style={styles.filtroTexto}>{tipo}</Text>
-            </TouchableOpacity>
+            </Pressable>
           ))}
         </View>
 
         <ScrollView style={styles.resultadosLista}>
           {filtrados.map((e) => (
-            <TouchableOpacity
+            <Pressable
               key={e.id}
               style={styles.listItem}
               onPress={() => setSelected(e)}
             >
               <Text style={styles.itemTitle}>{e.nome_comercio}</Text>
               <Text style={styles.itemTipo}>{e.tipo_comercio}</Text>
-            </TouchableOpacity>
+            </Pressable>
           ))}
         </ScrollView>
       </View>
@@ -181,9 +175,9 @@ export default function LocalizarEstabelecimento() {
           <Text style={styles.cardTitle}>{selected.nome_comercio}</Text>
           <Text style={styles.cardTipo}>{selected.tipo_comercio}</Text>
           <Text style={styles.cardDesc}>{selected.descricao_comercio}</Text>
-          <TouchableOpacity>
+          <Pressable>
             <Text style={styles.btn}>Ver mais detalhes</Text>
-          </TouchableOpacity>
+          </Pressable>
         </View>
       )}
     </View>

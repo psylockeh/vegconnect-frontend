@@ -2,7 +2,7 @@ import {
   View,
   Text,
   FlatList,
-  TouchableOpacity,
+  Pressable,
   TextInput,
   ScrollView,
   Image,
@@ -186,7 +186,7 @@ export default function Feed() {
                   padding: 8,
                 }}
               >
-                <TouchableOpacity
+                <Pressable
                   onPress={logout}
                   style={{
                     backgroundColor: "#D33",
@@ -198,7 +198,7 @@ export default function Feed() {
                   <Text style={{ color: "#fff", fontWeight: "bold" }}>
                     Sair
                   </Text>
-                </TouchableOpacity>
+                </Pressable>
               </View>
             </View>
 
@@ -222,7 +222,7 @@ export default function Feed() {
                       source={{ uri }}
                       style={{ width: 90, height: 90, borderRadius: 8 }}
                     />
-                    <TouchableOpacity
+                    <Pressable
                       onPress={() => removerImagem(uri)}
                       style={{
                         position: "absolute",
@@ -237,7 +237,7 @@ export default function Feed() {
                       }}
                     >
                       <Text style={{ color: "#fff", fontSize: 12 }}>X</Text>
-                    </TouchableOpacity>
+                    </Pressable>
                   </View>
                 ))}
               </ScrollView>
@@ -260,27 +260,27 @@ export default function Feed() {
                     return permissoes.includes(tipoMin);
                   })
                   .map((tipo: string) => (
-                    <TouchableOpacity
+                    <Pressable
                       key={tipo}
                       style={feedStyles.botaoTipo}
                       onPress={() => abrirModal(tipo)}
                     >
                       <Text style={feedStyles.textoBotaoTipo}>{tipo}</Text>
-                    </TouchableOpacity>
+                    </Pressable>
                   ))}
               </View>
 
               <View style={feedStyles.iconesAcoes}>
-                <TouchableOpacity onPress={selecionarImagem}>
+                <Pressable onPress={selecionarImagem}>
                   <MaterialIcons name="image" size={22} color="#3C6E47" />
-                </TouchableOpacity>
-                <TouchableOpacity>
+                </Pressable>
+                <Pressable>
                   <MaterialIcons name="group" size={22} color="#3C6E47" />
-                </TouchableOpacity>
+                </Pressable>
               </View>
             </View>
 
-            <TouchableOpacity
+            <Pressable
               onPress={publicarRecado}
               disabled={!recadoTexto.trim()}
               style={[
@@ -289,7 +289,7 @@ export default function Feed() {
               ]}
             >
               <Text style={feedStyles.textoBotaoPublicar}>Publicar</Text>
-            </TouchableOpacity>
+            </Pressable>
           </View>
 
           {/* Lista de postagens */}
@@ -298,11 +298,9 @@ export default function Feed() {
             keyExtractor={(item) => item.id.toString()}
             scrollEnabled={true}
             renderItem={({ item }) => (
-              <TouchableOpacity
-                onPress={() => router.push(`/postagem/${item.id}`)}
-              >
+              <Pressable onPress={() => router.push(`/postagem/${item.id}`)}>
                 <CardPostagem postagem={item} />
-              </TouchableOpacity>
+              </Pressable>
             )}
           />
         </ScrollView>

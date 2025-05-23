@@ -4,11 +4,11 @@ import {
   View,
   Text,
   TextInput,
-  TouchableOpacity,
+  Pressable,
   ScrollView,
 } from "react-native";
 import { styles } from "@/styles/ModalValidarReceitaStyles";
-import { uploadImageToCloudinary } from "@/services/uploadImage";
+import { uploadImageToCloudinary } from "@/utils/cloudinary";
 import Toast from "react-native-toast-message";
 import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
@@ -91,9 +91,9 @@ export default function ModalValidarReceita({
             style={styles.textArea}
           />
 
-          <TouchableOpacity style={styles.botao} onPress={handlePickImage}>
+          <Pressable style={styles.botao} onPress={handlePickImage}>
             <Text style={styles.botaoTexto}>📸 Adicionar Imagem/Vídeo</Text>
-          </TouchableOpacity>
+          </Pressable>
 
           <ScrollView horizontal>
             {imagens.map((url, idx) => (
@@ -102,27 +102,24 @@ export default function ModalValidarReceita({
           </ScrollView>
 
           <View style={styles.botoesAprovacao}>
-            <TouchableOpacity
-              onPress={() => setAprovado(true)}
-              style={styles.aprovar}
-            >
+            <Pressable onPress={() => setAprovado(true)} style={styles.aprovar}>
               <Text style={styles.textoAprovacao}>✅ Aprovar</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
+            </Pressable>
+            <Pressable
               onPress={() => setAprovado(false)}
               style={styles.reprovar}
             >
               <Text style={styles.textoAprovacao}>❌ Reprovar</Text>
-            </TouchableOpacity>
+            </Pressable>
           </View>
 
-          <TouchableOpacity style={styles.enviar} onPress={handleSubmit}>
+          <Pressable style={styles.enviar} onPress={handleSubmit}>
             <Text style={styles.enviarTexto}>🚀 Enviar Validação</Text>
-          </TouchableOpacity>
+          </Pressable>
 
-          <TouchableOpacity onPress={onClose}>
+          <Pressable onPress={onClose}>
             <Text style={styles.fechar}>Fechar</Text>
-          </TouchableOpacity>
+          </Pressable>
         </View>
       </View>
     </Modal>

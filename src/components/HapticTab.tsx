@@ -1,4 +1,4 @@
-import { TouchableOpacity, Platform } from "react-native";
+import { Pressable, Platform } from "react-native";
 import { useEffect } from "react";
 import * as Haptics from "expo-haptics";
 
@@ -9,5 +9,5 @@ export function HapticTab(props: any) {
     }
   }, [props.accessibilityState?.selected]);
 
-  return <TouchableOpacity {...props} />;
+  return <Pressable {...props} />;
 }
