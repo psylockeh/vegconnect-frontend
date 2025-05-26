@@ -16,7 +16,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { styles } from "@/styles/PerfilStyles";
 import { AuthContext } from "@/context/AuthContext";
 import { useContext } from "react";
-import GerenciamentoMural from "@/components/GerenciamentoMural";
+import GerenciamentoMural from "@/components/gerenciamento/GerenciamentoMural";
 
 export default function PerfilUsuario() {
   const router = useRouter();
@@ -81,7 +81,7 @@ export default function PerfilUsuario() {
 
   return (
     <View style={styles.container}>
-      <Sidebar onPostPress={() => {}} />
+      <Sidebar onPostPress={() => { }} />
       <View style={styles.mainContent}>
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.cardPerfil}>
@@ -196,15 +196,13 @@ export default function PerfilUsuario() {
 
                 {/* Botão de Gerenciar Favoritos */}
                 <Pressable
-                  onPress={() => router.push("/gerenciar-favoritos")}
+                  onPress={() => router.push("/favoritos")}
                   style={({ pressed }) => [
                     styles.botaoGerenciarFavoritos,
-                    pressed && styles.botaoPressionado,
+                    pressed && styles.botaoPressionado
                   ]}
                 >
-                  <Text style={styles.textoBotaoAlterar}>
-                    Gerenciar Favoritos
-                  </Text>
+                  <Text style={styles.textoBotaoAlterar}>Gerenciar Favoritos</Text>
                 </Pressable>
               </View>
             )}
