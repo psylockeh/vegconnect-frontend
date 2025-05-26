@@ -38,6 +38,7 @@
     "expo-symbols": "~0.4.4",
     "expo-system-ui": "~5.0.7",
     "expo-web-browser": "~14.1.6",
+    "framer-motion": "^12.12.2",
     "leaflet": "^1.9.4",
     "linear-gradient": "^1.0.6",
     "lottie-react-native": "7.2.2",

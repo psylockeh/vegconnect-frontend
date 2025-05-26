@@ -6,6 +6,7 @@ import L from "leaflet";
 import { styles } from "@/styles/LocalizarEstabelecimentoStyles";
 import { useContext } from "react";
 import { AuthContext } from "@/context/AuthContext";
+import { motion } from "framer-motion";
 
 interface Estabelecimento {
   id: number;
@@ -33,6 +34,21 @@ export default function LocalizarEstabelecimento() {
   const [tipoSelecionado, setTipoSelecionado] = useState<string>("Todos");
   const { userToken } = useContext(AuthContext);
 
+  const GOOGLE_KEY = process.env.EXPO_PUBLIC_GOOGLE_KEY;
+
+  const buscarViaGoogle = async (latitude: number, longitude: number) => {
+    try {
+      const response = await fetch(
+        `https://vegconnect-backend.onrender.com/externo/google/places?lat=${latitude}&lng=${longitude}`
+      );
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Erro ao buscar estabelecimentos via Google:", error);
+      return [];
+    }
+  };
+
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(async (position) => {
@@ -55,12 +71,10 @@ export default function LocalizarEstabelecimento() {
           if (!resposta.ok) throw new Error("Erro na resposta do servidor.");
 
           const dados = await resposta.json();
-
-          if (!Array.isArray(dados))
-            throw new Error("Resposta não é um array.");
-
-          setEstabelecimentos(dados);
-          setFiltrados(dados);
+          const viaGoogle = await buscarViaGoogle(latitude, longitude);
+          const combinados = [...dados, ...viaGoogle];
+          setEstabelecimentos(combinados);
+          setFiltrados(combinados);
         } catch (err) {
           console.error(
             "❌ Erro ao buscar estabelecimentos:",
@@ -95,9 +109,21 @@ export default function LocalizarEstabelecimento() {
     popupAnchor: [1, -34],
   });
 
+  const googleIcon = new L.Icon({
+    iconUrl: "https://maps.google.com/mapfiles/ms/icons/green-dot.png",
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+  });
+
   return (
     <View style={styles.container}>
-      <View style={styles.sidebar}>
+      <motion.div
+        initial={{ x: -100, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        transition={{ duration: 0.6 }}
+        style={styles.sidebar}
+      >
         <Text style={styles.logo}>🌱 VegConnect</Text>
 
         <TextInput
@@ -113,32 +139,39 @@ export default function LocalizarEstabelecimento() {
 
         <View style={styles.filtroContainer}>
           {tiposDisponiveis.map((tipo) => (
-            <Pressable
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               key={tipo}
-              style={[
-                styles.filtroBotao,
-                tipoSelecionado === tipo && styles.filtroAtivo,
-              ]}
-              onPress={() => aplicarFiltro(tipo)}
+              style={{
+                ...styles.filtroBotao,
+                ...(tipoSelecionado === tipo
+                  ? { backgroundColor: "#3C6E47" }
+                  : {}),
+              }}
+              onClick={() => aplicarFiltro(tipo)}
             >
               <Text style={styles.filtroTexto}>{tipo}</Text>
-            </Pressable>
+            </motion.button>
           ))}
         </View>
 
         <ScrollView style={styles.resultadosLista}>
           {filtrados.map((e) => (
-            <Pressable
+            <motion.div
               key={e.id}
-              style={styles.listItem}
-              onPress={() => setSelected(e)}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.4 }}
             >
-              <Text style={styles.itemTitle}>{e.nome_comercio}</Text>
-              <Text style={styles.itemTipo}>{e.tipo_comercio}</Text>
-            </Pressable>
+              <Pressable style={styles.listItem} onPress={() => setSelected(e)}>
+                <Text style={styles.itemTitle}>{e.nome_comercio}</Text>
+                <Text style={styles.itemTipo}>{e.tipo_comercio}</Text>
+              </Pressable>
+            </motion.div>
           ))}
         </ScrollView>
-      </View>
+      </motion.div>
 
       <View style={styles.mapContainer}>
         {userLocation && (
@@ -156,7 +189,7 @@ export default function LocalizarEstabelecimento() {
               <Marker
                 key={e.id}
                 position={[e.latitude, e.longitude]}
-                icon={markerIcon}
+                icon={e.id >= 100000 ? googleIcon : markerIcon}
                 eventHandlers={{ click: () => setSelected(e) }}
               >
                 <Popup>
@@ -171,14 +204,20 @@ export default function LocalizarEstabelecimento() {
       </View>
 
       {selected && (
-        <View style={styles.card}>
+        <motion.div
+          className="card"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          style={styles.card}
+        >
           <Text style={styles.cardTitle}>{selected.nome_comercio}</Text>
           <Text style={styles.cardTipo}>{selected.tipo_comercio}</Text>
           <Text style={styles.cardDesc}>{selected.descricao_comercio}</Text>
           <Pressable>
             <Text style={styles.btn}>Ver mais detalhes</Text>
           </Pressable>
-        </View>
+        </motion.div>
       )}
     </View>
   );
