@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Pressable } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { styles } from "@/styles/GerenciamentoMural";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { API_URL } from "@/config/api";
-import axios from "axios";
-import { Postagem } from "@/types";
+// import AsyncStorage from '@react-native-async-storage/async-storage';  
+// import { API_URL } from "@/config/api";
+// import axios from "axios";
+// import { Postagem } from "@/types"; 
+
 
 type TipoUsuario = "comum" | "chef" | "comerciante";
 type Props = {
@@ -18,57 +19,50 @@ type Props = {
 // const [carregandoPostagens, setCarregandoPostagens] = useState(true);
 
 // Função para carregar postagens com base no filtro
-// const carregarPostagens = async () => {
-//   try {
-//     const token = await AsyncStorage.getItem("@token");
+  // const carregarPostagens = async () => {
+  //   try {
+  //     const token = await AsyncStorage.getItem("@token");
 
-//     if (!token) {
-//       console.error("Token não encontrado!");
-//       return;
-//     }
+  //     if (!token) {
+  //       console.error("Token não encontrado!");
+  //       return;
+  //     }
 
-//     const response = await axios.get(`${API_URL}/usuario/postagens`, {
-//       headers: {
-//         Authorization: `Bearer ${token}`,
-//       },
-//     });
-//     setPostagens(response.data);
-//   } catch (error) {
-//     console.error("Erro ao carregar postagens:", error);
-//   } finally {
-//     setCarregandoPostagens(false);
-//   }
-// };
+  //     const response = await axios.get(`${API_URL}/usuario/postagens`, {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`, 
+  //       },
+  //     });
+  //     setPostagens(response.data);
+  //   } catch (error) {
+  //     console.error("Erro ao carregar postagens:", error);
+  //   } finally {
+  //     setCarregandoPostagens(false);
+  //   }
+  // };
 
-// // Carregar postagens sempre que o filtro for alterado
-// useEffect(() => {
-//   carregarPostagens();
-// }, []);
+  // // Carregar postagens sempre que o filtro for alterado
+  // useEffect(() => {
+  //   carregarPostagens();
+  // }, []);
+
 
 const GerenciamentoMural = ({
   filtroSelecionado,
   setFiltroSelecionado,
   tipoUsuario,
 }: Props) => {
-  const todasOpcoes = [
-    "receita",
-    "recado",
-    "estabelecimento",
-    "evento",
-    "promoção",
-  ];
+  const todasOpcoes = ["receita", "recado", "estabelecimento", "evento", "promoção"];
 
   const opcoesFiltradas =
     tipoUsuario === "comerciante"
       ? todasOpcoes
-      : todasOpcoes.filter(
-          (item) => item !== "estabelecimento" && item !== "promoção"
-        );
+      : todasOpcoes.filter((item) => item !== "estabelecimento" && item !== "promoção");
 
   return (
     <View style={styles.gerenciarMural}>
       {opcoesFiltradas.map((item) => (
-        <Pressable
+        <TouchableOpacity
           key={item}
           onPress={() => setFiltroSelecionado(item)}
           style={[
@@ -81,12 +75,12 @@ const GerenciamentoMural = ({
               item === "receita"
                 ? "restaurant-menu"
                 : item === "recado"
-                  ? "message"
-                  : item === "estabelecimento"
-                    ? "store"
-                    : item === "evento"
-                      ? "event"
-                      : "local-offer"
+                ? "message"
+                : item === "estabelecimento"
+                ? "store"
+                : item === "evento"
+                ? "event"
+                : "local-offer"
             }
             size={20}
             color={filtroSelecionado === item ? "#fff" : "#3C6E47"}
@@ -99,10 +93,11 @@ const GerenciamentoMural = ({
           >
             {item.charAt(0).toUpperCase() + item.slice(1)}
           </Text>
-        </Pressable>
+        </TouchableOpacity>
       ))}
     </View>
   );
 };
+
 
 export default GerenciamentoMural;

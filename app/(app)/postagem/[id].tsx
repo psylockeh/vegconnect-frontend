@@ -4,16 +4,15 @@ import { useLocalSearchParams } from "expo-router";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_URL } from "@/config/api";
-
 import { styles } from "@/styles/CardPostagemStyles";
 import ModalCriarPostagemStyles from "@/styles/ModalCriarPostagemStyles";
-
 import VisualizacaoReceita from "@/components/postagens/VisualizacaoReceita";
 import VisualizacaoEstabelecimento from "@/components/postagens/VisualizacaoEstabelecimento";
 import VisualizacaoPromocao from "@/components/postagens/VisualizacaoPromocao";
 import VisualizacaoEvento from "@/components/postagens/VisualizacaoEvento";
 import ModalValidarReceita from "@/components/postagens/ModalValidarReceita";
 import { useAuth } from "@/context/AuthContext";
+import FavoritarBotao from "@/components/gerenciamento/FavoritoBotao";
 const { perfilUsuario } = useAuth();
 
 export default function DetalhesPostagem() {
@@ -104,6 +103,8 @@ export default function DetalhesPostagem() {
             <Text style={styles.nickname}>@{usuario?.nickname}</Text>
           </View>
         </View>
+        {/* Botão de favoritar */}
+        <FavoritarBotao postagemId={postagem.id} />
 
         {/* Título e conteúdo */}
         {postagem.titulo && (
