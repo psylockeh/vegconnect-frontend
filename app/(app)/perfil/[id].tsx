@@ -209,9 +209,12 @@ export default function PerfilUsuario() {
 
             {/* Mural gerenciamento de postagens */}
             <GerenciamentoMural
-              filtroSelecionado={filtroSelecionado}
-              setFiltroSelecionado={setFiltroSelecionado}
-              tipoUsuario={usuario?.tp_user?.toLowerCase()}
+              idUser={Number(id)}
+              tipoUsuario={
+                usuario?.tp_user
+                  ? usuario.tp_user.toLowerCase() as "comum" | "chef" | "comerciante"
+                  : "comum"
+              }
             />
           </View>
         </ScrollView>

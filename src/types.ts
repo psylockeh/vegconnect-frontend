@@ -1,6 +1,7 @@
 // Tipo comum a todas as postagens
 export interface BasePost {
-  tp_post: "receita" | "evento" | "promocao" | "estabelecimento";
+  id: number;
+  tp_post: "receita" | "evento" | "promocao" | "estabelecimento" | "recado";
   titulo?: string;
   conteudo?: string;
   midia_urls?: string[];
@@ -67,9 +68,17 @@ export interface EstabelecimentoPost extends BasePost {
   endereco: string;
 }
 
+// ---------- RECADO ----------
+export interface RecadoPost extends BasePost {
+  tp_post: "recado";
+  
+ 
+}
+
 // ---------- Tipo união de todas as postagens ----------
 export type Postagem =
   | ReceitaPost
   | EventoPost
   | PromocaoPost
-  | EstabelecimentoPost;
+  | EstabelecimentoPost
+  | RecadoPost;
