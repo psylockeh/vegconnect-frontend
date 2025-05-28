@@ -20,8 +20,8 @@ const CardPostagem = ({ postagem }: Props) => {
     usuario?.foto_perfil?.startsWith("http") && !erroImagem
       ? { uri: usuario.foto_perfil }
       : {
-          uri: "https://res.cloudinary.com/dyhzz5baz/image/upload/v1746917561/default-avatar_jvqpsg.png",
-        };
+        uri: "https://res.cloudinary.com/dyhzz5baz/image/upload/v1746917561/default-avatar_jvqpsg.png",
+      };
 
   const definirCorBorda = () => {
     switch (tp_post) {
@@ -106,6 +106,18 @@ const CardPostagem = ({ postagem }: Props) => {
             ellipsizeMode="tail"
           >
             {descricao_resumida}
+          </Text>
+        )}
+
+
+        {/* Conteúdo apenas para recado */}
+        {tp_post === "recado" && postagem.conteudo && (
+          <Text
+            style={styles.descricaoResumida}
+            numberOfLines={3}
+            ellipsizeMode="tail"
+          >
+            {postagem.conteudo}
           </Text>
         )}
 
