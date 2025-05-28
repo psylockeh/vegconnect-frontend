@@ -50,7 +50,7 @@ const FavoritoBotao: React.FC<FavoritoBotaoProps> = ({
     try {
       const config = getAuthHeader();
       const res = await axios.get(
-        `${API_URL}/usuario/listas/postagens/${postagemId}/status`,
+        `${API_URL}/usuario/listas/status/${postagemId}`,
         config
       );
       setIsFavoritado(res.data.favoritado);

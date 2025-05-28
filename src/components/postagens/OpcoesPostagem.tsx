@@ -1,15 +1,49 @@
 import React, { useState } from "react";
-import { View, Text, Pressable } from "react-native";
+import { View, Text, Pressable, Alert } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { styles } from "@/styles/OpcoesPostagem";
+import axios from "axios";
+import { API_URL } from "@/config/api";
+import { useAuth } from "@/context/AuthContext";
 
 interface OpcoesPostagemProps {
+  postagemId: number;
   onEditar: () => void;
-  onExcluir: () => void;
+  onPostagemExcluida?: () => void; 
 }
 
-const OpcoesPostagem = ({ onEditar, onExcluir }: OpcoesPostagemProps) => {
+const OpcoesPostagem = ({ postagemId, onEditar, onPostagemExcluida }: OpcoesPostagemProps) => {
   const [mostrarOpcoes, setMostrarOpcoes] = useState(false);
+  const { userToken } = useAuth();
+
+  const excluirPostagem = async () => {
+    Alert.alert(
+      "Excluir Postagem",
+      "Tem certeza que deseja excluir esta postagem?",
+      [
+        { text: "Cancelar", style: "cancel" },
+        {
+          text: "Excluir",
+          style: "destructive",
+          onPress: async () => {
+            try {
+              const config = {
+                headers: {
+                  Authorization: `Bearer ${userToken}`,
+                },
+              };
+              await axios.delete(`${API_URL}/usuario/deletarPostagem/${postagemId}`, config);
+              Alert.alert("Sucesso", "Postagem excluída com sucesso!");
+              if (onPostagemExcluida) onPostagemExcluida();
+            } catch (error) {
+              console.error("Erro ao excluir postagem:", error);
+              Alert.alert("Erro", "Não foi possível excluir a postagem.");
+            }
+          },
+        },
+      ]
+    );
+  };
 
   return (
     <View>
@@ -41,10 +75,9 @@ const OpcoesPostagem = ({ onEditar, onExcluir }: OpcoesPostagemProps) => {
 
           {/* Excluir Postagem */}
           <Pressable
-            style={styles.exibirOpcoes}
-            onPress={() => {
-              setMostrarOpcoes(false);
-              onExcluir();
+            onPress={(e) => {
+              e.stopPropagation(); 
+              excluirPostagem();
             }}
           >
             <MaterialIcons name="delete" size={18} color="#555" />

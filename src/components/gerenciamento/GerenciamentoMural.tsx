@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react"; 
 import axios from "axios";
-import { View, Text, TouchableOpacity, FlatList } from "react-native";
+import { View, Text, TouchableOpacity, FlatList, ActivityIndicator } from "react-native";  // <-- importado ActivityIndicator
 import { MaterialIcons } from "@expo/vector-icons";
 import { styles } from "@/styles/GerenciamentoMural";
 import { API_URL } from "@/config/api";
 import { useAuth } from "@/context/AuthContext";
 import { Postagem } from "@/types";
-
-// IMPORTAR CardPostagem
-import CardPostagem from "@/components/CardPostagem"; // ajuste o caminho conforme a sua estrutura
+import CardPostagem from "@/components/CardPostagem";
 
 type TipoUsuario = "comum" | "chef" | "comerciante";
 
@@ -108,7 +106,7 @@ const GerenciamentoMural: React.FC<Props> = ({ idUser, tipoUsuario }) => {
 
       {/* Conteúdo das postagens */}
       {loading ? (
-        <Text>Carregando postagens...</Text>
+        <ActivityIndicator size={20} color="#3C6E47" /> 
       ) : error ? (
         <Text>{error}</Text>
       ) : postagens.length === 0 ? (
