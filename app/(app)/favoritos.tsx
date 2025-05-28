@@ -192,6 +192,8 @@ export default function AppFavorito() {
               </Text>
             </View>
           )}
+          showsVerticalScrollIndicator={false}
+
           ListEmptyComponent={
             <Text style={styles.textoVazio}>📌 Nenhuma lista encontrada.</Text>
           }
@@ -228,6 +230,7 @@ export default function AppFavorito() {
                 data={postagens}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={({ item }) => <CardPostagem postagem={item} />}
+                showsVerticalScrollIndicator={false}
                 ListEmptyComponent={
                   <Text style={styles.textoVazio}>📌 Nenhuma postagem encontrada.</Text>
                 }

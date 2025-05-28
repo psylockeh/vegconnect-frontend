@@ -41,6 +41,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F0F4F2",
     padding: 12,
     borderRadius: 10,
+    marginTop: 10,
     marginBottom: 10,
     fontSize: 14,
     borderWidth: 1,
@@ -93,7 +94,7 @@ const styles = StyleSheet.create({
     color: "#33691e",
   },
   botaoFecharExcluir: {
-    marginTop: 16,
+    marginTop: 10,
     backgroundColor: "#e53935",
     paddingVertical: 12,
     borderRadius: 10,

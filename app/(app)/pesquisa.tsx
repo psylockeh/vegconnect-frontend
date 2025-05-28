@@ -62,8 +62,8 @@ const PesquisaGeral = () => {
     } catch (err: any) {
       setErro(
         err.response?.data?.msg ||
-          err.message ||
-          "❌ Erro ao realizar pesquisa!!"
+        err.message ||
+        "❌ Erro ao realizar pesquisa!!"
       );
     } finally {
       setCarregando(false);
@@ -77,7 +77,7 @@ const PesquisaGeral = () => {
 
   return (
     <View style={pesquisarStyles.container}>
-      <Sidebar onPostPress={() => {}} />
+      <Sidebar onPostPress={() => { }} />
 
       <View style={pesquisarStyles.mainContent}>
         <View style={pesquisarStyles.cardPesquisa}>
@@ -187,6 +187,8 @@ const PesquisaGeral = () => {
               )}
             </Pressable>
           )}
+          showsVerticalScrollIndicator={false}
+
         />
       </View>
     </View>
