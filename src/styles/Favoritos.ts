@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F5FAF6",
     flexDirection: "row",
   },
-   mainContent: {
+  mainContent: {
     flex: 1,
     padding: 16,
     marginBottom: -10,
@@ -102,8 +102,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: "100%",
   },
-
-
+  cancelarTexto: {
+    marginTop: 15,
+    color: 'red',
+  },
   alterarExcluir: {
     flex: 1,
     justifyContent: "center",

@@ -262,7 +262,7 @@ export default function AppFavorito() {
                 <Text style={styles.botaoTexto}>Excluir Lista</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => setOpcoesVisiveis(false)}>
-                <Text style={{ marginTop: 20, color: '#000' }}>Cancelar</Text>
+                <Text style={styles.cancelarTexto}>Cancelar</Text>
               </TouchableOpacity>
             </View>
           </View>

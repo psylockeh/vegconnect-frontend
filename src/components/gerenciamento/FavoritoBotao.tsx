@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   TouchableOpacity,
@@ -30,12 +30,13 @@ const FavoritoBotao: React.FC<FavoritoBotaoProps> = ({
 }) => {
   const { userToken } = useAuth();
   const [isFavoritado, setIsFavoritado] = useState(isFavoritadoInicial);
-  const [listaIdFavoritada, setListaIdFavoritada] = useState<number | null>(null); 
+  const [listaIdFavoritada, setListaIdFavoritada] = useState<number | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [listas, setListas] = useState<ListaFavorito[]>([]);
   const [novaLista, setNovaLista] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // Função para retornar o header com token de autenticação
   const getAuthHeader = () => {
     if (!userToken) {
       console.warn("Token não disponível no contexto!");
@@ -43,6 +44,27 @@ const FavoritoBotao: React.FC<FavoritoBotaoProps> = ({
     }
     return { headers: { Authorization: `Bearer ${userToken}` } };
   };
+
+  // Função para buscar se a postagem já está favoritada e em qual lista
+  const fetchStatusFavorito = async () => {
+    try {
+      const config = getAuthHeader();
+      const res = await axios.get(
+        `${API_URL}/usuario/listas/postagens/${postagemId}/status`,
+        config
+      );
+      setIsFavoritado(res.data.favoritado);
+      setListaIdFavoritada(res.data.listaId);
+    } catch (error) {
+      console.error("Erro ao buscar status de favorito:", error);
+      setIsFavoritado(false);
+      setListaIdFavoritada(null);
+    }
+  };
+
+  useEffect(() => {
+    fetchStatusFavorito();
+  }, [postagemId]);
 
   // Listar listas criadas
   const fetchListas = async () => {
@@ -66,7 +88,7 @@ const FavoritoBotao: React.FC<FavoritoBotaoProps> = ({
         config
       );
       setIsFavoritado(true);
-      setListaIdFavoritada(listaId); 
+      setListaIdFavoritada(listaId);
       setModalVisible(false);
     } catch (error: any) {
       console.error("Erro ao favoritar:", error.response || error);
@@ -75,6 +97,9 @@ const FavoritoBotao: React.FC<FavoritoBotaoProps> = ({
         error.response?.data?.erro === "Já favoritada."
       ) {
         Alert.alert("Aviso", "Esta postagem já está na lista.");
+        setIsFavoritado(true);
+        setListaIdFavoritada(listaId);
+        setModalVisible(false);
       } else {
         Alert.alert("Erro", "Erro ao favoritar.");
       }
@@ -94,7 +119,7 @@ const FavoritoBotao: React.FC<FavoritoBotaoProps> = ({
         config
       );
       setIsFavoritado(false);
-      setListaIdFavoritada(null); 
+      setListaIdFavoritada(null);
     } catch (error) {
       console.error("Erro ao desfavoritar:", error);
       Alert.alert("Erro", "Erro ao desfavoritar.");
@@ -122,6 +147,7 @@ const FavoritoBotao: React.FC<FavoritoBotaoProps> = ({
     }
   };
 
+  // Ao clicar no botão para favoritar, abre modal para escolher lista
   const handleFavoritar = () => {
     fetchListas();
     setModalVisible(true);
@@ -145,23 +171,26 @@ const FavoritoBotao: React.FC<FavoritoBotaoProps> = ({
           <View style={styles.containerModal}>
             <Text style={styles.titulo}>Adicionar à lista</Text>
 
-            <FlatList
-              data={listas}
-              keyExtractor={(item) => item.id.toString()}
-              renderItem={({ item }) => (
-                <TouchableOpacity
-                  style={styles.itemLista}
-                  onPress={() => favoritar(item.id)}
-                >
-                  <Text>{item.nome}</Text>
-                </TouchableOpacity>
-              )}
-              ListEmptyComponent={
-                <Text style={styles.textoVazio}>
-                  Nenhuma lista encontrada.
-                </Text>
-              }
-            />
+            {/* Listas*/}
+            <View style={{ maxHeight: 200 }}>
+              <FlatList
+                data={listas}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={({ item }) => (
+                  <TouchableOpacity
+                    style={styles.itemLista}
+                    onPress={() => favoritar(item.id)}
+                  >
+                    <Text style={styles.listaNome}>{item.nome}</Text>
+                  </TouchableOpacity>
+                )}
+                ListEmptyComponent={
+                  <Text style={styles.textoVazio}>Nenhuma lista encontrada.</Text>
+                }
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={{ paddingBottom: 10 }}
+              />
+            </View>
 
             <TextInput
               placeholder="Nova lista"
@@ -177,7 +206,7 @@ const FavoritoBotao: React.FC<FavoritoBotaoProps> = ({
               disabled={loading}
             >
               <Text style={styles.criarBotaoTexto}>
-                Criar Lista e Adicionar
+                Criar Lista e Adicionar Favorito
               </Text>
             </TouchableOpacity>
 
