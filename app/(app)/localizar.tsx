@@ -34,15 +34,19 @@ export default function LocalizarEstabelecimento() {
   const [tipoSelecionado, setTipoSelecionado] = useState<string>("Todos");
   const { userToken } = useContext(AuthContext);
 
-  const GOOGLE_KEY = process.env.EXPO_PUBLIC_GOOGLE_KEY;
-
   const buscarViaGoogle = async (latitude: number, longitude: number) => {
     try {
       const response = await fetch(
         `https://vegconnect-backend.onrender.com/externo/google/places?lat=${latitude}&lng=${longitude}`
       );
+
+      if (!response.ok) {
+        console.error("❌ Erro na resposta da API externa:", response.status);
+        return [];
+      }
+
       const data = await response.json();
-      return data;
+      return Array.isArray(data) ? data : [];
     } catch (error) {
       console.error("Erro ao buscar estabelecimentos via Google:", error);
       return [];
