@@ -16,7 +16,6 @@ import { Picker } from "@react-native-picker/picker";
 import { ToastAndroid, Platform } from "react-native";
 import LottieView from "lottie-react-native";
 import { MaskedTextInput } from "react-native-mask-text";
-<<<<<<< HEAD
 import {
   formatarCNPJ,
   validarCNPJ,
@@ -24,9 +23,7 @@ import {
 } from "@/utils/formatadores";
 import * as ImagePicker from "expo-image-picker";
 import { Button } from "react-native";
-=======
 import { MaterialIcons } from "@expo/vector-icons";
->>>>>>> e2c863f1ec9bad71593cf2726bffd682816b1b2f
 
 export default function CadastroScreen() {
   const [erroCnpj, setErroCnpj] = useState(false);
@@ -52,13 +49,14 @@ export default function CadastroScreen() {
   const [cepComercio, setCepComercio] = useState("");
   const [telefoneComercio, setTelefoneComercio] = useState("");
   const [confirmarSenha, setConfirmarSenha] = useState("");
-<<<<<<< HEAD
   const [cep, setCep] = useState("");
   const [logradouro, setLogradouro] = useState("");
   const [bairro, setBairro] = useState("");
   const [cidade, setCidade] = useState("");
   const [estado, setEstado] = useState("");
   const [numero, setNumero] = useState("");
+   const [showSenha, setShowSenha] = useState(false);
+  const [showConfirmarSenha, setShowConfirmarSenha] = useState(false);
   const [certificacaoSelecionada, setCertificacaoSelecionada] =
     useState<string>("");
 
@@ -120,11 +118,6 @@ export default function CadastroScreen() {
       Alert.alert("Erro ao buscar CEP.");
     }
   };
-=======
-  const [showSenha, setShowSenha] = useState(false);
-  const [showConfirmarSenha, setShowConfirmarSenha] = useState(false);
-
->>>>>>> e2c863f1ec9bad71593cf2726bffd682816b1b2f
 
   const formatarDataParaAPI = (data: string) => {
     const regex = /^(\d{2})\/(\d{2})\/(\d{4})$/;
