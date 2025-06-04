@@ -10,12 +10,15 @@ import {
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { styles } from "@/styles/AuthStyles";
 import { useAuth } from "@/context/AuthContext";
+import { MaterialIcons } from "@expo/vector-icons";
+
 
 export default function ResetPasswordScreen() {
   const router = useRouter();
   const { token } = useLocalSearchParams();
   const { resetPassword } = useAuth();
-
+  const [mostrarNovaSenha, setMostrarNovaSenha] = useState(false);
+  const [mostrarConfirmSenha, setMostrarConfirmSenha] = useState(false);
   const [novaSenha, setNovaSenha] = useState("");
   const [confirmSenha, setConfirmSenha] = useState("");
   const [loading, setLoading] = useState(false);
@@ -57,21 +60,49 @@ export default function ResetPasswordScreen() {
           Insira a nova credencial para Redefinir Senha
         </Text>
 
-        <TextInput
-          style={styles.input}
-          placeholder="Nova Senha"
-          secureTextEntry
-          value={novaSenha}
-          onChangeText={setNovaSenha}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Confirme a Nova Senha"
-          secureTextEntry
-          value={confirmSenha}
-          onChangeText={setConfirmSenha}
-        />
+        {/* Nova Senha com ícone */}
+        <View style={[{ flexDirection: "row", alignItems: "center" }]}>
+          <TextInput
+            style={styles.input}
+            placeholder="Nova Senha"
+            secureTextEntry={!mostrarNovaSenha}
+            value={novaSenha}
+            onChangeText={setNovaSenha}
+          />
+          <Pressable
+            onPress={() => setMostrarNovaSenha(!mostrarNovaSenha)}
+            style={{ position: "absolute", right: 10, marginBottom: 15, padding: 5 }}
+            hitSlop={10}
+          >
+            <MaterialIcons
+              name={mostrarNovaSenha ? "visibility" : "visibility-off"}
+              size={24}
+              color="gray"
+            />
+          </Pressable>
+        </View>
 
+        {/* Confirmação da Nova Senha com ícone */}
+        <View style={[{ flexDirection: "row", alignItems: "center" }]}>
+          <TextInput
+            style={styles.input}
+            placeholder="Confirme a Nova Senha"
+            secureTextEntry={!mostrarConfirmSenha}
+            value={confirmSenha}
+            onChangeText={setConfirmSenha}
+          />
+          <Pressable
+            onPress={() => setMostrarConfirmSenha(!mostrarConfirmSenha)}
+            style={{ position: "absolute", right: 10, marginBottom: 15, padding: 5 }}
+            hitSlop={10}
+          >
+            <MaterialIcons
+              name={mostrarConfirmSenha ? "visibility" : "visibility-off"}
+              size={24}
+              color="gray"
+            />
+          </Pressable>
+        </View>
         {message ? <Text style={styles.message}>{message}</Text> : null}
 
         <Pressable
