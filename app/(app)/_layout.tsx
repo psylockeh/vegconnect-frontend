@@ -56,5 +56,5 @@ export default function ProtectedLayout() {
     );
   }
 
-  return <Stack />;
+  return <Stack screenOptions={{ headerShown: false }} />;
 }
