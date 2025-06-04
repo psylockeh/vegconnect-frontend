@@ -1,3 +1,4 @@
+import { error } from "console";
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
@@ -31,5 +32,12 @@ export const styles = StyleSheet.create({
   },
   posteOpSelecionadoRow: {
     backgroundColor: "#3C6E47",
+  },
+  textoMensagem: {
+    color: "#D32F2F",
+    fontSize: 16,
+    textAlign: "center",
+    marginTop: 15,
+    marginBottom: 8,
   },
 });

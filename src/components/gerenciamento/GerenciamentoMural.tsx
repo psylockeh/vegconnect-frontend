@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"; 
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { View, Text, TouchableOpacity, FlatList, ActivityIndicator } from "react-native";  // <-- importado ActivityIndicator
 import { MaterialIcons } from "@expo/vector-icons";
@@ -28,6 +28,7 @@ const GerenciamentoMural: React.FC<Props> = ({ idUser, tipoUsuario }) => {
   const [postagens, setPostagens] = useState<Postagem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [mensagemAlerta, setMensagemAlerta] = useState("");
 
   useEffect(() => {
     if (!userToken) {
@@ -39,6 +40,7 @@ const GerenciamentoMural: React.FC<Props> = ({ idUser, tipoUsuario }) => {
     const fetchPostagens = async () => {
       setLoading(true);
       setError(null);
+      setMensagemAlerta("");
 
       try {
         const response = await axios.get<Postagem[]>(
@@ -53,9 +55,14 @@ const GerenciamentoMural: React.FC<Props> = ({ idUser, tipoUsuario }) => {
         );
 
         setPostagens(postagensFiltradas);
+        if (postagensFiltradas.length === 0) {
+          setMensagemAlerta("🌱 Nenhuma postagem encontrada!!");
+        } else {
+          setMensagemAlerta("");
+        }
       } catch (err: any) {
         console.error("Erro ao buscar postagens do usuário:", err);
-        setError("Erro ao carregar postagens.");
+        setError("🌱 Nenhuma postagem encontrada!!");
       } finally {
         setLoading(false);
       }
@@ -82,12 +89,12 @@ const GerenciamentoMural: React.FC<Props> = ({ idUser, tipoUsuario }) => {
                 item === "receita"
                   ? "restaurant-menu"
                   : item === "recado"
-                  ? "message"
-                  : item === "estabelecimento"
-                  ? "store"
-                  : item === "evento"
-                  ? "event"
-                  : "local-offer"
+                    ? "message"
+                    : item === "estabelecimento"
+                      ? "store"
+                      : item === "evento"
+                        ? "event"
+                        : "local-offer"
               }
               size={20}
               color={filtroSelecionado === item ? "#fff" : "#3C6E47"}
@@ -106,11 +113,11 @@ const GerenciamentoMural: React.FC<Props> = ({ idUser, tipoUsuario }) => {
 
       {/* Conteúdo das postagens */}
       {loading ? (
-        <ActivityIndicator size={20} color="#3C6E47" /> 
+        <ActivityIndicator size={20} color="#3C6E47" />
       ) : error ? (
-        <Text>{error}</Text>
+        <Text style={styles.textoMensagem}>{error}</Text>
       ) : postagens.length === 0 ? (
-        <Text>Nenhuma postagem encontrada para este filtro.</Text>
+        <Text style={styles.textoMensagem}>{mensagemAlerta}</Text>
       ) : (
         <FlatList
           data={postagens}
