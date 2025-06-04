@@ -121,11 +121,10 @@ export default function AppFavorito() {
       await axios.put(
         `${API_URL}/usuario/listas/${listaOpcoes.id}`,
         {
-          id: listaOpcoes.id,
-          nome: novoNomeLista,
-          usuarioId: userId,
+          novo_nome: novoNomeLista,
         },
         getAuthConfig()
+
       );
       Alert.alert("Sucesso", "Nome da lista atualizado.");
       setOpcoesVisiveis(false);
