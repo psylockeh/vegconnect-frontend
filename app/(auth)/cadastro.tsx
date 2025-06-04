@@ -16,6 +16,7 @@ import { Picker } from "@react-native-picker/picker";
 import { ToastAndroid, Platform } from "react-native";
 import LottieView from "lottie-react-native";
 import { MaskedTextInput } from "react-native-mask-text";
+<<<<<<< HEAD
 import {
   formatarCNPJ,
   validarCNPJ,
@@ -23,6 +24,9 @@ import {
 } from "@/utils/formatadores";
 import * as ImagePicker from "expo-image-picker";
 import { Button } from "react-native";
+=======
+import { MaterialIcons } from "@expo/vector-icons";
+>>>>>>> e2c863f1ec9bad71593cf2726bffd682816b1b2f
 
 export default function CadastroScreen() {
   const [erroCnpj, setErroCnpj] = useState(false);
@@ -48,6 +52,7 @@ export default function CadastroScreen() {
   const [cepComercio, setCepComercio] = useState("");
   const [telefoneComercio, setTelefoneComercio] = useState("");
   const [confirmarSenha, setConfirmarSenha] = useState("");
+<<<<<<< HEAD
   const [cep, setCep] = useState("");
   const [logradouro, setLogradouro] = useState("");
   const [bairro, setBairro] = useState("");
@@ -115,6 +120,11 @@ export default function CadastroScreen() {
       Alert.alert("Erro ao buscar CEP.");
     }
   };
+=======
+  const [showSenha, setShowSenha] = useState(false);
+  const [showConfirmarSenha, setShowConfirmarSenha] = useState(false);
+
+>>>>>>> e2c863f1ec9bad71593cf2726bffd682816b1b2f
 
   const formatarDataParaAPI = (data: string) => {
     const regex = /^(\d{2})\/(\d{2})\/(\d{4})$/;
@@ -341,22 +351,45 @@ export default function CadastroScreen() {
           style={styles.input}
         />
 
-        {/* Campo de Senha */}
-        <TextInput
-          style={styles.input}
-          placeholder="Senha"
-          value={senha}
-          onChangeText={setSenha}
-          secureTextEntry
-        />
+        {/* Senha com ícone */}
+        <View style={[{ flexDirection: "row", alignItems: "center" }]}>
+          <TextInput
+            style={styles.input}
+            placeholder="Senha"
+            value={senha}
+            onChangeText={setSenha}
+            secureTextEntry={!showSenha}
+          />
+          <Pressable onPress={() => setShowSenha(!showSenha)}
+            style={{ position: "absolute", right: 10, marginBottom: 15, padding: 5 }}
+            hitSlop={10}>
+            <MaterialIcons
+              name={showSenha ? "visibility" : "visibility-off"}
+              size={24}
+              color="gray"
+            />
+          </Pressable>
+        </View>
 
-        <TextInput
-          style={styles.input}
-          placeholder="Confirmar Senha"
-          value={confirmarSenha}
-          onChangeText={setConfirmarSenha}
-          secureTextEntry
-        />
+        {/* Confirmar Senha com ícone */}
+        <View style={[{ flexDirection: "row", alignItems: "center" }]}>
+          <TextInput
+            style={styles.input}
+            placeholder="Confirmar Senha"
+            value={confirmarSenha}
+            onChangeText={setConfirmarSenha}
+            secureTextEntry={!showConfirmarSenha}
+          />
+          <Pressable onPress={() => setShowConfirmarSenha(!showConfirmarSenha)}
+            style={{ position: "absolute", right: 10, marginBottom: 15, padding: 5 }}
+            hitSlop={10}>
+            <MaterialIcons
+              name={showConfirmarSenha ? "visibility" : "visibility-off"}
+              size={24}
+              color="gray"
+            />
+          </Pressable>
+        </View>
 
         {/* Campo de Tipo de Usuario*/}
         <Text style={styles.label}>

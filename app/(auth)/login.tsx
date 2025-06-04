@@ -12,12 +12,15 @@ import { useAuth } from "@/context/AuthContext";
 import { LoginStyles as styles } from "@/styles/LoginStyles";
 import LottieView from "lottie-react-native";
 import BotaoComLoader from "@/components/BotaoComLoader";
+import { MaterialIcons } from "@expo/vector-icons";
+
 
 export default function LoginScreen() {
   const router = useRouter();
   const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const [mostrarSenha, setMostrarSenha] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [manterConectado, setManterConectado] = useState(false);
@@ -77,15 +80,27 @@ export default function LoginScreen() {
           autoCapitalize="none"
         />
 
-        {/* Campo de Senha */}
-
-        <TextInput
-          style={styles.input}
-          placeholder="Senha"
-          value={senha}
-          onChangeText={setSenha}
-          secureTextEntry
-        />
+        {/* Campo de Senha com ícone MaterialIcons */}
+        <View style={[{ flexDirection: "row", alignItems: "center" }]}>
+          <TextInput
+            style={styles.input}
+            placeholder="Senha"
+            value={senha}
+            onChangeText={setSenha}
+            secureTextEntry={!mostrarSenha}
+          />
+          <Pressable
+            onPress={() => setMostrarSenha(!mostrarSenha)}
+            style={{ position: "absolute", right: 10, marginBottom: 15, padding: 5 }}
+            hitSlop={10}
+          >
+            <MaterialIcons
+              name={mostrarSenha ? "visibility" : "visibility-off"}
+              size={24}
+              color="gray"
+            />
+          </Pressable>
+        </View>
 
         {/* Link para recuperação de senha */}
         <Pressable onPress={() => router.push("/forgot-password")}>

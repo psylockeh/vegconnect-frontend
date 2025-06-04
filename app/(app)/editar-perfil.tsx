@@ -38,6 +38,8 @@ export default function EditarPerfilScreen() {
   const [mensagemAlerta, setMensagemAlerta] = useState("");
   const [senha, setSenha] = useState("");
   const [confirmarSenha, setConfirmarSenha] = useState("");
+  const [showSenha, setShowSenha] = useState(false);
+  const [showConfirmarSenha, setShowConfirmarSenha] = useState(false);
   const router = useRouter();
 
   const tipo = perfilUsuario?.tp_user;
@@ -255,8 +257,8 @@ export default function EditarPerfilScreen() {
         bio,
         foto_perfil:
           foto_perfil &&
-          typeof foto_perfil === "string" &&
-          foto_perfil.startsWith("http")
+            typeof foto_perfil === "string" &&
+            foto_perfil.startsWith("http")
             ? foto_perfil
             : null,
       };
@@ -359,7 +361,7 @@ export default function EditarPerfilScreen() {
 
   return (
     <View style={styles.container}>
-      <Sidebar onPostPress={() => {}} />
+      <Sidebar onPostPress={() => { }} />
       <View style={styles.mainContent}>
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.cardEditarPerfil}>
@@ -371,8 +373,8 @@ export default function EditarPerfilScreen() {
               >
                 <View style={styles.avatarContainer}>
                   {foto_perfil &&
-                  typeof foto_perfil === "string" &&
-                  foto_perfil.startsWith("http") ? (
+                    typeof foto_perfil === "string" &&
+                    foto_perfil.startsWith("http") ? (
                     <Image
                       source={{ uri: foto_perfil }}
                       style={styles.avatar}
@@ -449,28 +451,53 @@ export default function EditarPerfilScreen() {
                 />
               </View>
 
+              {/* Senha com ícone */}
               <View style={styles.inputColuna}>
                 <Text style={styles.label}>Senha:</Text>
-                <TextInput
-                  style={styles.inputEditarPerfil}
-                  placeholder="Nova senha (opcional)"
-                  value={senha}
-                  onChangeText={setSenha}
-                  secureTextEntry
-                />
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <TextInput
+                    style={[styles.inputEditarPerfil, { width: "100%" }]}
+                    placeholder="Digite sua senha"
+                    value={senha}
+                    onChangeText={setSenha}
+                    secureTextEntry={!showSenha}
+                    autoCapitalize="none"
+                  />
+                  <Pressable onPress={() => setShowSenha(!showSenha)}
+                    style={{ position: "absolute", right: 10, marginBottom: 10, padding: 5 }}
+                    hitSlop={10}>
+                    <MaterialIcons
+                      name={showSenha ? "visibility" : "visibility-off"}
+                      size={24}
+                      color="gray"
+                    />
+                  </Pressable>
+                </View>
               </View>
             </View>
-
+            {/* Confirmar Senha com ícone */}
             <View style={styles.linhaInputs}>
               <View style={styles.inputColuna}>
                 <Text style={styles.label}>Confirmar Senha:</Text>
-                <TextInput
-                  style={styles.inputEditarPerfil}
-                  placeholder="Confirmar senha"
-                  value={confirmarSenha}
-                  onChangeText={setConfirmarSenha}
-                  secureTextEntry
-                />
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <TextInput
+                    style={[styles.inputEditarPerfil, { width: "100%" }]}
+                    placeholder="Confirme sua senha"
+                    value={confirmarSenha}
+                    onChangeText={setConfirmarSenha}
+                    secureTextEntry={!showConfirmarSenha}
+                    autoCapitalize="none"
+                  />
+                  <Pressable onPress={() => setShowConfirmarSenha(!showConfirmarSenha)}
+                    style={{ position: "absolute", right: 10, marginBottom: 10, padding: 5 }}
+                    hitSlop={10}>
+                    <MaterialIcons
+                      name={showConfirmarSenha ? "visibility" : "visibility-off"}
+                      size={24}
+                      color="gray"
+                    />
+                  </Pressable>
+                </View>
               </View>
             </View>
 
@@ -595,8 +622,8 @@ export default function EditarPerfilScreen() {
               style={[
                 styles.botaoSalvarPerfil,
                 !houveMudanca &&
-                  !senha &&
-                  !confirmarSenha && { backgroundColor: "#ccc" },
+                !senha &&
+                !confirmarSenha && { backgroundColor: "#ccc" },
               ]}
               onPress={salvarPerfil}
               disabled={loading || (!houveMudanca && !senha && !confirmarSenha)}

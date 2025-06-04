@@ -53,7 +53,7 @@ export default function Feed() {
   const [tpPost, setTpPost] = useState<string>("");
   const [recadoTexto, setRecadoTexto] = useState("");
   const [midiasSelecionadas, setMidiasSelecionadas] = useState<string[]>([]);
-  const { logout, perfilUsuario } = useAuth();
+  const { perfilUsuario } = useAuth();
 
   const carregarPostagens = async () => {
     try {
@@ -136,7 +136,7 @@ export default function Feed() {
 
   return (
     <View style={feedStyles.container}>
-      <Sidebar onPostPress={() => {}} />
+      <Sidebar onPostPress={() => { }} />
 
       <View style={feedStyles.mainContent}>
         <ScrollView showsVerticalScrollIndicator={false}>
@@ -175,30 +175,6 @@ export default function Feed() {
                   />
                   {perfilUsuario?.tp_user || "Público"}
                 </Text>
-              </View>
-
-              {/* Botão Sair */}
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: "center",
-                  alignItems: "flex-end",
-                  padding: 8,
-                }}
-              >
-                <Pressable
-                  onPress={logout}
-                  style={{
-                    backgroundColor: "#D33",
-                    paddingHorizontal: 12,
-                    paddingVertical: 6,
-                    borderRadius: 6,
-                  }}
-                >
-                  <Text style={{ color: "#fff", fontWeight: "bold" }}>
-                    Sair
-                  </Text>
-                </Pressable>
               </View>
             </View>
 
@@ -254,7 +230,7 @@ export default function Feed() {
                     const tipoMin = tipo.toLowerCase();
                     const permissoes =
                       permissoesPorTipoUsuario[
-                        usuario?.tp_user as keyof typeof permissoesPorTipoUsuario
+                      usuario?.tp_user as keyof typeof permissoesPorTipoUsuario
                       ] || [];
 
                     return permissoes.includes(tipoMin);
