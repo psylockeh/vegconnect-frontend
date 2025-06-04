@@ -11,7 +11,7 @@ type Props = {
 
 export default function Sidebar({ onPostPress }: Props) {
   const [open, setOpen] = useState(true);
-  const { perfilUsuario } = useAuth();
+  const { logout, perfilUsuario } = useAuth();
   const router = useRouter();
 
   const slideAnim = useRef(new Animated.Value(0)).current;
@@ -47,7 +47,7 @@ export default function Sidebar({ onPostPress }: Props) {
 
             <Pressable
               style={styles.menuItem}
-              // onPress={() => router.push("/menu")}
+            // onPress={() => router.push("/menu")}
             >
               <FontAwesome name="bars" size={20} color="#023D2E" />
               <Text style={styles.labelMenu}>Menu</Text>
@@ -108,6 +108,37 @@ export default function Sidebar({ onPostPress }: Props) {
               <FontAwesome name="leaf" size={20} color="#67b26f" />
               <Text style={styles.label}>{perfilUsuario.tp_user}</Text>
             </Pressable>
+
+            {/* Botão Sair */}
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                marginTop: 50,
+                padding: 8,
+              }}
+            >
+              <Pressable
+                onPress={logout}
+                style={({ pressed }) => [
+                  {
+                    backgroundColor: pressed ? "#D33" : "#ff4d4d", // vermelho mais claro
+                    paddingHorizontal: 8,
+                    paddingVertical: 4,
+                    borderRadius: 6,
+                    shadowColor: "#000",
+                    shadowOffset: { width: 0, height: 2 },
+                    shadowOpacity: 0.2,
+                    shadowRadius: 4,
+                    elevation: 3,
+                  },
+                ]}
+              >
+                <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 12 }}>
+                  Sair
+                </Text>
+              </Pressable>
+            </View>
           </View>
         )}
       </Animated.View>
