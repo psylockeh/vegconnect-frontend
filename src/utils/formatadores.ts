@@ -5,6 +5,48 @@ export const formatarValor = (texto: string) => {
   return "R$ " + valorFormatado.replace(".", ",");
 };
 
+export const formatarCNPJ = (cnpj: string) => {
+  return cnpj
+    .replace(/\D/g, "") // Remove tudo que não é dígito
+    .replace(/^(\d{2})(\d)/, "$1.$2")
+    .replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3")
+    .replace(/\.(\d{3})(\d)/, ".$1/$2")
+    .replace(/(\d{4})(\d)/, "$1-$2")
+    .slice(0, 18);
+};
+export const formatarTelefone = (numero: string) => {
+  if (numero.length <= 10) {
+    return numero.replace(/(\d{2})(\d{4})(\d{0,4})/, "($1) $2-$3");
+  }
+  return numero.replace(/(\d{2})(\d{5})(\d{0,4})/, "($1) $2-$3");
+};
+
+export const validarCNPJ = (cnpj: string): boolean => {
+  const cleaned = cnpj.replace(/[^\d]+/g, "");
+  if (cleaned.length !== 14 || /^(\d)\1+$/.test(cleaned)) return false;
+
+  let t = cleaned.length - 2,
+    d = cleaned.substring(t),
+    d1 = parseInt(d.charAt(0)),
+    d2 = parseInt(d.charAt(1)),
+    calc = (x: number) => {
+      let n = cleaned.substring(0, x),
+        y = x - 7,
+        s = 0,
+        r = 0;
+
+      for (let i = x; i >= 1; i--) {
+        s += +n.charAt(x - i) * y--;
+        if (y < 2) y = 9;
+      }
+
+      r = 11 - (s % 11);
+      return r > 9 ? 0 : r;
+    };
+
+  return calc(t) === d1 && calc(t + 1) === d2;
+};
+
 export const formatarData = (texto: string) => {
   const numeros = texto.replace(/\D/g, "").slice(0, 8);
   const dia = numeros.slice(0, 2);

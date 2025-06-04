@@ -16,8 +16,16 @@ import { Picker } from "@react-native-picker/picker";
 import { ToastAndroid, Platform } from "react-native";
 import LottieView from "lottie-react-native";
 import { MaskedTextInput } from "react-native-mask-text";
+import {
+  formatarCNPJ,
+  validarCNPJ,
+  formatarTelefone,
+} from "@/utils/formatadores";
+import * as ImagePicker from "expo-image-picker";
+import { Button } from "react-native";
 
 export default function CadastroScreen() {
+  const [erroCnpj, setErroCnpj] = useState(false);
   const router = useRouter();
   const { register } = useAuth();
   const [nome, setNome] = useState("");
@@ -40,12 +48,88 @@ export default function CadastroScreen() {
   const [cepComercio, setCepComercio] = useState("");
   const [telefoneComercio, setTelefoneComercio] = useState("");
   const [confirmarSenha, setConfirmarSenha] = useState("");
+  const [cep, setCep] = useState("");
+  const [logradouro, setLogradouro] = useState("");
+  const [bairro, setBairro] = useState("");
+  const [cidade, setCidade] = useState("");
+  const [estado, setEstado] = useState("");
+  const [numero, setNumero] = useState("");
+  const [certificacaoSelecionada, setCertificacaoSelecionada] =
+    useState<string>("");
+
+  const selecionarImagem = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 0.8,
+    });
+
+    if (!result.canceled) {
+      setImagemCertificacao(result.assets[0].uri);
+    }
+  };
+
+  const certificacoesDisponiveis = [
+    "SENAC – Cozinha Profissional",
+    "SENAI – Alimentos e Bebidas",
+    "Escola Wilma Kövesi de Cozinha",
+    "Natural Chef – Nutrição e Gastronomia",
+    "Le Cordon Bleu (Brasil)",
+    "Instituto Gastronômico das Américas (IGA)",
+    "Autodeclaração com Prova de Experiência",
+  ];
+
+  const [imagemCertificacao, setImagemCertificacao] = useState<string | null>(
+    null
+  );
+
+  const especialidades = [
+    "Cozinha Vegana",
+    "Cozinha Vegetariana",
+    "Cozinha Natural",
+    "Panificação Vegana",
+    "Confeitaria Sem Leite/Ovos",
+    "Comida Brasileira",
+    "Comida Internacional",
+  ];
+
+  const buscarEnderecoPorCep = async (cepLimpo: string) => {
+    try {
+      const response = await fetch(
+        `https://viacep.com.br/ws/${cepLimpo}/json/`
+      );
+      const data = await response.json();
+
+      if (data.erro) {
+        Alert.alert("CEP não encontrado.");
+        return;
+      }
+
+      setLogradouro(data.logradouro || "");
+      setBairro(data.bairro || "");
+      setCidade(data.localidade || "");
+      setEstado(data.uf || "");
+    } catch (error) {
+      console.error("Erro ao buscar CEP:", error);
+      Alert.alert("Erro ao buscar CEP.");
+    }
+  };
 
   const formatarDataParaAPI = (data: string) => {
     const regex = /^(\d{2})\/(\d{2})\/(\d{4})$/;
     const match = data.match(regex);
     return match ? `${match[3]}-${match[2]}-${match[1]}` : data;
   };
+
+  const tiposProduto = [
+    "Alimentos",
+    "Bebidas",
+    "Higiene",
+    "Cosméticos",
+    "Limpeza",
+    "Outros",
+  ];
 
   const handleCadastro = async () => {
     setLoading(true);
@@ -100,6 +184,18 @@ export default function CadastroScreen() {
     }
 
     const dataFormatada = formatarDataParaAPI(dataNascimento);
+
+    const handleSelecionarImagem = async () => {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        quality: 0.8,
+      });
+
+      if (!result.canceled) {
+        setImagemCertificacao(result.assets[0].uri);
+      }
+    };
 
     const dadosCadastro = {
       nome,
@@ -279,21 +375,47 @@ export default function CadastroScreen() {
         {/* Campo de Usuario Chef*/}
         {tipoUsuario === "chef" && (
           <>
-            {/* Campo de Especialidade*/}
-            <TextInput
-              style={styles.input}
-              placeholder="Especialidade"
-              value={especialidade}
-              onChangeText={setEspecialidade}
+            {/* Campo de Especialidade */}
+            <Text style={styles.label}>Especialidade</Text>
+            <Picker
+              selectedValue={especialidade}
+              onValueChange={(itemValue) => setEspecialidade(itemValue)}
+              style={styles.picker}
+            >
+              <Picker.Item label="Selecione uma especialidade..." value="" />
+              {especialidades.map((item: string) => (
+                <Picker.Item key={item} label={item} value={item} />
+              ))}
+            </Picker>
+
+            {/* Campo de Certificação */}
+            <Text style={styles.label}>Certificação em Gastronomia</Text>
+            <Picker
+              selectedValue={certificacaoSelecionada}
+              onValueChange={(itemValue) =>
+                setCertificacaoSelecionada(itemValue)
+              }
+              style={styles.picker}
+            >
+              <Picker.Item label="Selecione uma certificação..." value="" />
+              {certificacoesDisponiveis.map((item: string) => (
+                <Picker.Item key={item} label={item} value={item} />
+              ))}
+            </Picker>
+
+            <Button
+              title="Anexar imagem da certificação"
+              onPress={selecionarImagem}
+              color="#2196F3"
             />
 
-            {/* Campo de Certificações*/}
-            <TextInput
-              style={styles.input}
-              placeholder="Certificações"
-              value={certificacoes}
-              onChangeText={setCertificacoes}
-            />
+            {imagemCertificacao && (
+              <Image
+                source={{ uri: imagemCertificacao }}
+                style={{ width: 200, height: 200, marginTop: 10 }}
+                resizeMode="contain"
+              />
+            )}
           </>
         )}
 
@@ -308,20 +430,28 @@ export default function CadastroScreen() {
               onChangeText={setNomeComercio}
             />
 
-            {/* Campo de CNPJ*/}
+            {/* Campo de CNPJ */}
             <TextInput
               style={styles.input}
               placeholder="CNPJ"
-              value={cnpj}
-              onChangeText={setCnpj}
+              value={formatarCNPJ(cnpj)} // aqui aplicamos a máscara apenas na exibição
+              onChangeText={(text) => {
+                const somenteNumeros = text.replace(/\D/g, "");
+                setCnpj(somenteNumeros); // armazenamos apenas os números
+              }}
+              keyboardType="numeric"
             />
 
-            {/* Campo de Telefone do Comércio*/}
+            {/* Campo Telefone do Comércio */}
             <TextInput
               style={styles.input}
               placeholder="Telefone do Comércio"
-              value={telefoneComercio}
-              onChangeText={setTelefoneComercio}
+              value={formatarTelefone(telefoneComercio)}
+              onChangeText={(text) => {
+                const somenteNumeros = text.replace(/\D/g, "").slice(0, 11);
+                setTelefoneComercio(somenteNumeros);
+              }}
+              keyboardType="phone-pad"
             />
 
             {/* Campo de Tipo de Comércio*/}
@@ -333,12 +463,17 @@ export default function CadastroScreen() {
             />
 
             {/* Campo de Tipo do Produto*/}
-            <TextInput
-              style={styles.input}
-              placeholder="Tipo do Produto"
-              value={tipoProduto}
-              onChangeText={setTipoProduto}
-            />
+            <Text style={styles.label}>Tipo de Produto</Text>
+            <Picker
+              selectedValue={tipoProduto}
+              onValueChange={(itemValue) => setTipoProduto(itemValue)}
+              style={styles.picker}
+            >
+              <Picker.Item label="Selecione o tipo de produto" value="" />
+              {tiposProduto.map((tipo) => (
+                <Picker.Item key={tipo} label={tipo} value={tipo} />
+              ))}
+            </Picker>
 
             {/* Campo de Endereço de Comércio*/}
             <TextInput
@@ -349,11 +484,57 @@ export default function CadastroScreen() {
             />
 
             {/* Campo de CEP do Comércio*/}
+            {/* Campo de CEP */}
+            <Text style={styles.label}>CEP do Comércio</Text>
             <TextInput
               style={styles.input}
-              placeholder="CEP do Comércio"
-              value={cepComercio}
-              onChangeText={setCepComercio}
+              placeholder="00000-000"
+              keyboardType="numeric"
+              value={cep}
+              maxLength={9}
+              onChangeText={(text) => {
+                const formatted = text
+                  .replace(/\D/g, "")
+                  .replace(/^(\d{5})(\d)/, "$1-$2");
+                setCep(formatted);
+
+                const onlyDigits = formatted.replace(/\D/g, "");
+                if (onlyDigits.length === 8) buscarEnderecoPorCep(onlyDigits);
+              }}
+            />
+
+            {/* Campos preenchidos automaticamente */}
+            <TextInput
+              style={styles.input}
+              placeholder="Logradouro"
+              value={logradouro}
+              editable={false}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Bairro"
+              value={bairro}
+              editable={false}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Cidade"
+              value={cidade}
+              editable={false}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Estado"
+              value={estado}
+              editable={false}
+            />
+
+            {/* Campo Número - preenchido manualmente */}
+            <TextInput
+              style={styles.input}
+              placeholder="Número"
+              value={numero}
+              onChangeText={setNumero}
             />
           </>
         )}

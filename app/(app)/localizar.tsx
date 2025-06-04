@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { View, Text, TextInput, Pressable, ScrollView } from "react-native";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { styles } from "@/styles/LocalizarEstabelecimentoStyles";
-import { useContext } from "react";
 import { AuthContext } from "@/context/AuthContext";
 import { motion } from "framer-motion";
 
@@ -18,7 +17,7 @@ interface Estabelecimento {
   distancia?: number;
 }
 
-const tiposDisponiveis = ["Todos", "restaurante", "feira", "loja", "servico"];
+const tiposDisponiveis = ["Todos", "Vegano", "Vegetariano", "Feira"];
 
 export default function LocalizarEstabelecimento() {
   const [estabelecimentos, setEstabelecimentos] = useState<Estabelecimento[]>(
@@ -39,16 +38,11 @@ export default function LocalizarEstabelecimento() {
       const response = await fetch(
         `https://vegconnect-backend.onrender.com/externo/google/places?lat=${latitude}&lng=${longitude}`
       );
-
-      if (!response.ok) {
-        console.error("❌ Erro na resposta da API externa:", response.status);
-        return [];
-      }
-
+      if (!response.ok) throw new Error("Erro na API externa");
       const data = await response.json();
       return Array.isArray(data) ? data : [];
     } catch (error) {
-      console.error("Erro ao buscar estabelecimentos via Google:", error);
+      console.error("Erro ao buscar via Google:", error);
       return [];
     }
   };
@@ -80,10 +74,7 @@ export default function LocalizarEstabelecimento() {
           setEstabelecimentos(combinados);
           setFiltrados(combinados);
         } catch (err) {
-          console.error(
-            "❌ Erro ao buscar estabelecimentos:",
-            (err as Error).message
-          );
+          console.error("Erro ao buscar estabelecimentos:", err);
           setEstabelecimentos([]);
           setFiltrados([]);
         }
@@ -97,7 +88,9 @@ export default function LocalizarEstabelecimento() {
     const base =
       tipo === "Todos"
         ? estabelecimentos
-        : estabelecimentos.filter((e) => e.tipo_comercio === tipo);
+        : estabelecimentos.filter(
+            (e) => e.tipo_comercio.toLowerCase() === tipo.toLowerCase()
+          );
     const resultado = base.filter(
       (e) =>
         e.nome_comercio.toLowerCase().includes(termoNormalizado) ||
@@ -107,17 +100,17 @@ export default function LocalizarEstabelecimento() {
   };
 
   const markerIcon = new L.Icon({
-    iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
+    iconUrl: "https://cdn-icons-png.flaticon.com/512/447/447031.png",
+    iconSize: [30, 42],
+    iconAnchor: [15, 42],
+    popupAnchor: [0, -36],
   });
 
   const googleIcon = new L.Icon({
-    iconUrl: "https://maps.google.com/mapfiles/ms/icons/green-dot.png",
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
+    iconUrl: "https://cdn-icons-png.flaticon.com/512/684/684908.png",
+    iconSize: [30, 42],
+    iconAnchor: [15, 42],
+    popupAnchor: [0, -36],
   });
 
   return (
@@ -149,9 +142,7 @@ export default function LocalizarEstabelecimento() {
               key={tipo}
               style={{
                 ...styles.filtroBotao,
-                ...(tipoSelecionado === tipo
-                  ? { backgroundColor: "#3C6E47" }
-                  : {}),
+                ...(tipoSelecionado === tipo ? styles.filtroAtivo : {}),
               }}
               onClick={() => aplicarFiltro(tipo)}
             >
