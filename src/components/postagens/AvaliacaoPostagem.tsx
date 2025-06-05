@@ -21,6 +21,7 @@ const AvaliacaoPostagem: React.FC<Props> = ({ postagem, avaliacaoAtual = 0 }) =>
   const [pontosNegativos, setPontosNegativos] = useState("");
   const [mediaAvaliacoes, setMediaAvaliacoes] = useState(0);
   const [totalAvaliacoes, setTotalAvaliacoes] = useState(0);
+  const [jaAvaliou, setJaAvaliou] = useState(false);
 
   // Função para buscar média
   const fetchMediaAvaliacoes = async () => {
@@ -42,11 +43,41 @@ const AvaliacaoPostagem: React.FC<Props> = ({ postagem, avaliacaoAtual = 0 }) =>
     }
   }, [postagem]);
 
+  // Função para buscar status da avaliação 
+  const buscarStatusAvaliacao = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/usuario/avaliacao/${postagem.id}`, {
+        headers: { Authorization: `Bearer ${userToken}` },
+      });
+
+      if (response.data.avaliou) {
+        const { estrelas, comentario_positivo, comentario_negativo } = response.data.avaliacao;
+        setAvaliacao(estrelas);
+        setPontosPositivos(comentario_positivo || "");
+        setPontosNegativos(comentario_negativo || "");
+        setJaAvaliou(true);
+      } else {
+        setAvaliacao(0);
+        setPontosPositivos("");
+        setPontosNegativos("");
+        setJaAvaliou(false);
+      }
+
+      setMostrarFormulario(true);
+    } catch (error) {
+      console.error("Erro ao buscar status da avaliação:", error);
+      setMostrarFormulario(true);
+    }
+  };
+
   // Função para enviar avaliação e atualizar média depois
   const enviarAvaliacao = async () => {
     if (avaliacao < 1 || avaliacao > 5) {
       alert("Por favor, selecione uma avaliação entre 1 e 5 estrelas.");
       return;
+    }
+    if (jaAvaliou) {
+      alert("Você já avaliou esta postagem. Sua avaliação será atualizada.");
     }
     try {
       await axios.post(
@@ -67,6 +98,7 @@ const AvaliacaoPostagem: React.FC<Props> = ({ postagem, avaliacaoAtual = 0 }) =>
       setAvaliacao(0);
       setPontosPositivos("");
       setPontosNegativos("");
+      setJaAvaliou(true);
       fetchMediaAvaliacoes();
     } catch (error) {
       console.error("Erro ao enviar avaliação:", error);
@@ -132,7 +164,7 @@ const AvaliacaoPostagem: React.FC<Props> = ({ postagem, avaliacaoAtual = 0 }) =>
                   <>
                     <TouchableOpacity
                       style={styles.botaoAvaliacao}
-                      onPress={() => setMostrarFormulario(true)}>
+                      onPress={buscarStatusAvaliacao}>
                       <Text style={styles.textoBotao}>Escreva uma avaliação</Text>
                     </TouchableOpacity>
 
@@ -155,6 +187,7 @@ const AvaliacaoPostagem: React.FC<Props> = ({ postagem, avaliacaoAtual = 0 }) =>
                           key={star}
                           onPress={() => setAvaliacao(star)}
                           activeOpacity={0.7}
+                          disabled={jaAvaliou}
                         >
                           <MaterialIcons
                             name={avaliacao >= star ? "star" : "star-border"}
@@ -172,6 +205,7 @@ const AvaliacaoPostagem: React.FC<Props> = ({ postagem, avaliacaoAtual = 0 }) =>
                       onChangeText={setPontosPositivos}
                       placeholder="Descreva os pontos positivos"
                       multiline
+                      editable={!jaAvaliou}
                     />
 
                     <Text style={styles.label}>Pontos Negativos:</Text>
@@ -181,12 +215,13 @@ const AvaliacaoPostagem: React.FC<Props> = ({ postagem, avaliacaoAtual = 0 }) =>
                       onChangeText={setPontosNegativos}
                       placeholder="Descreva os pontos negativos"
                       multiline
+                      editable={!jaAvaliou}
                     />
 
                     <TouchableOpacity
                       style={styles.botaoAvaliacao}
                       onPress={enviarAvaliacao}
-                      disabled={avaliacao === 0}
+                      disabled={avaliacao === 0 || jaAvaliou}
                     >
                       <Text style={styles.textoBotao}>Enviar Avaliação</Text>
                     </TouchableOpacity>
