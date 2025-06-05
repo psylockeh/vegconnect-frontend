@@ -241,7 +241,7 @@ export default function AppFavorito() {
               onPress={() => setModalVisible(false)}
               accessibilityLabel="Fechar modal"
             >
-              <Text style={styles.botaoTexto}>Fechar</Text>
+              <Text style={styles.textoBotaoCancelar}>Fechar</Text>
             </TouchableOpacity>
           </View>
         </Modal>
@@ -261,7 +261,7 @@ export default function AppFavorito() {
                 <Text style={styles.botaoTexto}>Salvar</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.botaoFecharExcluir} onPress={excluirLista}>
-                <Text style={styles.botaoTexto}>Excluir Lista</Text>
+                <Text style={styles.textoBotaoCancelar}>Excluir Lista</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => setOpcoesVisiveis(false)}>
                 <Text style={styles.cancelarTexto}>Cancelar</Text>

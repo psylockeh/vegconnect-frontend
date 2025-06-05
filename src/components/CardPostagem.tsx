@@ -4,6 +4,7 @@ import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import { styles } from "@/styles/CardPostagemStyles";
 import { useRouter } from "expo-router";
 import ModalCriarPostagemStyles from "@/styles/ModalCriarPostagemStyles";
+import AvaliacaoPostagem from "@/components/postagens/AvaliacaoPostagem";
 
 interface Props {
   postagem: any;
@@ -65,12 +66,17 @@ const CardPostagem = ({ postagem }: Props) => {
             <Text style={styles.nomeUsuario}>{usuario?.nome}</Text>
             <Text style={styles.nickname}>@{usuario?.nickname}</Text>
           </View>
+
+          {/* Botão avaliar postagem */}
+          <View style={{ flexDirection: "row", justifyContent: "flex-end", alignItems: "flex-start", width: '90%'  }}>
+            <AvaliacaoPostagem postagem={postagem} />
+          </View>
         </View>
 
         {/* Tag + Selo */}
         <View style={styles.tagWrapper}>
           <View style={[styles.tagTipoPost, { backgroundColor: "#2E7D32" }]}>
-            <Text style={styles.tagTipoText}>Receita</Text>
+            <Text style={styles.tagTipoText}>{postagem.tp_post}</Text>
           </View>
           {postagem.selo_confianca && (
             <View style={styles.verificadoWrapper}>

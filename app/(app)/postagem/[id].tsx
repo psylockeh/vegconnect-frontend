@@ -13,6 +13,8 @@ import VisualizacaoEvento from "@/components/postagens/VisualizacaoEvento";
 import ModalValidarReceita from "@/components/postagens/ModalValidarReceita";
 import { useAuth } from "@/context/AuthContext";
 import FavoritarBotao from "@/components/gerenciamento/FavoritoBotao";
+import AvaliacaoPostagem from "@/components/postagens/AvaliacaoPostagem";
+
 const { perfilUsuario } = useAuth();
 
 export default function DetalhesPostagem() {
@@ -102,9 +104,13 @@ export default function DetalhesPostagem() {
             <Text style={styles.nomeUsuario}>{usuario?.nome}</Text>
             <Text style={styles.nickname}>@{usuario?.nickname}</Text>
           </View>
+
+          {/* Botões alinhados à direita, um abaixo do outro */}
+          <View style={{ flexDirection: "row", alignItems: "flex-start", justifyContent: "flex-end", width: '90%' }}>
+            <AvaliacaoPostagem postagem={postagem} />
+            <FavoritarBotao postagemId={postagem.id} />
+          </View>
         </View>
-        {/* Botão de favoritar */}
-        <FavoritarBotao postagemId={postagem.id} />
 
         {/* Título e conteúdo */}
         {postagem.titulo && (

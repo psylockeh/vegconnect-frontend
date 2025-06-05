@@ -25,10 +25,12 @@ export const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 16,
     color: "#023D2E",
+    marginLeft: 10,
   },
   nickname: {
     color: "#666",
     fontSize: 14,
+    marginLeft: 10,
   },
   tpUser: {
     fontSize: 14,

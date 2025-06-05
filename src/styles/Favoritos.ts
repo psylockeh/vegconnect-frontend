@@ -38,15 +38,13 @@ const styles = StyleSheet.create({
     marginLeft: 15,
   },
   input: {
-    backgroundColor: "#F0F4F2",
-    padding: 12,
-    borderRadius: 10,
-    marginTop: 10,
-    marginBottom: 10,
-    fontSize: 14,
     borderWidth: 1,
-    borderColor: "#D7E2DA",
-    color: "#333",
+    borderColor: "#B7B7A4",
+    backgroundColor: "#F9F9F9",
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 14,
+    color: "#023D2E",
   },
   botaoCriarSalvar: {
     backgroundColor: "#3C6E47",
@@ -95,13 +93,15 @@ const styles = StyleSheet.create({
   },
   botaoFecharExcluir: {
     marginTop: 10,
-    backgroundColor: "#e53935",
-    paddingVertical: 12,
-    borderRadius: 10,
     alignItems: "center",
-    height: 48,
-    justifyContent: "center",
-    width: "100%",
+    backgroundColor: "#E8EFE8",
+    paddingVertical: 10,
+    borderRadius: 10,
+  },
+  textoBotaoCancelar: {
+    color: "#2E4F36",
+    fontWeight: "600",
+    fontSize: 15,
   },
   cancelarTexto: {
     marginTop: 15,
@@ -113,7 +113,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
-
   modalAlterarExcluir: {
     width: "85%",
     backgroundColor: "#fff",
