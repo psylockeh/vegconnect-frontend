@@ -10,8 +10,8 @@
   "include": [
     "**/*.ts",
     "**/*.tsx",
-    "src/styles/CardPostagemtsx",
-    "src/styles/CardPromocao.Stylets"
+    "src/styles/CardPostagemStyles.ts",
+    "src/styles/CardPromocaoStyles.ts"
   ],
   "exclude": ["node_modules"]
 }
