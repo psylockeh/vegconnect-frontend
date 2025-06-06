@@ -1,5 +1,13 @@
 import React, { useEffect, useState, useContext } from "react";
-import { View, Text, TextInput, Pressable, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  Pressable,
+  ScrollView,
+  useWindowDimensions,
+  StyleSheet,
+} from "react-native";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
@@ -32,6 +40,21 @@ export default function LocalizarEstabelecimento() {
   const [busca, setBusca] = useState("");
   const [tipoSelecionado, setTipoSelecionado] = useState<string>("Todos");
   const { userToken } = useContext(AuthContext);
+  const { width: screenWidth } = useWindowDimensions();
+  const isColumnLayout = screenWidth < 768;
+  const sidebarWidth = isColumnLayout ? screenWidth : 340;
+  const containerStyle = StyleSheet.flatten([
+    styles.container,
+    { flexDirection: isColumnLayout ? "column" : "row" },
+  ]);
+  const sidebarStyle = StyleSheet.flatten([
+    styles.sidebar,
+    { width: isColumnLayout ? "100%" : sidebarWidth },
+  ]);
+  const mapContainerStyle = StyleSheet.flatten([
+    styles.mapContainer,
+    isColumnLayout && { width: "100%", minHeight: 300 },
+  ]);
 
   const buscarViaGoogle = async (latitude: number, longitude: number) => {
     try {
@@ -114,12 +137,12 @@ export default function LocalizarEstabelecimento() {
   });
 
   return (
-    <View style={styles.container}>
+    <View style={containerStyle}>
       <motion.div
         initial={{ x: -100, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 0.6 }}
-        style={styles.sidebar}
+        style={sidebarStyle}
       >
         <Text style={styles.logo}>🌱 VegConnect</Text>
 
@@ -168,7 +191,7 @@ export default function LocalizarEstabelecimento() {
         </ScrollView>
       </motion.div>
 
-      <View style={styles.mapContainer}>
+      <View style={mapContainerStyle}>
         {userLocation && (
           <MapContainer
             center={[userLocation.latitude, userLocation.longitude]}
