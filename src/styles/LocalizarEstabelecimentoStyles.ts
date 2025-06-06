@@ -1,21 +1,27 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
 
-export const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: "row",
-    backgroundColor: "#003B2A",
-  },
-  sidebar: {
-    width: 340,
-    padding: 24,
-    backgroundColor: "#003B2A",
-    borderRightWidth: 1,
-    borderColor: "#1a1a1a",
-    display: "flex",
-    flexDirection: "column",
-    gap: 12,
-  },
+const windowWidth = Dimensions.get("window").width;
+
+export const createLocalizarEstabelecimentoStyles = (
+  sidebarWidth: number = windowWidth * 0.4,
+  columnLayout: boolean = windowWidth < 768
+) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      flexDirection: columnLayout ? "column" : "row",
+      backgroundColor: "#003B2A",
+    },
+    sidebar: {
+      width: columnLayout ? "100%" : sidebarWidth,
+      padding: 24,
+      backgroundColor: "#003B2A",
+      borderRightWidth: 1,
+      borderColor: "#1a1a1a",
+      display: "flex",
+      flexDirection: "column",
+      gap: 12,
+    },
   logo: {
     fontSize: 28,
     fontWeight: "700",
@@ -83,6 +89,8 @@ export const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
     paddingTop: 20,
+    width: columnLayout ? "100%" : undefined,
+    minHeight: columnLayout ? 300 : undefined,
   },
   map: {
     width: "100%",
@@ -125,3 +133,5 @@ export const styles = StyleSheet.create({
     fontSize: 14,
   },
 });
+
+export const styles = createLocalizarEstabelecimentoStyles();
