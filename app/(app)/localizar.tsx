@@ -1,5 +1,12 @@
 import React, { useEffect, useState, useContext } from "react";
-import { View, Text, TextInput, Pressable, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  Pressable,
+  ScrollView,
+  useWindowDimensions,
+} from "react-native";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
@@ -32,6 +39,7 @@ export default function LocalizarEstabelecimento() {
   const [busca, setBusca] = useState("");
   const [tipoSelecionado, setTipoSelecionado] = useState<string>("Todos");
   const { userToken } = useContext(AuthContext);
+  const isSmallScreen = useWindowDimensions().width < 768;
 
   const buscarViaGoogle = async (latitude: number, longitude: number) => {
     try {
@@ -114,12 +122,12 @@ export default function LocalizarEstabelecimento() {
   });
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, isSmallScreen && styles.containerMobile]}>
       <motion.div
         initial={{ x: -100, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 0.6 }}
-        style={styles.sidebar}
+        style={[styles.sidebar, isSmallScreen && styles.sidebarMobile]}
       >
         <Text style={styles.logo}>🌱 VegConnect</Text>
 

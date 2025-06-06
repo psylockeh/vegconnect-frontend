@@ -6,6 +6,9 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     backgroundColor: "#003B2A",
   },
+  containerMobile: {
+    flexDirection: "column",
+  },
   sidebar: {
     width: 340,
     padding: 24,
@@ -15,6 +18,9 @@ export const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "column",
     gap: 12,
+  },
+  sidebarMobile: {
+    width: "100%",
   },
   logo: {
     fontSize: 28,
