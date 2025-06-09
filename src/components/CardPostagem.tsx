@@ -5,17 +5,23 @@ import { styles } from "@/styles/CardPostagemStyles";
 import { useRouter } from "expo-router";
 import ModalCriarPostagemStyles from "@/styles/ModalCriarPostagemStyles";
 import AvaliacaoPostagem from "@/components/postagens/AvaliacaoPostagem";
+import OpcoesPostagem from "@/components/postagens/OpcoesPostagem";
+import { useAuth } from "@/context/AuthContext";
+
 
 interface Props {
   postagem: any;
+  onPostagemExcluida?: () => void;
 }
 
-const CardPostagem = ({ postagem }: Props) => {
+const CardPostagem = ({ postagem, onPostagemExcluida }: Props) => {
   const { tp_post, autor: usuario, createdAt, descricao_resumida } = postagem;
   const router = useRouter();
   const { id } = postagem;
 
   const [erroImagem, setErroImagem] = useState(false);
+  const { usuario: usuarioLogado } = useAuth();
+  const [mensagemExclusao, setMensagemExclusao] = useState("");
 
   const fotoPerfilFinal =
     usuario?.foto_perfil?.startsWith("http") && !erroImagem
@@ -52,6 +58,8 @@ const CardPostagem = ({ postagem }: Props) => {
     )}`;
   };
 
+  const ehAutorDaPostagem = usuarioLogado?.id_user === usuario?.id_user;
+
   return (
     <Pressable onPress={() => router.push(`/postagem/${id}`)}>
       <View style={[styles.card, { borderColor: definirCorBorda() }]}>
@@ -68,34 +76,34 @@ const CardPostagem = ({ postagem }: Props) => {
           </View>
 
           {/* Botão avaliar postagem */}
-          <View style={{ flexDirection: "row", justifyContent: "flex-end", alignItems: "flex-start", width: '90%'  }}>
+          <View style={{ flexDirection: "row", justifyContent: "flex-end", alignItems: "flex-start", marginLeft: "75%" }}>
             <AvaliacaoPostagem postagem={postagem} />
           </View>
         </View>
 
         {/* Tag + Selo */}
-        <View style={styles.tagWrapper}>
-          <View style={[styles.tagTipoPost, { backgroundColor: "#2E7D32" }]}>
-            <Text style={styles.tagTipoText}>{postagem.tp_post}</Text>
-          </View>
-          {postagem.selo_confianca && (
-            <View style={styles.verificadoWrapper}>
-              <Image
-                source={{
-                  uri: "https://res.cloudinary.com/dyhzz5baz/image/upload/v1747699449/verified_30dp_314D1C_FILL0_wght400_GRAD0_opsz24_mvxkh2.png",
-                }}
-                style={styles.verificadoIcon}
-              />
-              <Text style={styles.verificadoTexto}>
-                {postagem.verificado_por?.nickname
-                  ? `Verificada por @${postagem.verificado_por.nickname}`
-                  : postagem.autor?.tp_user === "Chef"
-                    ? `Receita criada por Chef verificado`
-                    : ""}
-              </Text>
+          <View style={styles.tagWrapper}>
+            <View style={[styles.tagTipoPost, { backgroundColor: "#2E7D32" }]}>
+              <Text style={styles.tagTipoText}>{postagem.tp_post}</Text>
             </View>
-          )}
-        </View>
+            {tp_post === "receita" && postagem.selo_confianca && (
+              <View style={styles.verificadoWrapper}>
+                <Image
+                  source={{
+                    uri: "https://res.cloudinary.com/dyhzz5baz/image/upload/v1747699449/verified_30dp_314D1C_FILL0_wght400_GRAD0_opsz24_mvxkh2.png",
+                  }}
+                  style={styles.verificadoIcon}
+                />
+                <Text style={styles.verificadoTexto}>
+                  {postagem.verificado_por?.nickname
+                    ? `Verificada por @${postagem.verificado_por.nickname}`
+                    : postagem.autor?.tp_user === "Chef"
+                      ? `Receita criada por Chef verificado`
+                      : ""}
+                </Text>
+              </View>
+            )}
+          </View>
 
         {/* Título */}
         {postagem.titulo && (
@@ -144,7 +152,30 @@ const CardPostagem = ({ postagem }: Props) => {
             <MaterialIcons name="repeat" size={18} color="#555" />
             <Text style={styles.textoInteracao}>Repost</Text>
           </Pressable>
+
+          {/* Botão opções Editar e Excluir */}
+          {ehAutorDaPostagem && (
+            <OpcoesPostagem
+              postagemId={id}
+              onEditar={() => {
+              }}
+              onPostagemExcluida={() => {
+                if (onPostagemExcluida) {
+                  onPostagemExcluida();
+                  console.log("Lista atualizada após exclusão");
+                }
+                 setMensagemExclusao("Postagem excluída com sucesso!");
+              }}
+            />
+          )}
         </View>
+
+         {/* Mensagem de Postagem Exclida */}
+        {mensagemExclusao !== "" && (
+          <Text style={styles.mensagemExclusao}>
+            {mensagemExclusao}
+          </Text>
+        )}
       </View>
     </Pressable>
   );

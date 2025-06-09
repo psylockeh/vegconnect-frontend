@@ -19,6 +19,7 @@ export const styles = StyleSheet.create({
   exibirOpcoes: {
     flexDirection: "row",
     alignItems: "center",
+    gap: 6,
     paddingVertical: 5
   },
   botaoInteracao: {

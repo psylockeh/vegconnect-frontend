@@ -150,4 +150,15 @@ export const styles = StyleSheet.create({
     color: "#4B4B4B",
     fontStyle: "italic",
   },
+
+  mensagemExclusao: {
+    color: "#D32F2F",
+    fontSize: 16,
+    textAlign: "center",
+    marginTop: 15,
+    marginBottom: 5,
+    borderTopWidth: 1,
+    borderTopColor: "#eee",
+    paddingTop: 10,
+  },
 });

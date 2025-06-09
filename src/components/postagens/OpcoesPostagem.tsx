@@ -9,7 +9,7 @@ import { useAuth } from "@/context/AuthContext";
 interface OpcoesPostagemProps {
   postagemId: number;
   onEditar: () => void;
-  onPostagemExcluida?: () => void; 
+  onPostagemExcluida?: () => void;
 }
 
 const OpcoesPostagem = ({ postagemId, onEditar, onPostagemExcluida }: OpcoesPostagemProps) => {
@@ -17,32 +17,25 @@ const OpcoesPostagem = ({ postagemId, onEditar, onPostagemExcluida }: OpcoesPost
   const { userToken } = useAuth();
 
   const excluirPostagem = async () => {
-    Alert.alert(
-      "Excluir Postagem",
-      "Tem certeza que deseja excluir esta postagem?",
-      [
-        { text: "Cancelar", style: "cancel" },
-        {
-          text: "Excluir",
-          style: "destructive",
-          onPress: async () => {
-            try {
-              const config = {
-                headers: {
-                  Authorization: `Bearer ${userToken}`,
-                },
-              };
-              await axios.delete(`${API_URL}/usuario/deletarPostagem/${postagemId}`, config);
-              Alert.alert("Sucesso", "Postagem excluída com sucesso!");
-              if (onPostagemExcluida) onPostagemExcluida();
-            } catch (error) {
-              console.error("Erro ao excluir postagem:", error);
-              Alert.alert("Erro", "Não foi possível excluir a postagem.");
-            }
-          },
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
         },
-      ]
-    );
+      };
+
+      await axios.delete(`${API_URL}/usuario/deletarPostagem/${postagemId}`, config);
+
+      // Aguarda 10 segundos e chama o callback
+      if (onPostagemExcluida) {
+        setTimeout(() => {
+          onPostagemExcluida();
+        }, 1000); // 10 segundos
+      }
+    } catch (error) {
+      console.error("Erro ao excluir postagem:", error);
+      Alert.alert("Erro", "Não foi possível excluir a postagem.");
+    }
   };
 
   return (
@@ -75,8 +68,9 @@ const OpcoesPostagem = ({ postagemId, onEditar, onPostagemExcluida }: OpcoesPost
 
           {/* Excluir Postagem */}
           <Pressable
+            style={styles.exibirOpcoes}
             onPress={(e) => {
-              e.stopPropagation(); 
+              e.stopPropagation();
               excluirPostagem();
             }}
           >
