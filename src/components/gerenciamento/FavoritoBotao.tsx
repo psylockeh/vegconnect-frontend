@@ -6,7 +6,6 @@ import {
   Modal,
   TextInput,
   FlatList,
-  Alert,
 } from "react-native";
 import axios from "axios";
 import styles from "@/styles/FavoritoBotao";
@@ -74,7 +73,6 @@ const FavoritoBotao: React.FC<FavoritoBotaoProps> = ({
       setListas(res.data);
     } catch (error) {
       console.error("Erro ao buscar listas:", error);
-      Alert.alert("Erro", "Erro ao buscar listas.");
     }
   };
 
@@ -96,12 +94,12 @@ const FavoritoBotao: React.FC<FavoritoBotaoProps> = ({
         error.response?.data?.erro === "Postagem já favoritada." ||
         error.response?.data?.erro === "Já favoritada."
       ) {
-        Alert.alert("Aviso", "Esta postagem já está na lista.");
+        console.error("Aviso", "Esta postagem já está na lista.");
         setIsFavoritado(true);
         setListaIdFavoritada(listaId);
         setModalVisible(false);
       } else {
-        Alert.alert("Erro", "Erro ao favoritar.");
+         console.error("Erro", "Erro ao favoritar.");
       }
     }
   };
@@ -122,7 +120,6 @@ const FavoritoBotao: React.FC<FavoritoBotaoProps> = ({
       setListaIdFavoritada(null);
     } catch (error) {
       console.error("Erro ao desfavoritar:", error);
-      Alert.alert("Erro", "Erro ao desfavoritar.");
     }
   };
 
@@ -140,7 +137,6 @@ const FavoritoBotao: React.FC<FavoritoBotaoProps> = ({
       await favoritar(res.data.id);
     } catch (error: any) {
       console.error("Erro ao criar lista:", error.response || error);
-      Alert.alert("Erro", "Erro ao criar lista.");
     } finally {
       setNovaLista("");
       setLoading(false);

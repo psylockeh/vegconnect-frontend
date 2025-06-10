@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Button, TextInput, TouchableOpacity, Modal, TouchableWithoutFeedback, Keyboard } from "react-native";
+import { View, Text, Button, TextInput, TouchableOpacity, Modal, TouchableWithoutFeedback, Keyboard, FlatList } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import axios from "axios";
 import { API_URL } from "@/config/api";
@@ -11,6 +11,21 @@ type Props = {
   postagem: Postagem;
   avaliacaoAtual?: number;
 };
+interface Usuario {
+  id_user: number;
+  nome: string;
+  tp_user: string;
+  foto_perfil: string;
+  nickname: string;
+}
+
+interface Avaliacao {
+  id: number;
+  estrelas: number;
+  comentario_positivo: string;
+  comentario_negativo: string;
+  Usuario: Usuario;
+}
 
 const AvaliacaoPostagem: React.FC<Props> = ({ postagem, avaliacaoAtual = 0 }) => {
   const { userToken } = useAuth();
@@ -22,7 +37,7 @@ const AvaliacaoPostagem: React.FC<Props> = ({ postagem, avaliacaoAtual = 0 }) =>
   const [mediaAvaliacoes, setMediaAvaliacoes] = useState(0);
   const [totalAvaliacoes, setTotalAvaliacoes] = useState(0);
   const [jaAvaliou, setJaAvaliou] = useState(false);
-
+  const [avaliacoes, setAvaliacoes] = useState<Avaliacao[]>([]);
   // Função para buscar média
   const fetchMediaAvaliacoes = async () => {
     try {
@@ -70,14 +85,26 @@ const AvaliacaoPostagem: React.FC<Props> = ({ postagem, avaliacaoAtual = 0 }) =>
     }
   };
 
+  //Listar Avaliações
+  const buscarAvaliacoes = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/usuario/listaravaliacoes/${postagem.id}`, {
+        headers: { Authorization: `Bearer ${userToken}` },
+      });
+      setAvaliacoes(response.data.avaliacoes || []);
+    } catch (error) {
+      console.error("Erro ao buscar avaliações:", error);
+    }
+  };
+
   // Função para enviar avaliação e atualizar média depois
   const enviarAvaliacao = async () => {
     if (avaliacao < 1 || avaliacao > 5) {
-      alert("Por favor, selecione uma avaliação entre 1 e 5 estrelas.");
+      console.error("Por favor, selecione uma avaliação entre 1 e 5 estrelas.");
       return;
     }
     if (jaAvaliou) {
-      alert("Você já avaliou esta postagem. Sua avaliação será atualizada.");
+      console.error("Você já avaliou esta postagem. Sua avaliação será atualizada.");
     }
     try {
       await axios.post(
@@ -92,7 +119,7 @@ const AvaliacaoPostagem: React.FC<Props> = ({ postagem, avaliacaoAtual = 0 }) =>
           headers: { Authorization: `Bearer ${userToken}` },
         }
       );
-      alert("Avaliação enviada com sucesso!");
+      console.error("Avaliação enviada com sucesso!");
       setModalAberta(false);
       setMostrarFormulario(false);
       setAvaliacao(0);
@@ -102,7 +129,6 @@ const AvaliacaoPostagem: React.FC<Props> = ({ postagem, avaliacaoAtual = 0 }) =>
       fetchMediaAvaliacoes();
     } catch (error) {
       console.error("Erro ao enviar avaliação:", error);
-      alert("Erro ao enviar avaliação.");
     }
   };
 
@@ -135,6 +161,7 @@ const AvaliacaoPostagem: React.FC<Props> = ({ postagem, avaliacaoAtual = 0 }) =>
           onPress={() => {
             setModalAberta(true);
             setMostrarFormulario(false);
+            buscarAvaliacoes();
           }}
           activeOpacity={0.7}
         >
@@ -162,6 +189,43 @@ const AvaliacaoPostagem: React.FC<Props> = ({ postagem, avaliacaoAtual = 0 }) =>
               <View style={styles.modalContainer}>
                 {!mostrarFormulario ? (
                   <>
+                    {/* Lista de Avaliações */}
+                    <FlatList
+                      data={avaliacoes}
+                      keyExtractor={(item) => item.id.toString()}
+                      renderItem={({ item }) => (
+                        <View style={styles.avaliacaoItem}>
+                          <View style={{ flexDirection: "row", alignItems: "center" }}>
+                            <MaterialIcons name="person" size={20} color="#666" />
+                            <Text style={styles.avaliadorNome}>
+                              {item.Usuario?.nickname || item.Usuario?.nome}
+                            </Text>
+                          </View>
+                          <View style={{ flexDirection: "row", marginVertical: 4 }}>
+                            {[1, 2, 3, 4, 5].map((star) => (
+                              <MaterialIcons
+                                key={star}
+                                name={item.estrelas >= star ? "star" : "star-border"}
+                                size={18}
+                                color="#FFD700"
+                              />
+                            ))}
+                          </View>
+                          {item.comentario_positivo ? (
+                            <Text style={styles.comentario}>👍 {item.comentario_positivo}</Text>
+                          ) : null}
+                          {item.comentario_negativo ? (
+                            <Text style={styles.comentario}>👎 {item.comentario_negativo}</Text>
+                          ) : null}
+                        </View>
+                      )}
+                      ListEmptyComponent={
+                        <Text style={styles.textoVazio}>Nenhuma avaliação registrada.</Text>
+                      }
+                      showsVerticalScrollIndicator={false}
+                      contentContainerStyle={{ paddingBottom: 10 }}
+                    />
+
                     <TouchableOpacity
                       style={styles.botaoAvaliacao}
                       onPress={buscarStatusAvaliacao}>

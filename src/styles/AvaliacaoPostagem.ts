@@ -78,8 +78,22 @@ const styles = StyleSheet.create({
     color: "#2E4F36",
     fontWeight: "600",
     fontSize: 15,
-  }
-  
+  },
+
+  avaliadorNome: {
+    fontWeight: "bold",
+    marginLeft: 6,
+  },
+  comentario: {
+    fontSize: 14,
+    color: "#333",
+    marginTop: 4,
+  },
+  textoVazio: {
+  textAlign: "center",
+  color: "#888",
+  marginTop: 10,
+},
 });
 
 export default styles;

@@ -64,46 +64,48 @@ const CardPostagem = ({ postagem, onPostagemExcluida }: Props) => {
     <Pressable onPress={() => router.push(`/postagem/${id}`)}>
       <View style={[styles.card, { borderColor: definirCorBorda() }]}>
         {/* Cabeçalho */}
-        <View style={styles.headerUsuario}>
-          <Image
-            source={fotoPerfilFinal}
-            style={ModalCriarPostagemStyles.avatar}
-            onError={() => setErroImagem(true)}
-          />
-          <View>
-            <Text style={styles.nomeUsuario}>{usuario?.nome}</Text>
-            <Text style={styles.nickname}>@{usuario?.nickname}</Text>
-          </View>
+        <View style={[styles.headerUsuario, { justifyContent: "space-between" }]}>
+          <Pressable onPress={() => router.push(`/perfil/${usuario?.id_user}`)}>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Image
+                source={fotoPerfilFinal}
+                style={ModalCriarPostagemStyles.avatar}
+                onError={() => setErroImagem(true)}
+              />
+              <View>
+                <Text style={styles.nomeUsuario}>{usuario?.nome}</Text>
+                <Text style={styles.nickname}>@{usuario?.nickname}</Text>
+              </View>
+            </View>
+          </Pressable>
 
           {/* Botão avaliar postagem */}
-          <View style={{ flexDirection: "row", justifyContent: "flex-end", alignItems: "flex-start", marginLeft: "75%" }}>
-            <AvaliacaoPostagem postagem={postagem} />
-          </View>
+          <AvaliacaoPostagem postagem={postagem} />
         </View>
 
         {/* Tag + Selo */}
-          <View style={styles.tagWrapper}>
-            <View style={[styles.tagTipoPost, { backgroundColor: "#2E7D32" }]}>
-              <Text style={styles.tagTipoText}>{postagem.tp_post}</Text>
-            </View>
-            {tp_post === "receita" && postagem.selo_confianca && (
-              <View style={styles.verificadoWrapper}>
-                <Image
-                  source={{
-                    uri: "https://res.cloudinary.com/dyhzz5baz/image/upload/v1747699449/verified_30dp_314D1C_FILL0_wght400_GRAD0_opsz24_mvxkh2.png",
-                  }}
-                  style={styles.verificadoIcon}
-                />
-                <Text style={styles.verificadoTexto}>
-                  {postagem.verificado_por?.nickname
-                    ? `Verificada por @${postagem.verificado_por.nickname}`
-                    : postagem.autor?.tp_user === "Chef"
-                      ? `Receita criada por Chef verificado`
-                      : ""}
-                </Text>
-              </View>
-            )}
+        <View style={styles.tagWrapper}>
+          <View style={[styles.tagTipoPost, { backgroundColor: "#2E7D32" }]}>
+            <Text style={styles.tagTipoText}>{postagem.tp_post}</Text>
           </View>
+          {tp_post === "receita" && postagem.selo_confianca && (
+            <View style={styles.verificadoWrapper}>
+              <Image
+                source={{
+                  uri: "https://res.cloudinary.com/dyhzz5baz/image/upload/v1747699449/verified_30dp_314D1C_FILL0_wght400_GRAD0_opsz24_mvxkh2.png",
+                }}
+                style={styles.verificadoIcon}
+              />
+              <Text style={styles.verificadoTexto}>
+                {postagem.verificado_por?.nickname
+                  ? `Verificada por @${postagem.verificado_por.nickname}`
+                  : postagem.autor?.tp_user === "Chef"
+                    ? `Receita criada por Chef verificado`
+                    : ""}
+              </Text>
+            </View>
+          )}
+        </View>
 
         {/* Título */}
         {postagem.titulo && (
@@ -164,13 +166,13 @@ const CardPostagem = ({ postagem, onPostagemExcluida }: Props) => {
                   onPostagemExcluida();
                   console.log("Lista atualizada após exclusão");
                 }
-                 setMensagemExclusao("Postagem excluída com sucesso!");
+                setMensagemExclusao("Postagem excluída com sucesso!");
               }}
             />
           )}
         </View>
 
-         {/* Mensagem de Postagem Exclida */}
+        {/* Mensagem de Postagem Excluida */}
         {mensagemExclusao !== "" && (
           <Text style={styles.mensagemExclusao}>
             {mensagemExclusao}

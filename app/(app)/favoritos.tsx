@@ -5,7 +5,6 @@ import {
   FlatList,
   TextInput,
   TouchableOpacity,
-  Alert,
   Modal,
   ActivityIndicator,
 } from "react-native";
@@ -55,7 +54,7 @@ export default function AppFavorito() {
   const carregarListas = async () => {
     try {
       if (!userToken || !userId) {
-        Alert.alert("Erro", "Usuário não autenticado");
+        console.error("Erro", "Usuário não autenticado");
         return;
       }
 
@@ -63,7 +62,7 @@ export default function AppFavorito() {
       setListas(res.data);
     } catch (error: any) {
       const msg = error.response?.data?.message || error.message || "Erro ao buscar listas.";
-      Alert.alert("Erro", msg);
+     console.error("Erro", msg);
     }
   };
 
@@ -74,7 +73,7 @@ export default function AppFavorito() {
     try {
       setLoading(true);
       if (!userToken || !userId) {
-        Alert.alert("Erro", "Usuário não autenticado");
+        console.error("Erro", "Usuário não autenticado");
         return;
       }
 
@@ -82,10 +81,10 @@ export default function AppFavorito() {
 
       setNovaLista("");
       await carregarListas();
-      Alert.alert("Sucesso", "Lista criada com sucesso!");
+     console.error("Sucesso", "Lista criada com sucesso!");
     } catch (error: any) {
       const msg = error.response?.data?.message || error.message || "Erro ao criar lista.";
-      Alert.alert("Erro", msg);
+      console.error("Erro", msg);
     } finally {
       setLoading(false);
     }
@@ -97,7 +96,7 @@ export default function AppFavorito() {
       setLoadingPostagens(true);
 
       if (!userToken || !userId) {
-        Alert.alert("Erro", "Usuário não autenticado");
+        console.error("Erro", "Usuário não autenticado");
         return;
       }
 
@@ -108,7 +107,7 @@ export default function AppFavorito() {
       setModalVisible(true);
     } catch (error: any) {
       const msg = error.response?.data?.message || error.message || "Erro ao carregar postagens.";
-      Alert.alert("Erro", msg);
+      console.error("Erro", msg);
     } finally {
       setLoadingPostagens(false);
     }
@@ -126,11 +125,11 @@ export default function AppFavorito() {
         getAuthConfig()
 
       );
-      Alert.alert("Sucesso", "Nome da lista atualizado.");
+     console.error("Sucesso", "Nome da lista atualizado.");
       setOpcoesVisiveis(false);
       carregarListas();
     } catch (error: any) {
-      Alert.alert("Erro", "Erro ao atualizar nome da lista.");
+      console.error("Erro", "Erro ao atualizar nome da lista.");
     }
   };
 
@@ -139,11 +138,11 @@ export default function AppFavorito() {
     if (!listaOpcoes) return;
     try {
       await axios.delete(`${API_URL}/usuario/listas/${listaOpcoes.id}`, getAuthConfig());
-      Alert.alert("Sucesso", "Lista excluída.");
+      console.error("Sucesso", "Lista excluída.");
       setOpcoesVisiveis(false);
       carregarListas();
     } catch (error: any) {
-      Alert.alert("Erro", "Erro ao excluir lista.");
+      console.error("Erro", "Erro ao excluir lista.");
     }
   };
 

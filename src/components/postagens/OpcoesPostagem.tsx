@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, Pressable, Alert } from "react-native";
+import { View, Text, Pressable } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { styles } from "@/styles/OpcoesPostagem";
 import axios from "axios";
@@ -34,7 +34,6 @@ const OpcoesPostagem = ({ postagemId, onEditar, onPostagemExcluida }: OpcoesPost
       }
     } catch (error) {
       console.error("Erro ao excluir postagem:", error);
-      Alert.alert("Erro", "Não foi possível excluir a postagem.");
     }
   };
 

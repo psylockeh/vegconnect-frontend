@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, ScrollView, Image, ActivityIndicator } from "react-native";
+import { View, Text, ScrollView, Image, ActivityIndicator, Pressable } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -14,6 +14,7 @@ import ModalValidarReceita from "@/components/postagens/ModalValidarReceita";
 import { useAuth } from "@/context/AuthContext";
 import FavoritarBotao from "@/components/gerenciamento/FavoritoBotao";
 import AvaliacaoPostagem from "@/components/postagens/AvaliacaoPostagem";
+import { useRouter } from "expo-router";
 
 const { perfilUsuario } = useAuth();
 
@@ -23,6 +24,7 @@ export default function DetalhesPostagem() {
   const [carregando, setCarregando] = useState(true);
   const [modalVisivel, setModalVisivel] = useState(false);
   const { perfilUsuario } = useAuth();
+  const router = useRouter();
 
   const carregarPostagem = async () => {
     try {
@@ -89,27 +91,33 @@ export default function DetalhesPostagem() {
     <ScrollView contentContainerStyle={{ padding: 16 }}>
       <View style={[styles.card, { borderColor: "#ccc" }]}>
         {/* Header do usuário */}
-        <View style={styles.headerUsuario}>
-          <Image
-            source={{
-              uri: usuario?.foto_perfil?.startsWith("http")
-                ? usuario.foto_perfil
-                : "https://res.cloudinary.com/dyhzz5baz/image/upload/v1746917561/default-avatar_jvqpsg.png",
-            }}
-            style={ModalCriarPostagemStyles.avatar}
-            onError={() => console.log("❌ Erro ao carregar imagem de perfil")}
-          />
-
-          <View>
-            <Text style={styles.nomeUsuario}>{usuario?.nome}</Text>
-            <Text style={styles.nickname}>@{usuario?.nickname}</Text>
-          </View>
+        <View style={[styles.headerUsuario, { justifyContent: "space-between" }]}>
+          <Pressable onPress={() => router.push(`/perfil/${usuario?.id_user}`)}>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Image
+                source={{
+                  uri: usuario?.foto_perfil?.startsWith("http")
+                    ? usuario.foto_perfil
+                    : "https://res.cloudinary.com/dyhzz5baz/image/upload/v1746917561/default-avatar_jvqpsg.png",
+                }}
+                style={ModalCriarPostagemStyles.avatar}
+                onError={() => console.log("❌ Erro ao carregar imagem de perfil")}
+              />
+              <View>
+                <Text style={styles.nomeUsuario}>{usuario?.nome}</Text>
+                <Text style={styles.nickname}>@{usuario?.nickname}</Text>
+              </View>
+            </View>
+          </Pressable>
 
           {/* Botões alinhados à direita, um abaixo do outro */}
-          <View style={{ flexDirection: "row", alignItems: "flex-start", justifyContent: "flex-end", width: '90%' }}>
-            <AvaliacaoPostagem postagem={postagem} />
+          <View style={{ flexDirection: "column", alignItems: "flex-end", gap: 6 }}>
+            <View style={{ marginBottom: -15 }}>
+              <AvaliacaoPostagem postagem={postagem} />
+            </View>
             <FavoritarBotao postagemId={postagem.id} />
           </View>
+          {/* Botão opçõesPostagens */}
         </View>
 
         {/* Título e conteúdo */}
