@@ -4,11 +4,24 @@ const styles = StyleSheet.create({
   container: {
     padding: 8,
   },
+  formularioContainer: {
+    flex: 1,
+    backgroundColor: "#F5FAF6",
+    padding: 16,
+    borderRadius: 8,
+  },
   label: {
     fontSize: 16,
     fontWeight: "bold",
     marginTop: 15,
     marginBottom: 5,
+  },
+  labelTitulo: {
+    fontSize: 22,
+    fontWeight: "bold",
+    marginBottom: 12,
+    color: "#3C6E47",
+    textAlign: "center",
   },
   containerEstrela: {
     flexDirection: "row",
@@ -24,6 +37,35 @@ const styles = StyleSheet.create({
     textAlign: "left",
     fontWeight: "bold",
   },
+  headerUsuario: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  fotoPerfil: {
+    width: 50,
+    height: 50,
+    borderRadius: 30,
+    marginRight: 30,
+    backgroundColor: "#E6F1EB",
+  },
+  nomeUsuario: {
+    fontWeight: "bold",
+    fontSize: 16,
+    color: "#023D2E",
+    marginLeft: 10,
+  },
+  nickname: {
+    color: "#666",
+    fontSize: 14,
+    marginLeft: 10,
+  },
+  avatar: {
+    width: 42,
+    height: 42,
+    borderRadius: 21,
+    backgroundColor: "#ccc",
+  },
   input: {
     borderWidth: 1,
     borderColor: "#B7B7A4",
@@ -34,16 +76,18 @@ const styles = StyleSheet.create({
     marginTop: 10,
     color: "#023D2E",
   },
-  modalBackground: {
+  sobrePosicao: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.4)",
-    justifyContent: "center",
-    padding: 16,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   modalContainer: {
-    backgroundColor: "white",
-    borderRadius: 8,
+    width: '90%',
+    backgroundColor: 'white',
     padding: 20,
+    borderRadius: 12,
+    elevation: 4,
   },
   avaliacaoItem: {
     marginBottom: 12,
@@ -66,6 +110,7 @@ const styles = StyleSheet.create({
     height: 48,
     justifyContent: "center",
     width: "100%",
+    marginTop: 15,
   },
   botaoCancelar: {
     marginTop: 10,
@@ -87,13 +132,15 @@ const styles = StyleSheet.create({
   comentario: {
     fontSize: 14,
     color: "#333",
-    marginTop: 4,
+    marginTop: 10,
   },
   textoVazio: {
-  textAlign: "center",
-  color: "#888",
-  marginTop: 10,
-},
+    color: "#D32F2F",
+    fontSize: 16,
+    textAlign: "center",
+    marginTop: 10,
+    marginBottom: 8,
+  },
 });
 
 export default styles;

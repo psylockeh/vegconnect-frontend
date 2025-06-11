@@ -9,7 +9,19 @@ const styles = StyleSheet.create({
   mainContent: {
     flex: 1,
     padding: 16,
+    marginTop: -10,
     marginBottom: -10,
+  },
+  card: {
+    backgroundColor: "#FAFDFB",
+    padding: 16,
+    borderRadius: 16,
+    marginBottom: 20,
+    shadowColor: "#000",
+    shadowOpacity: 0.05,
+    shadowOffset: { width: 0, height: 3 },
+    shadowRadius: 5,
+    elevation: 3,
   },
   titulo: {
     fontSize: 22,
@@ -19,7 +31,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   itemLista: {
-    backgroundColor: "rgba(60, 110, 71, 0.3)",
+    backgroundColor: '#f9f9f9',
     padding: 14,
     borderRadius: 12,
     marginVertical: 6,
@@ -28,6 +40,9 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 3 },
     shadowRadius: 5,
     elevation: 3,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: '#ddd',
   },
   listaNome: {
     fontSize: 20,
@@ -68,9 +83,23 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   containerModal: {
+    width: '80%',
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 12,
+    elevation: 4,
+  },
+  sobrePosicao: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  formularioContainer: {
+    flex: 1,
+    backgroundColor: "#F5FAF6",
     padding: 16,
+    borderRadius: 8,
   },
   tituloModal: {
     fontSize: 20,
@@ -92,7 +121,7 @@ const styles = StyleSheet.create({
     color: "#33691e",
   },
   botaoFecharExcluir: {
-    marginTop: 10,
+    marginTop: 15,
     alignItems: "center",
     backgroundColor: "#E8EFE8",
     paddingVertical: 10,
@@ -114,7 +143,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalAlterarExcluir: {
-    width: "85%",
+    width: "55%",
     backgroundColor: "#fff",
     borderRadius: 12,
     padding: 20,

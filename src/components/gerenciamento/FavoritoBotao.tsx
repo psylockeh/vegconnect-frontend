@@ -168,7 +168,7 @@ const FavoritoBotao: React.FC<FavoritoBotaoProps> = ({
             <Text style={styles.titulo}>Adicionar à lista</Text>
 
             {/* Listas*/}
-            <View style={{ maxHeight: 200 }}>
+            <View style={[styles.formularioContainer, { maxHeight: 200 }]}>
               <FlatList
                 data={listas}
                 keyExtractor={(item) => item.id.toString()}

@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Button, TextInput, TouchableOpacity, Modal, TouchableWithoutFeedback, Keyboard, FlatList } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Modal, Image, ScrollView,
+  TouchableWithoutFeedback,
+  Keyboard, FlatList, ActivityIndicator
+} from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import axios from "axios";
 import { API_URL } from "@/config/api";
@@ -38,6 +46,9 @@ const AvaliacaoPostagem: React.FC<Props> = ({ postagem, avaliacaoAtual = 0 }) =>
   const [totalAvaliacoes, setTotalAvaliacoes] = useState(0);
   const [jaAvaliou, setJaAvaliou] = useState(false);
   const [avaliacoes, setAvaliacoes] = useState<Avaliacao[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [erroImagem, setErroImagem] = useState(false);
+
   // Função para buscar média
   const fetchMediaAvaliacoes = async () => {
     try {
@@ -88,12 +99,15 @@ const AvaliacaoPostagem: React.FC<Props> = ({ postagem, avaliacaoAtual = 0 }) =>
   //Listar Avaliações
   const buscarAvaliacoes = async () => {
     try {
+      setLoading(true);
       const response = await axios.get(`${API_URL}/usuario/listaravaliacoes/${postagem.id}`, {
         headers: { Authorization: `Bearer ${userToken}` },
       });
       setAvaliacoes(response.data.avaliacoes || []);
     } catch (error) {
       console.error("Erro ao buscar avaliações:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -131,6 +145,13 @@ const AvaliacaoPostagem: React.FC<Props> = ({ postagem, avaliacaoAtual = 0 }) =>
       console.error("Erro ao enviar avaliação:", error);
     }
   };
+
+  const fotoPerfilFinal = (fotoPerfil: string | null | undefined) =>
+    fotoPerfil?.startsWith("http") && !erroImagem
+      ? { uri: fotoPerfil }
+      : {
+        uri: "https://res.cloudinary.com/dyhzz5baz/image/upload/v1746917561/default-avatar_jvqpsg.png",
+      };
 
   // Renderiza estrelas coloridas de acordo com a média
   const renderStars = (media: number) => {
@@ -184,67 +205,85 @@ const AvaliacaoPostagem: React.FC<Props> = ({ postagem, avaliacaoAtual = 0 }) =>
       >
         {/* Listar avaliações e botão de avaliar */}
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-          <View style={styles.modalBackground}>
-            <TouchableWithoutFeedback onPress={() => { }}>
-              <View style={styles.modalContainer}>
-                {!mostrarFormulario ? (
-                  <>
-                    {/* Lista de Avaliações */}
-                    <FlatList
-                      data={avaliacoes}
-                      keyExtractor={(item) => item.id.toString()}
-                      renderItem={({ item }) => (
-                        <View style={styles.avaliacaoItem}>
-                          <View style={{ flexDirection: "row", alignItems: "center" }}>
-                            <MaterialIcons name="person" size={20} color="#666" />
-                            <Text style={styles.avaliadorNome}>
-                              {item.Usuario?.nickname || item.Usuario?.nome}
-                            </Text>
-                          </View>
-                          <View style={{ flexDirection: "row", marginVertical: 4 }}>
-                            {[1, 2, 3, 4, 5].map((star) => (
-                              <MaterialIcons
-                                key={star}
-                                name={item.estrelas >= star ? "star" : "star-border"}
-                                size={18}
-                                color="#FFD700"
-                              />
-                            ))}
-                          </View>
-                          {item.comentario_positivo ? (
-                            <Text style={styles.comentario}>👍 {item.comentario_positivo}</Text>
-                          ) : null}
-                          {item.comentario_negativo ? (
-                            <Text style={styles.comentario}>👎 {item.comentario_negativo}</Text>
-                          ) : null}
-                        </View>
-                      )}
-                      ListEmptyComponent={
-                        <Text style={styles.textoVazio}>Nenhuma avaliação registrada.</Text>
-                      }
-                      showsVerticalScrollIndicator={false}
-                      contentContainerStyle={{ paddingBottom: 10 }}
-                    />
+          <View style={styles.sobrePosicao}>
+            <View style={styles.modalContainer}>
+              {!mostrarFormulario ? (
+                <>
+                  {/* Lista de Avaliações */}
+                  {loading ? (
+                    <View style={{ padding: 10 }}>
+                      <ActivityIndicator size={20} color="#3C6E47" />
+                    </View>
+                  ) : (
+                    <View style={{ maxHeight: 400 }}>
+                      <Text style={styles.labelTitulo}>Avaliações</Text>
+                      <ScrollView style={styles.formularioContainer} showsVerticalScrollIndicator={false}>
+                        <FlatList
+                          data={avaliacoes}
+                          keyExtractor={(item) => item.id.toString()}
+                          renderItem={({ item }) => (
+                            <View style={styles.avaliacaoItem}>
+                              {/* Cabeçalho */}
+                              <View style={[styles.headerUsuario, { justifyContent: "space-between" }]}>
+                                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                                  <Image
+                                    source={fotoPerfilFinal(item.Usuario?.foto_perfil)}
+                                    style={styles.avatar}
+                                    onError={() => setErroImagem(true)}
+                                  />
+                                  <View>
+                                    <Text style={styles.nomeUsuario}>{item.Usuario?.nome}</Text>
+                                    <Text style={styles.nickname}>@{item.Usuario?.nickname}</Text>
+                                  </View>
+                                </View>
+                              </View>
 
-                    <TouchableOpacity
-                      style={styles.botaoAvaliacao}
-                      onPress={buscarStatusAvaliacao}>
-                      <Text style={styles.textoBotao}>Escreva uma avaliação</Text>
-                    </TouchableOpacity>
+                              <View style={{ flexDirection: "row", marginVertical: 4 }}>
+                                {[1, 2, 3, 4, 5].map((star) => (
+                                  <MaterialIcons
+                                    key={star}
+                                    name={item.estrelas >= star ? "star" : "star-border"}
+                                    size={18}
+                                    color="#FFD700"
+                                  />
+                                ))}
+                              </View>
+                              {item.comentario_positivo ? (
+                                <Text style={styles.comentario}>👍: {item.comentario_positivo}</Text>
+                              ) : null}
+                              {item.comentario_negativo ? (
+                                <Text style={styles.comentario}>👎: {item.comentario_negativo}</Text>
+                              ) : null}
+                            </View>
+                          )}
+                          ListEmptyComponent={
+                            <Text style={styles.textoVazio}>📌 Nenhuma avaliação registrada.</Text>
+                          }
+                        />
+                      </ScrollView>
+                    </View>
+                  )}
 
-                    <TouchableOpacity
-                      onPress={() => {
-                        setModalAberta(false);
-                        setMostrarFormulario(false);
-                      }}
-                      style={styles.botaoCancelar}
-                    >
-                      <Text style={styles.textoBotaoCancelar}>Fechar</Text>
-                    </TouchableOpacity>
-                  </>
-                ) : (
-                  <>
-                    <Text style={styles.label}>Sua Avaliação:</Text>
+                  <TouchableOpacity
+                    style={styles.botaoAvaliacao}
+                    onPress={buscarStatusAvaliacao}>
+                    <Text style={styles.textoBotao}>Escreva uma avaliação</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    onPress={() => {
+                      setModalAberta(false);
+                      setMostrarFormulario(false);
+                    }}
+                    style={styles.botaoCancelar}
+                  >
+                    <Text style={styles.textoBotaoCancelar}>Fechar</Text>
+                  </TouchableOpacity>
+                </>
+              ) : (
+                <>
+                  <Text style={styles.labelTitulo}>Sua Avaliação</Text>
+                  <View style={styles.formularioContainer}>
                     <View style={styles.containerEstrela}>
                       {[1, 2, 3, 4, 5].map((star) => (
                         <TouchableOpacity
@@ -281,28 +320,28 @@ const AvaliacaoPostagem: React.FC<Props> = ({ postagem, avaliacaoAtual = 0 }) =>
                       multiline
                       editable={!jaAvaliou}
                     />
+                  </View>
 
-                    <TouchableOpacity
-                      style={styles.botaoAvaliacao}
-                      onPress={enviarAvaliacao}
-                      disabled={avaliacao === 0 || jaAvaliou}
-                    >
-                      <Text style={styles.textoBotao}>Enviar Avaliação</Text>
-                    </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.botaoAvaliacao}
+                    onPress={enviarAvaliacao}
+                    disabled={avaliacao === 0 || jaAvaliou}
+                  >
+                    <Text style={styles.textoBotao}>Enviar Avaliação</Text>
+                  </TouchableOpacity>
 
-                    <TouchableOpacity
-                      style={styles.botaoCancelar}
-                      onPress={() => {
-                        setModalAberta(false);
-                        setMostrarFormulario(false);
-                      }}
-                    >
-                      <Text style={styles.textoBotaoCancelar}>Cancelar</Text>
-                    </TouchableOpacity>
-                  </>
-                )}
-              </View>
-            </TouchableWithoutFeedback>
+                  <TouchableOpacity
+                    style={styles.botaoCancelar}
+                    onPress={() => {
+                      setModalAberta(false);
+                      setMostrarFormulario(false);
+                    }}
+                  >
+                    <Text style={styles.textoBotaoCancelar}>Cancelar</Text>
+                  </TouchableOpacity>
+                </>
+              )}
+            </View>
           </View>
         </TouchableWithoutFeedback>
       </Modal>

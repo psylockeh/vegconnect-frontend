@@ -5,6 +5,12 @@ export default StyleSheet.create({
     padding: 8,
     alignSelf: 'flex-end',
   },
+  formularioContainer: {
+    flex: 1,
+    backgroundColor: "#F5FAF6",
+    padding: 16,
+    borderRadius: 8,
+  },
   sobrePosicao: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.4)',
@@ -26,7 +32,7 @@ export default StyleSheet.create({
     textAlign: "center",
   },
   itemLista: {
-    backgroundColor: "rgba(60, 110, 71, 0.3)",
+    backgroundColor: '#f9f9f9',
     padding: 14,
     borderRadius: 12,
     marginVertical: 6,
@@ -35,6 +41,9 @@ export default StyleSheet.create({
     shadowOffset: { width: 0, height: 3 },
     shadowRadius: 5,
     elevation: 3,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: '#ddd',
   },
   listaNome: {
     fontSize: 15,
@@ -77,8 +86,10 @@ export default StyleSheet.create({
     fontSize: 15,
   },
   textoVazio: {
-    textAlign: 'center',
+    color: "#D32F2F",
+    fontSize: 16,
+    textAlign: "center",
     marginTop: 10,
-    color: '#888',
+    marginBottom: 8,
   },
 });
