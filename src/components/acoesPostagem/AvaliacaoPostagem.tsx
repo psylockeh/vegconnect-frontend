@@ -19,6 +19,7 @@ type Props = {
   postagem: Postagem;
   avaliacaoAtual?: number;
 };
+
 interface Usuario {
   id_user: number;
   nome: string;
@@ -32,7 +33,7 @@ interface Avaliacao {
   estrelas: number;
   comentario_positivo: string;
   comentario_negativo: string;
-  Usuario: Usuario;
+  autor: Usuario;
 }
 
 const AvaliacaoPostagem: React.FC<Props> = ({ postagem, avaliacaoAtual = 0 }) => {
@@ -103,6 +104,7 @@ const AvaliacaoPostagem: React.FC<Props> = ({ postagem, avaliacaoAtual = 0 }) =>
       const response = await axios.get(`${API_URL}/usuario/listaravaliacoes/${postagem.id}`, {
         headers: { Authorization: `Bearer ${userToken}` },
       });
+       console.log("Avaliações recebidas:", response.data); // <- verifique se tem Usuario dentro
       setAvaliacoes(response.data.avaliacoes || []);
     } catch (error) {
       console.error("Erro ao buscar avaliações:", error);
@@ -228,13 +230,13 @@ const AvaliacaoPostagem: React.FC<Props> = ({ postagem, avaliacaoAtual = 0 }) =>
                                 <View style={[styles.headerUsuario, { justifyContent: "space-between" }]}>
                                   <View style={{ flexDirection: "row", alignItems: "center" }}>
                                     <Image
-                                      source={fotoPerfilFinal(item.Usuario?.foto_perfil)}
+                                      source={fotoPerfilFinal(item.autor?.foto_perfil)}
                                       style={styles.avatar}
                                       onError={() => setErroImagem(true)}
                                     />
                                     <View>
-                                      <Text style={styles.nomeUsuario}>{item.Usuario?.nome}</Text>
-                                      <Text style={styles.nickname}>@{item.Usuario?.nickname}</Text>
+                                      <Text style={styles.nomeUsuario}>{item.autor?.nome}</Text>
+                                      <Text style={styles.nickname}>@{item.autor?.nickname}</Text>
                                     </View>
                                   </View>
                                 </View>

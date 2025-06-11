@@ -16,17 +16,11 @@ import { API_URL } from "@/config/api";
 import CardPostagem from "@/components/CardPostagem";
 import { MaterialIcons } from "@expo/vector-icons";
 import Sidebar from "@/components/Sidebar";
+import type { Postagem } from "@/types";
 
 interface ListaFavorito {
   id: number;
   nome: string;
-}
-
-
-interface Postagem {
-  id: number;
-  titulo: string;
-  conteudo: string;
 }
 
 export default function AppFavorito() {

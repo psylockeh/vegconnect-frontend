@@ -12,11 +12,11 @@ import VisualizacaoPromocao from "@/components/postagens/VisualizacaoPromocao";
 import VisualizacaoEvento from "@/components/postagens/VisualizacaoEvento";
 import ModalValidarReceita from "@/components/postagens/ModalValidarReceita";
 import { useAuth } from "@/context/AuthContext";
-import FavoritarBotao from "@/components/gerenciamento/FavoritoBotao";
-import AvaliacaoPostagem from "@/components/postagens/AvaliacaoPostagem";
+import FavoritarBotao from "@/components/acoesPostagem/FavoritoBotao";
+import AvaliacaoPostagem from "@/components/acoesPostagem/AvaliacaoPostagem";
 import { useRouter } from "expo-router";
 import Sidebar from "@/components/Sidebar";
-import OpcoesPostagem from "@/components/postagens/OpcoesPostagem";
+import OpcoesPostagem from "@/components/acoesPostagem/OpcoesPostagem";
 
 const { perfilUsuario } = useAuth();
 

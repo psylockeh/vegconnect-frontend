@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { View, Text, TouchableOpacity, FlatList, ActivityIndicator } from "react-native";  // <-- importado ActivityIndicator
 import { MaterialIcons } from "@expo/vector-icons";
-import { styles } from "@/styles/GerenciamentoMural";
+import { styles } from "@/styles/PostagemPerfil";
 import { API_URL } from "@/config/api";
 import { useAuth } from "@/context/AuthContext";
 import { Postagem } from "@/types";
@@ -15,7 +15,7 @@ type Props = {
   tipoUsuario: TipoUsuario;
 };
 
-const GerenciamentoMural: React.FC<Props> = ({ idUser, tipoUsuario }) => {
+const PostagemPerfil: React.FC<Props> = ({ idUser, tipoUsuario }) => {
   const { userToken } = useAuth();
 
   const todasOpcoes = ["receita", "recado", "estabelecimento", "evento", "promoção"];
@@ -130,4 +130,4 @@ const GerenciamentoMural: React.FC<Props> = ({ idUser, tipoUsuario }) => {
   );
 };
 
-export default GerenciamentoMural;
+export default PostagemPerfil;

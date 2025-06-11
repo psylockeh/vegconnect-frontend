@@ -18,7 +18,7 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
   containerModal: {
-    width: '90%',
+    width: '80%',
     backgroundColor: 'white',
     padding: 20,
     borderRadius: 12,

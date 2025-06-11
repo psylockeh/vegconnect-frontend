@@ -4,13 +4,14 @@ import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import { styles } from "@/styles/CardPostagemStyles";
 import { useRouter } from "expo-router";
 import ModalCriarPostagemStyles from "@/styles/ModalCriarPostagemStyles";
-import AvaliacaoPostagem from "@/components/postagens/AvaliacaoPostagem";
-import OpcoesPostagem from "@/components/postagens/OpcoesPostagem";
+import AvaliacaoPostagem from "@/components/acoesPostagem/AvaliacaoPostagem";
+import OpcoesPostagem from "@/components/acoesPostagem/OpcoesPostagem";
 import { useAuth } from "@/context/AuthContext";
 
 
 interface Props {
   postagem: any;
+  avaliacaoAtual?: number;
   onPostagemExcluida?: () => void;
 }
 

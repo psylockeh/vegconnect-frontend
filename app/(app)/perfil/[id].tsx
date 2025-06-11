@@ -16,7 +16,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { styles } from "@/styles/PerfilStyles";
 import { AuthContext } from "@/context/AuthContext";
 import { useContext } from "react";
-import GerenciamentoMural from "@/components/gerenciamento/GerenciamentoMural";
+import GerenciamentoMural from "@/components/acoesPostagem/PostagemPerfil";
 
 export default function PerfilUsuario() {
   const router = useRouter();
