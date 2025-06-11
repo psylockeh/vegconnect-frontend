@@ -16,6 +16,7 @@ import FavoritarBotao from "@/components/gerenciamento/FavoritoBotao";
 import AvaliacaoPostagem from "@/components/postagens/AvaliacaoPostagem";
 import { useRouter } from "expo-router";
 import Sidebar from "@/components/Sidebar";
+import OpcoesPostagem from "@/components/postagens/OpcoesPostagem";
 
 const { perfilUsuario } = useAuth();
 
@@ -95,23 +96,24 @@ export default function DetalhesPostagem() {
         <View style={[styles.card, { borderColor: "#ccc" }]}>
           {/* Header do usuário */}
           <View style={[styles.headerUsuario, { justifyContent: "space-between" }]}>
-            <Pressable onPress={() => router.push(`/perfil/${usuario?.id_user}`)}>
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <Image
-                  source={{
-                    uri: usuario?.foto_perfil?.startsWith("http")
-                      ? usuario.foto_perfil
-                      : "https://res.cloudinary.com/dyhzz5baz/image/upload/v1746917561/default-avatar_jvqpsg.png",
-                  }}
-                  style={ModalCriarPostagemStyles.avatar}
-                  onError={() => console.log("❌ Erro ao carregar imagem de perfil")}
-                />
-                <View>
-                  <Text style={styles.nomeUsuario}>{usuario?.nome}</Text>
-                  <Text style={styles.nickname}>@{usuario?.nickname}</Text>
+              <Pressable onPress={() => router.push(`/perfil/${usuario?.id_user}`)}>
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <Image
+                    source={{
+                      uri: usuario?.foto_perfil?.startsWith("http")
+                        ? usuario.foto_perfil
+                        : "https://res.cloudinary.com/dyhzz5baz/image/upload/v1746917561/default-avatar_jvqpsg.png",
+                    }}
+                    style={ModalCriarPostagemStyles.avatar}
+                    onError={() => console.log("❌ Erro ao carregar imagem de perfil")}
+                  />
+                  <View>
+                    <Text style={styles.nomeUsuario}>{usuario?.nome}</Text>
+                    <Text style={styles.nickname}>@{usuario?.nickname}</Text>
+                  </View>
                 </View>
-              </View>
-            </Pressable>
+              </Pressable>
+
 
             {/* Botões alinhados à direita, um abaixo do outro */}
             <View style={{ flexDirection: "column", alignItems: "flex-end", gap: 6 }}>
@@ -119,18 +121,26 @@ export default function DetalhesPostagem() {
                 <AvaliacaoPostagem postagem={postagem} />
               </View>
               <FavoritarBotao postagemId={postagem.id} />
+
+              {/* Botão opçõesPostagens */}
+              {perfilUsuario?.id_user === usuario?.id_user && (
+                <OpcoesPostagem
+                  postagemId={postagem.id}
+                  onEditar={() => router.push(`/editar/${postagem.id}`)}
+                  onPostagemExcluida={() =>router.push(`/perfil/${usuario?.id_user}`)}
+                />
+              )}
             </View>
-            {/* Botão opçõesPostagens */}
           </View>
 
           {/* Título e conteúdo */}
-          {postagem.titulo && (
-            <Text style={styles.titulo}>{postagem.titulo}</Text>
-          )}
-          {postagem.tp_post !== "receita" && postagem.conteudo && (
-            <Text style={styles.conteudo}>{postagem.conteudo}</Text>
-          )}
-
+            {postagem.titulo && (
+              <Text style={styles.titulo}>{postagem.titulo}</Text>
+            )}
+            {postagem.tp_post !== "receita" && postagem.conteudo && (
+              <Text style={styles.conteudo}>{postagem.conteudo}</Text>
+            )}
+          
           {/* Visualização do tipo de postagem */}
           {renderVisualizacaoTipo()}
 
