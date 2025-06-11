@@ -206,142 +206,144 @@ const AvaliacaoPostagem: React.FC<Props> = ({ postagem, avaliacaoAtual = 0 }) =>
         {/* Listar avaliações e botão de avaliar */}
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
           <View style={styles.sobrePosicao}>
-            <View style={styles.modalContainer}>
-              {!mostrarFormulario ? (
-                <>
-                  {/* Lista de Avaliações */}
-                  {loading ? (
-                    <View style={{ padding: 10 }}>
-                      <ActivityIndicator size={20} color="#3C6E47" />
-                    </View>
-                  ) : (
-                    <View style={{ maxHeight: 400 }}>
-                      <Text style={styles.labelTitulo}>Avaliações</Text>
-                      <ScrollView style={styles.formularioContainer} showsVerticalScrollIndicator={false}>
-                        <FlatList
-                          data={avaliacoes}
-                          keyExtractor={(item) => item.id.toString()}
-                          renderItem={({ item }) => (
-                            <View style={styles.avaliacaoItem}>
-                              {/* Cabeçalho */}
-                              <View style={[styles.headerUsuario, { justifyContent: "space-between" }]}>
-                                <View style={{ flexDirection: "row", alignItems: "center" }}>
-                                  <Image
-                                    source={fotoPerfilFinal(item.Usuario?.foto_perfil)}
-                                    style={styles.avatar}
-                                    onError={() => setErroImagem(true)}
-                                  />
-                                  <View>
-                                    <Text style={styles.nomeUsuario}>{item.Usuario?.nome}</Text>
-                                    <Text style={styles.nickname}>@{item.Usuario?.nickname}</Text>
+            <TouchableWithoutFeedback onPress={() => { }}>
+              <View style={styles.modalContainer}>
+                {!mostrarFormulario ? (
+                  <>
+                    {/* Lista de Avaliações */}
+                    {loading ? (
+                      <View style={{ padding: 10 }}>
+                        <ActivityIndicator size={20} color="#3C6E47" />
+                      </View>
+                    ) : (
+                      <View style={{ maxHeight: 400 }}>
+                        <Text style={styles.labelTitulo}>Avaliações</Text>
+                        <ScrollView style={styles.formularioContainer} showsVerticalScrollIndicator={false}>
+                          <FlatList
+                            data={avaliacoes}
+                            keyExtractor={(item) => item.id.toString()}
+                            renderItem={({ item }) => (
+                              <View style={styles.avaliacaoItem}>
+                                {/* Cabeçalho */}
+                                <View style={[styles.headerUsuario, { justifyContent: "space-between" }]}>
+                                  <View style={{ flexDirection: "row", alignItems: "center" }}>
+                                    <Image
+                                      source={fotoPerfilFinal(item.Usuario?.foto_perfil)}
+                                      style={styles.avatar}
+                                      onError={() => setErroImagem(true)}
+                                    />
+                                    <View>
+                                      <Text style={styles.nomeUsuario}>{item.Usuario?.nome}</Text>
+                                      <Text style={styles.nickname}>@{item.Usuario?.nickname}</Text>
+                                    </View>
                                   </View>
                                 </View>
+
+                                <View style={{ flexDirection: "row", marginVertical: 4 }}>
+                                  {[1, 2, 3, 4, 5].map((star) => (
+                                    <MaterialIcons
+                                      key={star}
+                                      name={item.estrelas >= star ? "star" : "star-border"}
+                                      size={18}
+                                      color="#FFD700"
+                                    />
+                                  ))}
+                                </View>
+                                {item.comentario_positivo ? (
+                                  <Text style={styles.comentario}>👍: {item.comentario_positivo}</Text>
+                                ) : null}
+                                {item.comentario_negativo ? (
+                                  <Text style={styles.comentario}>👎: {item.comentario_negativo}</Text>
+                                ) : null}
                               </View>
-
-                              <View style={{ flexDirection: "row", marginVertical: 4 }}>
-                                {[1, 2, 3, 4, 5].map((star) => (
-                                  <MaterialIcons
-                                    key={star}
-                                    name={item.estrelas >= star ? "star" : "star-border"}
-                                    size={18}
-                                    color="#FFD700"
-                                  />
-                                ))}
-                              </View>
-                              {item.comentario_positivo ? (
-                                <Text style={styles.comentario}>👍: {item.comentario_positivo}</Text>
-                              ) : null}
-                              {item.comentario_negativo ? (
-                                <Text style={styles.comentario}>👎: {item.comentario_negativo}</Text>
-                              ) : null}
-                            </View>
-                          )}
-                          ListEmptyComponent={
-                            <Text style={styles.textoVazio}>📌 Nenhuma avaliação registrada.</Text>
-                          }
-                        />
-                      </ScrollView>
-                    </View>
-                  )}
-
-                  <TouchableOpacity
-                    style={styles.botaoAvaliacao}
-                    onPress={buscarStatusAvaliacao}>
-                    <Text style={styles.textoBotao}>Escreva uma avaliação</Text>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    onPress={() => {
-                      setModalAberta(false);
-                      setMostrarFormulario(false);
-                    }}
-                    style={styles.botaoCancelar}
-                  >
-                    <Text style={styles.textoBotaoCancelar}>Fechar</Text>
-                  </TouchableOpacity>
-                </>
-              ) : (
-                <>
-                  <Text style={styles.labelTitulo}>Sua Avaliação</Text>
-                  <View style={styles.formularioContainer}>
-                    <View style={styles.containerEstrela}>
-                      {[1, 2, 3, 4, 5].map((star) => (
-                        <TouchableOpacity
-                          key={star}
-                          onPress={() => setAvaliacao(star)}
-                          activeOpacity={0.7}
-                          disabled={jaAvaliou}
-                        >
-                          <MaterialIcons
-                            name={avaliacao >= star ? "star" : "star-border"}
-                            size={32}
-                            color="#FFD700"
+                            )}
+                            ListEmptyComponent={
+                              <Text style={styles.textoVazio}>📌 Nenhuma avaliação registrada.</Text>
+                            }
                           />
-                        </TouchableOpacity>
-                      ))}
+                        </ScrollView>
+                      </View>
+                    )}
+
+                    <TouchableOpacity
+                      style={styles.botaoAvaliacao}
+                      onPress={buscarStatusAvaliacao}>
+                      <Text style={styles.textoBotao}>Escreva uma avaliação</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      onPress={() => {
+                        setModalAberta(false);
+                        setMostrarFormulario(false);
+                      }}
+                      style={styles.botaoCancelar}
+                    >
+                      <Text style={styles.textoBotaoCancelar}>Fechar</Text>
+                    </TouchableOpacity>
+                  </>
+                ) : (
+                  <>
+                    <Text style={styles.labelTitulo}>Sua Avaliação</Text>
+                    <View style={styles.formularioContainer}>
+                      <View style={styles.containerEstrela}>
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <TouchableOpacity
+                            key={star}
+                            onPress={() => setAvaliacao(star)}
+                            activeOpacity={0.7}
+                            disabled={jaAvaliou}
+                          >
+                            <MaterialIcons
+                              name={avaliacao >= star ? "star" : "star-border"}
+                              size={32}
+                              color="#FFD700"
+                            />
+                          </TouchableOpacity>
+                        ))}
+                      </View>
+
+                      <Text style={styles.label}>Pontos Positivos:</Text>
+                      <TextInput
+                        style={styles.input}
+                        value={pontosPositivos}
+                        onChangeText={setPontosPositivos}
+                        placeholder="Descreva os pontos positivos"
+                        multiline
+                        editable={!jaAvaliou}
+                      />
+
+                      <Text style={styles.label}>Pontos Negativos:</Text>
+                      <TextInput
+                        style={styles.input}
+                        value={pontosNegativos}
+                        onChangeText={setPontosNegativos}
+                        placeholder="Descreva os pontos negativos"
+                        multiline
+                        editable={!jaAvaliou}
+                      />
                     </View>
 
-                    <Text style={styles.label}>Pontos Positivos:</Text>
-                    <TextInput
-                      style={styles.input}
-                      value={pontosPositivos}
-                      onChangeText={setPontosPositivos}
-                      placeholder="Descreva os pontos positivos"
-                      multiline
-                      editable={!jaAvaliou}
-                    />
+                    <TouchableOpacity
+                      style={styles.botaoAvaliacao}
+                      onPress={enviarAvaliacao}
+                      disabled={avaliacao === 0 || jaAvaliou}
+                    >
+                      <Text style={styles.textoBotao}>Enviar Avaliação</Text>
+                    </TouchableOpacity>
 
-                    <Text style={styles.label}>Pontos Negativos:</Text>
-                    <TextInput
-                      style={styles.input}
-                      value={pontosNegativos}
-                      onChangeText={setPontosNegativos}
-                      placeholder="Descreva os pontos negativos"
-                      multiline
-                      editable={!jaAvaliou}
-                    />
-                  </View>
-
-                  <TouchableOpacity
-                    style={styles.botaoAvaliacao}
-                    onPress={enviarAvaliacao}
-                    disabled={avaliacao === 0 || jaAvaliou}
-                  >
-                    <Text style={styles.textoBotao}>Enviar Avaliação</Text>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    style={styles.botaoCancelar}
-                    onPress={() => {
-                      setModalAberta(false);
-                      setMostrarFormulario(false);
-                    }}
-                  >
-                    <Text style={styles.textoBotaoCancelar}>Cancelar</Text>
-                  </TouchableOpacity>
-                </>
-              )}
-            </View>
+                    <TouchableOpacity
+                      style={styles.botaoCancelar}
+                      onPress={() => {
+                        setModalAberta(false);
+                        setMostrarFormulario(false);
+                      }}
+                    >
+                      <Text style={styles.textoBotaoCancelar}>Cancelar</Text>
+                    </TouchableOpacity>
+                  </>
+                )}
+              </View>
+            </TouchableWithoutFeedback>
           </View>
         </TouchableWithoutFeedback>
       </Modal>
