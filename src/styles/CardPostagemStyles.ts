@@ -1,6 +1,11 @@
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#F5FAF6",
+    flexDirection: "row",
+  },
   card: {
     borderWidth: 2,
     borderRadius: 12,

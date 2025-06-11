@@ -15,6 +15,7 @@ import { useAuth } from "@/context/AuthContext";
 import FavoritarBotao from "@/components/gerenciamento/FavoritoBotao";
 import AvaliacaoPostagem from "@/components/postagens/AvaliacaoPostagem";
 import { useRouter } from "expo-router";
+import Sidebar from "@/components/Sidebar";
 
 const { perfilUsuario } = useAuth();
 
@@ -88,64 +89,67 @@ export default function DetalhesPostagem() {
   };
 
   return (
-    <ScrollView contentContainerStyle={{ padding: 16 }}>
-      <View style={[styles.card, { borderColor: "#ccc" }]}>
-        {/* Header do usuário */}
-        <View style={[styles.headerUsuario, { justifyContent: "space-between" }]}>
-          <Pressable onPress={() => router.push(`/perfil/${usuario?.id_user}`)}>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Image
-                source={{
-                  uri: usuario?.foto_perfil?.startsWith("http")
-                    ? usuario.foto_perfil
-                    : "https://res.cloudinary.com/dyhzz5baz/image/upload/v1746917561/default-avatar_jvqpsg.png",
-                }}
-                style={ModalCriarPostagemStyles.avatar}
-                onError={() => console.log("❌ Erro ao carregar imagem de perfil")}
-              />
-              <View>
-                <Text style={styles.nomeUsuario}>{usuario?.nome}</Text>
-                <Text style={styles.nickname}>@{usuario?.nickname}</Text>
+    <View style={styles.container}>
+      <Sidebar onPostPress={() => { }} />
+      <ScrollView contentContainerStyle={{ padding: 16 }}>
+        <View style={[styles.card, { borderColor: "#ccc" }]}>
+          {/* Header do usuário */}
+          <View style={[styles.headerUsuario, { justifyContent: "space-between" }]}>
+            <Pressable onPress={() => router.push(`/perfil/${usuario?.id_user}`)}>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <Image
+                  source={{
+                    uri: usuario?.foto_perfil?.startsWith("http")
+                      ? usuario.foto_perfil
+                      : "https://res.cloudinary.com/dyhzz5baz/image/upload/v1746917561/default-avatar_jvqpsg.png",
+                  }}
+                  style={ModalCriarPostagemStyles.avatar}
+                  onError={() => console.log("❌ Erro ao carregar imagem de perfil")}
+                />
+                <View>
+                  <Text style={styles.nomeUsuario}>{usuario?.nome}</Text>
+                  <Text style={styles.nickname}>@{usuario?.nickname}</Text>
+                </View>
               </View>
-            </View>
-          </Pressable>
+            </Pressable>
 
-          {/* Botões alinhados à direita, um abaixo do outro */}
-          <View style={{ flexDirection: "column", alignItems: "flex-end", gap: 6 }}>
-            <View style={{ marginBottom: -15 }}>
-              <AvaliacaoPostagem postagem={postagem} />
+            {/* Botões alinhados à direita, um abaixo do outro */}
+            <View style={{ flexDirection: "column", alignItems: "flex-end", gap: 6 }}>
+              <View style={{ marginBottom: -15 }}>
+                <AvaliacaoPostagem postagem={postagem} />
+              </View>
+              <FavoritarBotao postagemId={postagem.id} />
             </View>
-            <FavoritarBotao postagemId={postagem.id} />
+            {/* Botão opçõesPostagens */}
           </View>
-          {/* Botão opçõesPostagens */}
+
+          {/* Título e conteúdo */}
+          {postagem.titulo && (
+            <Text style={styles.titulo}>{postagem.titulo}</Text>
+          )}
+          {postagem.tp_post !== "receita" && postagem.conteudo && (
+            <Text style={styles.conteudo}>{postagem.conteudo}</Text>
+          )}
+
+          {/* Visualização do tipo de postagem */}
+          {renderVisualizacaoTipo()}
+
+          {/* Data */}
+          <Text style={styles.data}>
+            Publicado em:{" "}
+            {new Date(postagem.createdAt).toLocaleDateString("pt-BR")}
+          </Text>
         </View>
 
-        {/* Título e conteúdo */}
-        {postagem.titulo && (
-          <Text style={styles.titulo}>{postagem.titulo}</Text>
+        {/* Modal para validação */}
+        {modalVisivel && (
+          <ModalValidarReceita
+            visible={modalVisivel}
+            postagemId={postagem.id}
+            onClose={() => setModalVisivel(false)}
+          />
         )}
-        {postagem.tp_post !== "receita" && postagem.conteudo && (
-          <Text style={styles.conteudo}>{postagem.conteudo}</Text>
-        )}
-
-        {/* Visualização do tipo de postagem */}
-        {renderVisualizacaoTipo()}
-
-        {/* Data */}
-        <Text style={styles.data}>
-          Publicado em:{" "}
-          {new Date(postagem.createdAt).toLocaleDateString("pt-BR")}
-        </Text>
-      </View>
-
-      {/* Modal para validação */}
-      {modalVisivel && (
-        <ModalValidarReceita
-          visible={modalVisivel}
-          postagemId={postagem.id}
-          onClose={() => setModalVisivel(false)}
-        />
-      )}
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 }
