@@ -275,7 +275,7 @@ export default function CadastroScreen() {
         flexGrow: 1,
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "#fff6da",
+        backgroundColor: "#F5FAF0",
       }}
     >
       <View style={styles.box}>

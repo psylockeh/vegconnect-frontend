@@ -6,14 +6,14 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
-    backgroundColor: "#fff6da",
+    backgroundColor: "#F5FAF0",
   },
   box: {
     width: "100%",
     maxWidth: 400,
     padding: 20,
     borderRadius: 8,
-    backgroundColor: "#fffcf4",
+    backgroundColor: "#FAFDFB",
     elevation: 3,
   },
   logoContainer: {

@@ -6,7 +6,7 @@ export const LoginStyles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
-    backgroundColor: "#fff6da",
+    backgroundColor: "#F5FAF0",
   },
 
   box: {
@@ -14,7 +14,7 @@ export const LoginStyles = StyleSheet.create({
     maxWidth: 400,
     padding: 20,
     borderRadius: 8,
-    backgroundColor: "#fffcf4",
+    backgroundColor: "#FAFDFB",
     elevation: 3,
   },
 
