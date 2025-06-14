@@ -28,7 +28,7 @@ interface Estabelecimento {
   descricao_comercio: string;
   distancia?: number;
   place_id?: string;
-  fotos?: string[];
+  fotos?: string | string[];
   rating?: number;
 }
 
@@ -146,12 +146,22 @@ export default function LocalizarEstabelecimento() {
   });
 
   const handleSelect = async (e: Estabelecimento) => {
+    let fotos: string[] = [];
+    let rating = e.rating || 0;
+
     if (e.id >= 100000 && e.place_id) {
       const detalhes = await buscarDetalhes(e.place_id);
-      setSelected({ ...e, fotos: detalhes.fotos, rating: detalhes.rating });
+      fotos = detalhes.fotos;
+      rating = detalhes.rating;
     } else {
-      setSelected({ ...e, fotos: e.fotos || [], rating: e.rating || 0 });
+      if (Array.isArray(e.fotos)) {
+        fotos = e.fotos;
+      } else if (e.fotos) {
+        fotos = [e.fotos];
+      }
     }
+
+    setSelected({ ...e, fotos, rating });
   };
 
   return (
@@ -239,7 +249,13 @@ export default function LocalizarEstabelecimento() {
           style={styles.card}
         >
           <View style={styles.carouselContainer}>
-            <CarrosselImagens fotos={selected.fotos?.flat() || []} />
+            <CarrosselImagens
+              fotos={Array.isArray(selected.fotos)
+                ? selected.fotos
+                : selected.fotos
+                ? [selected.fotos]
+                : []}
+            />
           </View>
           <Text style={styles.cardTitle}>{selected.nome_comercio}</Text>
           <Text style={styles.cardTipo}>{selected.tipo_comercio}</Text>
