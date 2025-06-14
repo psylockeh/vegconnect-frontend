@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import {
   View,
   Text,
@@ -13,7 +13,8 @@ import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { styles } from "@/styles/LocalizarEstabelecimentoStyles";
 import { AuthContext } from "@/context/AuthContext";
-import { motion } from "framer-motion";
+import { MotiView } from "moti";
+import { StyleProp, ViewStyle } from "react-native";
 
 interface Estabelecimento {
   id: number;
@@ -43,18 +44,20 @@ export default function LocalizarEstabelecimento() {
   const { width: screenWidth } = useWindowDimensions();
   const isColumnLayout = screenWidth < 768;
   const sidebarWidth = isColumnLayout ? screenWidth : 340;
-  const containerStyle = StyleSheet.flatten([
+  const containerStyle: StyleProp<ViewStyle> = StyleSheet.flatten([
     styles.container,
-    { flexDirection: isColumnLayout ? "column" : "row" },
+    { flexDirection: isColumnLayout ? ("column" as const) : ("row" as const) },
   ]);
-  const sidebarStyle = StyleSheet.flatten([
+  const sidebarStyle: StyleProp<ViewStyle> = StyleSheet.flatten([
     styles.sidebar,
     { width: isColumnLayout ? "100%" : sidebarWidth },
   ]);
-  const mapContainerStyle = StyleSheet.flatten([
+  const mapContainerStyle: StyleProp<ViewStyle> = StyleSheet.flatten([
     styles.mapContainer,
     isColumnLayout && { width: "100%", minHeight: 300 },
   ]);
+
+  const mapRef = useRef<any>(null);
 
   const buscarViaGoogle = async (latitude: number, longitude: number) => {
     try {
@@ -138,14 +141,13 @@ export default function LocalizarEstabelecimento() {
 
   return (
     <View style={containerStyle}>
-      <motion.div
-        initial={{ x: -100, opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
-        transition={{ duration: 0.6 }}
+      <MotiView
+        from={{ opacity: 0, transform: [{ translateX: -100 }] }}
+        animate={{ opacity: 1, transform: [{ translateX: 0 }] }}
+        transition={{ duration: 600 }}
         style={sidebarStyle}
       >
         <Text style={styles.logo}>🌱 VegConnect</Text>
-
         <TextInput
           placeholder="Buscar por nome ou tipo..."
           placeholderTextColor="#ccc"
@@ -156,40 +158,33 @@ export default function LocalizarEstabelecimento() {
             aplicarFiltro(tipoSelecionado, text);
           }}
         />
-
         <View style={styles.filtroContainer}>
           {tiposDisponiveis.map((tipo) => (
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+            <Pressable
               key={tipo}
-              style={{
-                ...styles.filtroBotao,
-                ...(tipoSelecionado === tipo ? styles.filtroAtivo : {}),
-              }}
-              onClick={() => aplicarFiltro(tipo)}
+              style={[
+                styles.filtroBotao,
+                tipoSelecionado === tipo && styles.filtroAtivo,
+              ]}
+              onPress={() => aplicarFiltro(tipo)}
             >
               <Text style={styles.filtroTexto}>{tipo}</Text>
-            </motion.button>
+            </Pressable>
           ))}
         </View>
-
         <ScrollView style={styles.resultadosLista}>
           {filtrados.map((e) => (
-            <motion.div
+            <Pressable
               key={e.id}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.4 }}
+              style={styles.listItem}
+              onPress={() => setSelected(e)}
             >
-              <Pressable style={styles.listItem} onPress={() => setSelected(e)}>
-                <Text style={styles.itemTitle}>{e.nome_comercio}</Text>
-                <Text style={styles.itemTipo}>{e.tipo_comercio}</Text>
-              </Pressable>
-            </motion.div>
+              <Text style={styles.itemTitle}>{e.nome_comercio}</Text>
+              <Text style={styles.itemTipo}>{e.tipo_comercio}</Text>
+            </Pressable>
           ))}
         </ScrollView>
-      </motion.div>
+      </MotiView>
 
       <View style={mapContainerStyle}>
         {userLocation && (
@@ -222,11 +217,10 @@ export default function LocalizarEstabelecimento() {
       </View>
 
       {selected && (
-        <motion.div
-          className="card"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
+        <MotiView
+          from={{ opacity: 0, translateY: 20 }}
+          animate={{ opacity: 1, translateY: 0 }}
+          transition={{ duration: 400 }}
           style={styles.card}
         >
           <Text style={styles.cardTitle}>{selected.nome_comercio}</Text>
@@ -235,7 +229,7 @@ export default function LocalizarEstabelecimento() {
           <Pressable>
             <Text style={styles.btn}>Ver mais detalhes</Text>
           </Pressable>
-        </motion.div>
+        </MotiView>
       )}
     </View>
   );
