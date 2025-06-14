@@ -13,7 +13,7 @@ import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { styles } from "@/styles/LocalizarEstabelecimentoStyles";
 import CarrosselImagens from "@/components/CarrosselImagens";
-import { buscarDetalhes, DetalhesGoogle } from "@/services/googlePlaces";
+import { buscarDetalhes } from "@/services/googlePlaces";
 import { MaterialIcons } from "@expo/vector-icons";
 import { AuthContext } from "@/context/AuthContext";
 import { MotiView } from "moti";
@@ -28,7 +28,7 @@ interface Estabelecimento {
   descricao_comercio: string;
   distancia?: number;
   place_id?: string;
-  fotos?: string[];
+  fotos?: string | string[];
   rating?: number;
 }
 
@@ -40,10 +40,6 @@ export default function LocalizarEstabelecimento() {
   );
   const [filtrados, setFiltrados] = useState<Estabelecimento[]>([]);
   const [selected, setSelected] = useState<Estabelecimento | null>(null);
-  const [selectedDetalhes, setSelectedDetalhes] = useState<DetalhesGoogle>({
-    fotos: [],
-    rating: 0,
-  });
   const [userLocation, setUserLocation] = useState<{
     latitude: number;
     longitude: number;
@@ -150,16 +146,22 @@ export default function LocalizarEstabelecimento() {
   });
 
   const handleSelect = async (e: Estabelecimento) => {
-    setSelected(e);
+    let fotos: string[] = [];
+    let rating = e.rating || 0;
+
     if (e.id >= 100000 && e.place_id) {
       const detalhes = await buscarDetalhes(e.place_id);
-      setSelectedDetalhes(detalhes);
+      fotos = detalhes.fotos;
+      rating = detalhes.rating;
     } else {
-      setSelectedDetalhes({
-        fotos: e.fotos || [],
-        rating: e.rating || 0,
-      });
+      if (Array.isArray(e.fotos)) {
+        fotos = e.fotos;
+      } else if (e.fotos) {
+        fotos = [e.fotos];
+      }
     }
+
+    setSelected({ ...e, fotos, rating });
   };
 
   return (
@@ -247,7 +249,13 @@ export default function LocalizarEstabelecimento() {
           style={styles.card}
         >
           <View style={styles.carouselContainer}>
-            <CarrosselImagens fotos={selected.fotos?.flat() || []} />
+            <CarrosselImagens
+              fotos={Array.isArray(selected.fotos)
+                ? selected.fotos
+                : selected.fotos
+                ? [selected.fotos]
+                : []}
+            />
           </View>
           <Text style={styles.cardTitle}>{selected.nome_comercio}</Text>
           <Text style={styles.cardTipo}>{selected.tipo_comercio}</Text>
