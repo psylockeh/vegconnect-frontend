@@ -13,7 +13,7 @@ import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { styles } from "@/styles/LocalizarEstabelecimentoStyles";
 import CarrosselImagens from "@/components/CarrosselImagens";
-import { buscarDetalhes, DetalhesGoogle } from "@/services/googlePlaces";
+import { buscarDetalhes } from "@/services/googlePlaces";
 import { MaterialIcons } from "@expo/vector-icons";
 import { AuthContext } from "@/context/AuthContext";
 import { MotiView } from "moti";
@@ -40,10 +40,6 @@ export default function LocalizarEstabelecimento() {
   );
   const [filtrados, setFiltrados] = useState<Estabelecimento[]>([]);
   const [selected, setSelected] = useState<Estabelecimento | null>(null);
-  const [selectedDetalhes, setSelectedDetalhes] = useState<DetalhesGoogle>({
-    fotos: [],
-    rating: 0,
-  });
   const [userLocation, setUserLocation] = useState<{
     latitude: number;
     longitude: number;
@@ -150,15 +146,11 @@ export default function LocalizarEstabelecimento() {
   });
 
   const handleSelect = async (e: Estabelecimento) => {
-    setSelected(e);
     if (e.id >= 100000 && e.place_id) {
       const detalhes = await buscarDetalhes(e.place_id);
-      setSelectedDetalhes(detalhes);
+      setSelected({ ...e, fotos: detalhes.fotos, rating: detalhes.rating });
     } else {
-      setSelectedDetalhes({
-        fotos: e.fotos || [],
-        rating: e.rating || 0,
-      });
+      setSelected({ ...e, fotos: e.fotos || [], rating: e.rating || 0 });
     }
   };
 
