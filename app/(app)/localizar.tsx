@@ -202,11 +202,9 @@ export default function LocalizarEstabelecimento() {
               style={styles.listItem}
               onPress={() => setSelected(e)}
             >
-              <Pressable style={styles.listItem} onPress={() => setSelected(e)}>
-                <Text style={styles.itemTitle}>{e.nome_comercio}</Text>
-                <Text style={styles.itemTipo}>{e.tipo_comercio}</Text>
-              </Pressable>
-            </motion.div>
+              <Text style={styles.itemTitle}>{e.nome_comercio}</Text>
+              <Text style={styles.itemTipo}>{e.tipo_comercio}</Text>
+            </Pressable>
           ))}
         </ScrollView>
       </MotiView>
@@ -249,7 +247,7 @@ export default function LocalizarEstabelecimento() {
           style={styles.card}
         >
           <View style={styles.carouselContainer}>
-            <CarrosselImagens fotos={selectedDetalhes.fotos} />
+            <CarrosselImagens fotos={selected.fotos?.flat() || []} />
           </View>
           <Text style={styles.cardTitle}>{selected.nome_comercio}</Text>
           <Text style={styles.cardTipo}>{selected.tipo_comercio}</Text>
@@ -257,7 +255,9 @@ export default function LocalizarEstabelecimento() {
             {Array.from({ length: 5 }).map((_, i) => (
               <MaterialIcons
                 key={i}
-                name={i < Math.round(selectedDetalhes.rating) ? "star" : "star-border"}
+                name={
+                  i < Math.round(selected.rating || 0) ? "star" : "star-border"
+                }
                 size={20}
                 color="#FFD700"
               />
