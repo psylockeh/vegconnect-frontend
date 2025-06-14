@@ -12,6 +12,9 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { styles } from "@/styles/LocalizarEstabelecimentoStyles";
+import CarrosselImagens from "@/components/CarrosselImagens";
+import { buscarDetalhes, DetalhesGoogle } from "@/services/googlePlaces";
+import { MaterialIcons } from "@expo/vector-icons";
 import { AuthContext } from "@/context/AuthContext";
 import { MotiView } from "moti";
 import { StyleProp, ViewStyle } from "react-native";
@@ -24,6 +27,9 @@ interface Estabelecimento {
   tipo_comercio: string;
   descricao_comercio: string;
   distancia?: number;
+  place_id?: string;
+  fotos?: string[];
+  rating?: number;
 }
 
 const tiposDisponiveis = ["Todos", "Vegano", "Vegetariano", "Feira"];
@@ -34,6 +40,10 @@ export default function LocalizarEstabelecimento() {
   );
   const [filtrados, setFiltrados] = useState<Estabelecimento[]>([]);
   const [selected, setSelected] = useState<Estabelecimento | null>(null);
+  const [selectedDetalhes, setSelectedDetalhes] = useState<DetalhesGoogle>({
+    fotos: [],
+    rating: 0,
+  });
   const [userLocation, setUserLocation] = useState<{
     latitude: number;
     longitude: number;
@@ -139,6 +149,19 @@ export default function LocalizarEstabelecimento() {
     popupAnchor: [0, -36],
   });
 
+  const handleSelect = async (e: Estabelecimento) => {
+    setSelected(e);
+    if (e.id >= 100000 && e.place_id) {
+      const detalhes = await buscarDetalhes(e.place_id);
+      setSelectedDetalhes(detalhes);
+    } else {
+      setSelectedDetalhes({
+        fotos: e.fotos || [],
+        rating: e.rating || 0,
+      });
+    }
+  };
+
   return (
     <View style={containerStyle}>
       <MotiView
@@ -179,9 +202,11 @@ export default function LocalizarEstabelecimento() {
               style={styles.listItem}
               onPress={() => setSelected(e)}
             >
-              <Text style={styles.itemTitle}>{e.nome_comercio}</Text>
-              <Text style={styles.itemTipo}>{e.tipo_comercio}</Text>
-            </Pressable>
+              <Pressable style={styles.listItem} onPress={() => setSelected(e)}>
+                <Text style={styles.itemTitle}>{e.nome_comercio}</Text>
+                <Text style={styles.itemTipo}>{e.tipo_comercio}</Text>
+              </Pressable>
+            </motion.div>
           ))}
         </ScrollView>
       </MotiView>
@@ -203,7 +228,7 @@ export default function LocalizarEstabelecimento() {
                 key={e.id}
                 position={[e.latitude, e.longitude]}
                 icon={e.id >= 100000 ? googleIcon : markerIcon}
-                eventHandlers={{ click: () => setSelected(e) }}
+                eventHandlers={{ click: () => handleSelect(e) }}
               >
                 <Popup>
                   <strong>{e.nome_comercio}</strong>
@@ -223,8 +248,21 @@ export default function LocalizarEstabelecimento() {
           transition={{ duration: 400 }}
           style={styles.card}
         >
+          <View style={styles.carouselContainer}>
+            <CarrosselImagens fotos={selectedDetalhes.fotos} />
+          </View>
           <Text style={styles.cardTitle}>{selected.nome_comercio}</Text>
           <Text style={styles.cardTipo}>{selected.tipo_comercio}</Text>
+          <View style={styles.starRow}>
+            {Array.from({ length: 5 }).map((_, i) => (
+              <MaterialIcons
+                key={i}
+                name={i < Math.round(selectedDetalhes.rating) ? "star" : "star-border"}
+                size={20}
+                color="#FFD700"
+              />
+            ))}
+          </View>
           <Text style={styles.cardDesc}>{selected.descricao_comercio}</Text>
           <Pressable>
             <Text style={styles.btn}>Ver mais detalhes</Text>
