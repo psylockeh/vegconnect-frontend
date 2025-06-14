@@ -132,6 +132,15 @@ export const createLocalizarEstabelecimentoStyles = (
     fontWeight: "600",
     fontSize: 14,
   },
+  carouselContainer: {
+    height: 200,
+    marginBottom: 10,
+  },
+  starRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: 6,
+  },
 });
 
 export const styles = createLocalizarEstabelecimentoStyles();
