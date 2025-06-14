@@ -16,7 +16,11 @@ const CarrosselImagens = ({ fotos }: Props) => {
       style={{ width: largura }}
     >
       {fotos.map((url, index) => (
-        <Image key={index} source={{ uri: url }} style={[styles.imagem, { width: largura }]} />
+        <Image
+          key={index}
+          source={{ uri: url }}
+          style={[styles.imagem, { width: largura }]}
+        />
       ))}
     </ScrollView>
   );

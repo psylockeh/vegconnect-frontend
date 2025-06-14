@@ -7,7 +7,9 @@ export interface DetalhesGoogle {
 
 export async function buscarDetalhes(placeId: string): Promise<DetalhesGoogle> {
   try {
-    const response = await fetch(`${API_URL}/externo/google/details?id=${placeId}`);
+    const response = await fetch(
+      `${API_URL}/externo/google/details?id=${placeId}`,
+    );
     if (!response.ok) throw new Error("Erro na API de detalhes do Google");
     const data = await response.json();
     return {

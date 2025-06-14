@@ -35,7 +35,7 @@ const tiposDisponiveis = ["Todos", "Vegano", "Vegetariano", "Feira"];
 
 export default function LocalizarEstabelecimento() {
   const [estabelecimentos, setEstabelecimentos] = useState<Estabelecimento[]>(
-    []
+    [],
   );
   const [filtrados, setFiltrados] = useState<Estabelecimento[]>([]);
   const [selected, setSelected] = useState<Estabelecimento | null>(null);
@@ -69,7 +69,7 @@ export default function LocalizarEstabelecimento() {
   const buscarViaGoogle = async (latitude: number, longitude: number) => {
     try {
       const response = await fetch(
-        `https://vegconnect-backend.onrender.com/externo/google/places?lat=${latitude}&lng=${longitude}`
+        `https://vegconnect-backend.onrender.com/externo/google/places?lat=${latitude}&lng=${longitude}`,
       );
       if (!response.ok) throw new Error("Erro na API externa");
       const data = await response.json();
@@ -96,7 +96,7 @@ export default function LocalizarEstabelecimento() {
               headers: {
                 Authorization: `Bearer ${userToken}`,
               },
-            }
+            },
           );
 
           if (!resposta.ok) throw new Error("Erro na resposta do servidor.");
@@ -122,12 +122,12 @@ export default function LocalizarEstabelecimento() {
       tipo === "Todos"
         ? estabelecimentos
         : estabelecimentos.filter(
-            (e) => e.tipo_comercio.toLowerCase() === tipo.toLowerCase()
+            (e) => e.tipo_comercio.toLowerCase() === tipo.toLowerCase(),
           );
     const resultado = base.filter(
       (e) =>
         e.nome_comercio.toLowerCase().includes(termoNormalizado) ||
-        e.tipo_comercio.toLowerCase().includes(termoNormalizado)
+        e.tipo_comercio.toLowerCase().includes(termoNormalizado),
     );
     setFiltrados(resultado);
   };
@@ -205,7 +205,10 @@ export default function LocalizarEstabelecimento() {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.4 }}
             >
-              <Pressable style={styles.listItem} onPress={() => handleSelect(e)}>
+              <Pressable
+                style={styles.listItem}
+                onPress={() => handleSelect(e)}
+              >
                 <Text style={styles.itemTitle}>{e.nome_comercio}</Text>
                 <Text style={styles.itemTipo}>{e.tipo_comercio}</Text>
               </Pressable>
@@ -261,7 +264,11 @@ export default function LocalizarEstabelecimento() {
             {Array.from({ length: 5 }).map((_, i) => (
               <MaterialIcons
                 key={i}
-                name={i < Math.round(selectedDetalhes.rating) ? "star" : "star-border"}
+                name={
+                  i < Math.round(selectedDetalhes.rating)
+                    ? "star"
+                    : "star-border"
+                }
                 size={20}
                 color="#FFD700"
               />
