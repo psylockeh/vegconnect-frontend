@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, Image } from "react-native";
 import { styles } from "@/styles/CardReceitaStyles";
 import { Pressable, ScrollView } from "react-native-gesture-handler";
+import CarrosselImagens from "@/components/CarrosselImagens";
 
 interface Props {
   postagem: any;
@@ -43,26 +44,12 @@ export default function VisualizacaoReceita({
     <View>
       {/* Carrossel de mídias */}
       {postagem.midia_urls?.length > 0 && (
-        <ScrollView
-          horizontal
-          pagingEnabled
-          showsHorizontalScrollIndicator={false}
-          style={styles.carrosselImagem}
-        >
-          {postagem.midia_urls.map((url: string, index: number) => (
-            <Image
-              key={index}
-              source={{ uri: url }}
-              style={{
-                width: 320,
-                height: 200,
-                borderRadius: 8,
-                marginRight: 10,
-              }}
-              resizeMode="cover"
-            />
-          ))}
-        </ScrollView>
+        <CarrosselImagens
+          fotos={postagem.midia_urls}
+          altura={200}
+          bordaRadius={8}
+          styleContainer={{ marginBottom: 12 }}
+        />
       )}
 
       {/* Tag + Selo */}

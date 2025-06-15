@@ -30,9 +30,28 @@ interface Estabelecimento {
   place_id?: string;
   fotos?: string[];
   rating?: number;
+  preco?: number;
+  horario?: string[];
 }
 
 const tiposDisponiveis = ["Todos", "Vegano", "Vegetariano", "Feira"];
+
+const formatarFaixaPreco = (preco?: number) => {
+  switch (preco) {
+    case 0:
+      return "Gratuito";
+    case 1:
+      return "$ (barato)";
+    case 2:
+      return "$$ (moderado)";
+    case 3:
+      return "$$$ (caro)";
+    case 4:
+      return "$$$$ (muito caro)";
+    default:
+      return "Não informado";
+  }
+};
 
 export default function LocalizarEstabelecimento() {
   const [estabelecimentos, setEstabelecimentos] = useState<Estabelecimento[]>(
@@ -158,12 +177,15 @@ export default function LocalizarEstabelecimento() {
       setSelectedDetalhes({
         fotos: e.fotos || [],
         rating: e.rating || 0,
+        preco: e.preco || undefined,
+        horario: e.horario || undefined,
       });
     }
   };
 
   return (
     <View style={containerStyle}>
+      {/* SIDEBAR */}
       <MotiView
         from={{ opacity: 0, transform: [{ translateX: -100 }] }}
         animate={{ opacity: 1, transform: [{ translateX: 0 }] }}
@@ -204,11 +226,18 @@ export default function LocalizarEstabelecimento() {
             >
               <Text style={styles.itemTitle}>{e.nome_comercio}</Text>
               <Text style={styles.itemTipo}>{e.tipo_comercio}</Text>
+              <Text style={{ fontSize: 13, color: "#555", marginTop: 6 }}>
+                🕒 {selectedDetalhes.horario?.[0] || "Horário não informado"}
+              </Text>
+              <Text style={{ fontSize: 13, color: "#555" }}>
+                💸 Faixa de preço: {formatarFaixaPreco(selectedDetalhes.preco)}
+              </Text>
             </Pressable>
           ))}
         </ScrollView>
       </MotiView>
 
+      {/* MAPA */}
       <View style={mapContainerStyle}>
         {userLocation && (
           <MapContainer
@@ -239,6 +268,7 @@ export default function LocalizarEstabelecimento() {
         )}
       </View>
 
+      {/* DETALHES DO ESTABELECIMENTO */}
       {selected && (
         <MotiView
           from={{ opacity: 0, translateY: 20 }}
@@ -246,8 +276,27 @@ export default function LocalizarEstabelecimento() {
           transition={{ duration: 400 }}
           style={styles.card}
         >
+          <View style={{ alignItems: "flex-end", padding: 5 }}>
+            <Pressable
+              onPress={() => setSelected(null)}
+              style={{
+                backgroundColor: "#eee",
+                borderRadius: 16,
+                padding: 6,
+                marginRight: 4,
+                elevation: 2,
+              }}
+            >
+              <MaterialIcons name="close" size={20} color="#444" />
+            </Pressable>
+          </View>
+
           <View style={styles.carouselContainer}>
-            <CarrosselImagens fotos={selected.fotos?.flat() || []} />
+            <CarrosselImagens
+              fotos={selectedDetalhes.fotos || []}
+              altura={180}
+              bordaRadius={14}
+            />
           </View>
           <Text style={styles.cardTitle}>{selected.nome_comercio}</Text>
           <Text style={styles.cardTipo}>{selected.tipo_comercio}</Text>

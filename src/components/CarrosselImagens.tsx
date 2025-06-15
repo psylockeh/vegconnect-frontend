@@ -1,32 +1,64 @@
 import React from "react";
-import { ScrollView, Image, Dimensions, StyleSheet } from "react-native";
+import {
+  ScrollView,
+  Image,
+  StyleSheet,
+  View,
+  ViewStyle,
+  Dimensions,
+} from "react-native";
 
 interface Props {
   fotos: string[];
+  altura?: number;
+  bordaRadius?: number;
+  styleContainer?: ViewStyle;
 }
 
-const CarrosselImagens = ({ fotos }: Props) => {
+const CarrosselImagens = ({
+  fotos,
+  altura = 180,
+  bordaRadius = 12,
+  styleContainer,
+}: Props) => {
   if (!fotos || fotos.length === 0) return null;
-  const largura = Dimensions.get("window").width - 40;
+
+  const screenWidth = Dimensions.get("window").width;
+  const largura = screenWidth - 80; // Reduz um pouco para encaixar melhor
+
   return (
-    <ScrollView
-      horizontal
-      pagingEnabled
-      showsHorizontalScrollIndicator={false}
-      style={{ width: largura }}
+    <View
+      style={[
+        {
+          alignSelf: "center",
+          width: largura,
+          height: altura,
+          borderRadius: bordaRadius,
+          overflow: "hidden",
+          marginBottom: 12,
+        },
+        styleContainer,
+      ]}
     >
-      {fotos.map((url, index) => (
-        <Image key={index} source={{ uri: url }} style={[styles.imagem, { width: largura }]} />
-      ))}
-    </ScrollView>
+      <ScrollView
+        horizontal
+        pagingEnabled
+        showsHorizontalScrollIndicator={false}
+      >
+        {fotos.map((url, index) => (
+          <Image
+            key={index}
+            source={{ uri: url }}
+            style={{
+              width: largura,
+              height: altura,
+              resizeMode: "cover",
+            }}
+          />
+        ))}
+      </ScrollView>
+    </View>
   );
 };
-
-const styles = StyleSheet.create({
-  imagem: {
-    height: 200,
-    resizeMode: "cover",
-  },
-});
 
 export default CarrosselImagens;
