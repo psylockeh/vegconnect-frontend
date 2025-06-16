@@ -18,6 +18,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { AuthContext } from "@/context/AuthContext";
 import { MotiView } from "moti";
 import { StyleProp, ViewStyle } from "react-native";
+import MiniCardEstabelecimento from "@/components/postagens/MiniCardEstabelecimento";
 
 interface Estabelecimento {
   id: number;
@@ -178,7 +179,7 @@ export default function LocalizarEstabelecimento() {
         fotos: e.fotos || [],
         rating: e.rating || 0,
         preco: e.preco || undefined,
-        horario: e.horario || undefined,
+        horario: Array.isArray(e.horario) ? e.horario : [],
       });
     }
   };
@@ -222,15 +223,21 @@ export default function LocalizarEstabelecimento() {
             <Pressable
               key={e.id}
               style={styles.listItem}
-              onPress={() => setSelected(e)}
+              onPress={() => {
+                handleSelect(e);
+                mapRef.current?.flyTo([e.latitude, e.longitude], 16);
+              }}
             >
               <Text style={styles.itemTitle}>{e.nome_comercio}</Text>
               <Text style={styles.itemTipo}>{e.tipo_comercio}</Text>
               <Text style={{ fontSize: 13, color: "#555", marginTop: 6 }}>
-                🕒 {selectedDetalhes.horario?.[0] || "Horário não informado"}
+                🕒{" "}
+                {Array.isArray(e.horario)
+                  ? e.horario[0]
+                  : "Horário não informado"}
               </Text>
               <Text style={{ fontSize: 13, color: "#555" }}>
-                💸 Faixa de preço: {formatarFaixaPreco(selectedDetalhes.preco)}
+                💸 Faixa de preço: {formatarFaixaPreco(e.preco)}
               </Text>
             </Pressable>
           ))}
@@ -245,6 +252,7 @@ export default function LocalizarEstabelecimento() {
             zoom={14}
             style={styles.map}
             scrollWheelZoom={true}
+            ref={mapRef}
           >
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
@@ -255,69 +263,60 @@ export default function LocalizarEstabelecimento() {
                 key={e.id}
                 position={[e.latitude, e.longitude]}
                 icon={e.id >= 100000 ? googleIcon : markerIcon}
-                eventHandlers={{ click: () => handleSelect(e) }}
+                eventHandlers={{
+                  click: () => handleSelect(e),
+                }}
               >
-                <Popup>
-                  <strong>{e.nome_comercio}</strong>
-                  <br />
-                  {e.tipo_comercio}
-                </Popup>
+                {selected && userLocation && (
+                  <View
+                    style={{
+                      position: "absolute",
+                      bottom: 20,
+                      left: 0,
+                      right: 0,
+                      alignItems: "center",
+                      zIndex: 999,
+                    }}
+                  >
+                    <MiniCardEstabelecimento
+                      fotos={selectedDetalhes.fotos}
+                      nome={selected.nome_comercio}
+                      tipo={selected.tipo_comercio}
+                      endereco={selected.descricao_comercio}
+                      rating={selectedDetalhes.rating}
+                      horario={selectedDetalhes.horario}
+                    />
+                  </View>
+                )}
               </Marker>
             ))}
           </MapContainer>
         )}
-      </View>
 
-      {/* DETALHES DO ESTABELECIMENTO */}
-      {selected && (
-        <MotiView
-          from={{ opacity: 0, translateY: 20 }}
-          animate={{ opacity: 1, translateY: 0 }}
-          transition={{ duration: 400 }}
-          style={styles.card}
-        >
-          <View style={{ alignItems: "flex-end", padding: 5 }}>
-            <Pressable
-              onPress={() => setSelected(null)}
-              style={{
-                backgroundColor: "#eee",
-                borderRadius: 16,
-                padding: 6,
-                marginRight: 4,
-                elevation: 2,
-              }}
-            >
-              <MaterialIcons name="close" size={20} color="#444" />
-            </Pressable>
-          </View>
-
-          <View style={styles.carouselContainer}>
-            <CarrosselImagens
-              fotos={selectedDetalhes.fotos || []}
-              altura={180}
-              bordaRadius={14}
+        {selected && (
+          <View
+            style={{
+              position: "absolute",
+              bottom: 20,
+              left: 0,
+              right: 0,
+              alignItems: "center",
+              zIndex: 999,
+            }}
+          >
+            <MiniCardEstabelecimento
+              fotos={selectedDetalhes.fotos}
+              nome={selected.nome_comercio}
+              tipo={selected.tipo_comercio}
+              endereco={selected.descricao_comercio}
+              rating={selectedDetalhes.rating}
+              horario={selectedDetalhes.horario}
+              preco={selectedDetalhes.preco}
+              onClose={() => setSelected(null)}
             />
           </View>
-          <Text style={styles.cardTitle}>{selected.nome_comercio}</Text>
-          <Text style={styles.cardTipo}>{selected.tipo_comercio}</Text>
-          <View style={styles.starRow}>
-            {Array.from({ length: 5 }).map((_, i) => (
-              <MaterialIcons
-                key={i}
-                name={
-                  i < Math.round(selected.rating || 0) ? "star" : "star-border"
-                }
-                size={20}
-                color="#FFD700"
-              />
-            ))}
-          </View>
-          <Text style={styles.cardDesc}>{selected.descricao_comercio}</Text>
-          <Pressable>
-            <Text style={styles.btn}>Ver mais detalhes</Text>
-          </Pressable>
-        </MotiView>
-      )}
+        )}
+      </View>
     </View>
   );
 }
