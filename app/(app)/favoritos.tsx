@@ -96,8 +96,9 @@ export default function AppFavorito() {
       }
 
       const res = await axios.get(`${API_URL}/usuario/listas/${lista.id}`, getAuthConfig());
+      const postagensExtraidas = res.data.map((fav: any) => fav.postagem);
 
-      setPostagens(res.data);
+      setPostagens(postagensExtraidas);
       setListaSelecionada(lista);
       setModalVisible(true);
     } catch (error: any) {
@@ -158,10 +159,10 @@ export default function AppFavorito() {
             <FlatList
               data={listasValidas}
               keyExtractor={(item) => item.id.toString()}
-              renderItem={({ item }) => (
+              renderItem={({ item, index  }) => (
                 <View style={styles.itemLista}>
                   <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                    <Text style={{ fontSize: 12, color: "#888", }}>ID: {item.id}</Text>
+                    <Text style={{ fontSize: 12, color: "#888", }}> Lista #{index + 1}</Text>
                     <TouchableOpacity
                       onPress={() => {
                         setListaOpcoes(item);
@@ -238,7 +239,7 @@ export default function AppFavorito() {
                   )}
                 </ScrollView>
               </View>
-              
+
               <TouchableOpacity
                 style={styles.botaoFecharExcluir}
                 onPress={() => setModalVisible(false)}

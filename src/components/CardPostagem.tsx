@@ -6,6 +6,7 @@ import { useRouter } from "expo-router";
 import ModalCriarPostagemStyles from "@/styles/ModalCriarPostagemStyles";
 import AvaliacaoPostagem from "@/components/acoesPostagem/AvaliacaoPostagem";
 import OpcoesPostagem from "@/components/acoesPostagem/OpcoesPostagem";
+import FavoritoBotao from "@/components/acoesPostagem/FavoritoBotao";
 import { useAuth } from "@/context/AuthContext";
 
 
@@ -80,8 +81,13 @@ const CardPostagem = ({ postagem, onPostagemExcluida }: Props) => {
             </View>
           </Pressable>
 
-          {/* Botão avaliar postagem */}
-          <AvaliacaoPostagem postagem={postagem} />
+         <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+            {/* Botão avaliar postagem */}
+            <AvaliacaoPostagem postagem={postagem} />
+
+            {/* Botão Favoritar */}
+            <FavoritoBotao postagemId={postagem.id} />
+          </View>
         </View>
 
         {/* Tag + Selo */}
