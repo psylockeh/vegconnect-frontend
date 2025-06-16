@@ -78,6 +78,15 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     width: "100%",
   },
+  botaoImagem: {
+    backgroundColor: "#3C6E43",
+    borderRadius: 10,
+    padding: 10,
+    alignItems: "center",
+    marginTop: -8,
+    marginBottom: 10,
+  },
+
   botaoDeletarPerfil: {
     marginTop: 16,
     backgroundColor: "#e53935",

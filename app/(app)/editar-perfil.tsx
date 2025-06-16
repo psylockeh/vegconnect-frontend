@@ -7,7 +7,14 @@ import {
   ActivityIndicator,
   Image,
   ScrollView,
+
 } from "react-native";
+import {
+  formatarCNPJ,
+  validarCNPJ,
+  formatarTelefone,
+} from "@/utils/formatadores";
+import { MaskedTextInput } from "react-native-mask-text";
 import * as ImagePicker from "expo-image-picker";
 import { useAuth } from "@/context/AuthContext";
 import { styles } from "@/styles/EditarPerfilStyles";
@@ -52,6 +59,11 @@ export default function EditarPerfilScreen() {
   const [enderCom, setEnderCom] = useState("");
   const [cnpj, setCnpj] = useState("");
   const [cepCom, setCepCom] = useState("");
+  const [logradouro, setLogradouro] = useState("");
+  const [bairro, setBairro] = useState("");
+  const [cidade, setCidade] = useState("");
+  const [estado, setEstado] = useState("");
+  const [numero, setNumero] = useState("");
 
   // Chef
   const [especialidade, setEspecialidade] = useState("");
@@ -84,6 +96,81 @@ export default function EditarPerfilScreen() {
   const houveMudanca = Object.entries(dadosAtuais).some(
     ([campo, valor]) => dadosOriginais.current[campo] !== valor
   );
+
+  const selecionarImagem = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 0.8,
+    });
+
+    if (!result.canceled) {
+      setImagemCertificacao(result.assets[0].uri);
+    }
+  };
+
+  const certificacoesDisponiveis = [
+    "SENAC – Cozinha Profissional",
+    "SENAI – Alimentos e Bebidas",
+    "Escola Wilma Kövesi de Cozinha",
+    "Natural Chef – Nutrição e Gastronomia",
+    "Le Cordon Bleu (Brasil)",
+    "Instituto Gastronômico das Américas (IGA)",
+    "Autodeclaração com Prova de Experiência",
+  ];
+
+  const [imagemCertificacao, setImagemCertificacao] = useState<string | null>(
+    null
+  );
+
+  const especialidades = [
+    "Cozinha Vegana",
+    "Cozinha Vegetariana",
+    "Cozinha Natural",
+    "Panificação Vegana",
+    "Confeitaria Sem Leite/Ovos",
+    "Comida Brasileira",
+    "Comida Internacional",
+  ];
+
+  const buscarEnderecoPorCep = async (cepLimpo: string) => {
+    try {
+      const response = await fetch(
+        `https://viacep.com.br/ws/${cepLimpo}/json/`
+      );
+      const data = await response.json();
+
+      if (data.erro) {
+        alert("CEP não encontrado.");
+        return;
+      }
+
+      setLogradouro(data.logradouro || "");
+      setBairro(data.bairro || "");
+      setCidade(data.localidade || "");
+      setEstado(data.uf || "");
+    } catch (error) {
+      console.error("Erro ao buscar CEP:", error);
+      alert("Erro ao buscar CEP.");
+    }
+  };
+
+  const formatarDataParaAPI = (data: string) => {
+    const regex = /^(\d{2})\/(\d{2})\/(\d{4})$/;
+    const match = data.match(regex);
+    return match ? `${match[3]}-${match[2]}-${match[1]}` : data;
+  };
+
+  const tiposProduto = [
+    "Alimentos",
+    "Bebidas",
+    "Higiene",
+    "Cosméticos",
+    "Limpeza",
+    "Outros",
+  ];
+
 
   useEffect(() => {
     carregarPerfil();
@@ -131,6 +218,7 @@ export default function EditarPerfilScreen() {
         setEnderCom(perfilUsuario.ender_com || "");
         setCnpj(perfilUsuario.cnpj || "");
         setCepCom(perfilUsuario.cep_com || "");
+
       }
 
       if (tipo === "Chef") {
@@ -178,8 +266,6 @@ export default function EditarPerfilScreen() {
     if (!email || !/^\S+@\S+\.\S+$/.test(email)) return "📧 E-mail inválido.";
     if (!telefone || telefone.replace(/\D/g, "").length < 10)
       return "📞 Telefone inválido. Digite ao menos 10 números.";
-    if (!data_nascimento || !/^\d{4}-\d{2}-\d{2}$/.test(data_nascimento))
-      return "📅 Use o formato de data: AAAA-MM-DD.";
 
     if (senha || confirmarSenha) {
       if (senha !== confirmarSenha) return "🔐 As senhas não coincidem.";
@@ -433,8 +519,12 @@ export default function EditarPerfilScreen() {
                 <TextInput
                   style={styles.inputEditarPerfil}
                   placeholder="Digite seu telefone"
-                  value={telefone}
-                  onChangeText={setTelefone}
+                  value={formatarTelefone(telefone)}
+                  autoCapitalize="none"
+                  onChangeText={(text) => {
+                    const somenteNumeros = text.replace(/\D/g, "").slice(0, 11);
+                    setTelefone(somenteNumeros);
+                  }}
                   keyboardType="phone-pad"
                 />
               </View>
@@ -443,11 +533,13 @@ export default function EditarPerfilScreen() {
             <View style={styles.linhaInputs}>
               <View style={styles.inputColuna}>
                 <Text style={styles.label}>Data de Nascimento:</Text>
-                <TextInput
-                  style={styles.inputEditarPerfil}
-                  placeholder="Digite sua data de nascimento"
+                <MaskedTextInput
+                  mask="9999/99/99"
+                  keyboardType="numeric"
+                  onChangeText={(text) => setDataNascimento(text)}
                   value={data_nascimento}
-                  onChangeText={setDataNascimento}
+                  placeholder="AAAA/MM/DD"
+                  style={styles.inputEditarPerfil}
                 />
               </View>
 
@@ -505,20 +597,44 @@ export default function EditarPerfilScreen() {
             {tipo === "Chef" && (
               <>
                 <Text style={styles.label}>Especialidade:</Text>
-                <TextInput
-                  style={styles.inputEditarPerfil}
-                  placeholder="Especialidade"
-                  value={especialidade}
-                  onChangeText={setEspecialidade}
-                />
+                <Picker
+                  selectedValue={especialidade}
+                  onValueChange={(itemValue) => setEspecialidade(itemValue)}
+                  style={styles.picker}
+                >
+                  <Picker.Item label="Selecione uma especialidade..." value="" />
+                  {especialidades.map((item: string) => (
+                    <Picker.Item key={item} label={item} value={item} />
+                  ))}
+                </Picker>
 
                 <Text style={styles.label}>Certificações:</Text>
-                <TextInput
-                  style={styles.inputEditarPerfil}
-                  placeholder="Certificações"
-                  value={certificacoes}
-                  onChangeText={setCertificacoes}
-                />
+                <Picker
+                  selectedValue={certificacoes}
+                  onValueChange={(itemValue) =>
+                    setCertificacoes(itemValue)
+                  }
+                  style={styles.picker}
+                >
+                  <Picker.Item label="Selecione uma certificação..." value="" />
+                  {certificacoesDisponiveis.map((item: string) => (
+                    <Picker.Item key={item} label={item} value={item} />
+                  ))}
+                </Picker>
+
+                <Pressable onPress={selecionarImagem} style={styles.botaoImagem}>
+                  <Text style={styles.textoBotao}>
+                    Anexar imagem da certificação
+                  </Text>
+                </Pressable>
+
+                {imagemCertificacao && (
+                  <Image
+                    source={{ uri: imagemCertificacao }}
+                    style={{ width: 200, height: 200, marginTop: 10 }}
+                    resizeMode="contain"
+                  />
+                )}
               </>
             )}
 
@@ -536,17 +652,28 @@ export default function EditarPerfilScreen() {
                 <TextInput
                   style={styles.inputEditarPerfil}
                   placeholder="Telefone do Comércio"
-                  value={telCom}
-                  onChangeText={setTelCom}
+                  value={formatarTelefone(telCom)}
+                  onChangeText={(text) => {
+                    const somenteNumeros = text.replace(/\D/g, "").slice(0, 11);
+                    setTelCom(somenteNumeros);
+                  }}
+                  keyboardType="phone-pad"
                 />
 
-                <Text style={styles.label}>CNPJ:</Text>
-                <TextInput
-                  style={styles.inputEditarPerfil}
-                  placeholder="CNPJ"
-                  value={cnpj}
-                  onChangeText={setCnpj}
-                />
+
+                <View style={styles.inputColuna}>
+                  <Text style={styles.label}>CNPJ:</Text>
+                  <TextInput
+                    style={styles.inputEditarPerfil}
+                    value={formatarCNPJ(cnpj)}
+                    placeholder="CNPJ"
+                    onChangeText={(text) => {
+                      const somenteNumeros = text.replace(/\D/g, "");
+                      setCnpj(somenteNumeros);
+                    }}
+                    keyboardType="numeric"
+                  />
+                </View>
 
                 <Text style={styles.label}>Tipo do Comércio:</Text>
                 <TextInput
@@ -557,12 +684,16 @@ export default function EditarPerfilScreen() {
                 />
 
                 <Text style={styles.label}>Tipo do Produto:</Text>
-                <TextInput
-                  style={styles.inputEditarPerfil}
-                  placeholder="Tipo do Produto"
-                  value={tipoProd}
-                  onChangeText={setTipoProd}
-                />
+                <Picker
+                  selectedValue={tipoProd}
+                  onValueChange={(itemValue) => setTipoProd(itemValue)}
+                  style={styles.picker}
+                >
+                  <Picker.Item label="Selecione o tipo de produto" value="" />
+                  {tiposProduto.map((tipo) => (
+                    <Picker.Item key={tipo} label={tipo} value={tipo} />
+                  ))}
+                </Picker>
 
                 <Text style={styles.label}>Endereço do Comércio:</Text>
                 <TextInput
@@ -572,12 +703,63 @@ export default function EditarPerfilScreen() {
                   onChangeText={setEnderCom}
                 />
 
-                <Text style={styles.label}>CEP do Comércio:</Text>
+                {/* Campo de CEP do Comércio*/}
+                {/* Campo de CEP */}
+                <Text style={styles.label}>CEP do Comércio: </Text>
                 <TextInput
                   style={styles.inputEditarPerfil}
-                  placeholder="CEP do Comércio"
+                  placeholder="00000-000"
+                  keyboardType="numeric"
                   value={cepCom}
-                  onChangeText={setCepCom}
+                  maxLength={9}
+                  onChangeText={(text) => {
+                    const formatted = text
+                      .replace(/\D/g, "")
+                      .replace(/^(\d{5})(\d)/, "$1-$2");
+                    setCepCom(formatted);
+
+                    const onlyDigits = formatted.replace(/\D/g, "");
+                    if (onlyDigits.length === 8) buscarEnderecoPorCep(onlyDigits);
+                  }}
+                />
+
+                {/* Campos preenchidos automaticamente */}
+                <Text style={styles.label}>Logradouro: </Text>
+                <TextInput
+                  style={styles.inputEditarPerfil}
+                  placeholder="Logradouro"
+                  value={logradouro}
+                  editable={false}
+                />
+                <Text style={styles.label}>Bairro: </Text>
+                <TextInput
+                  style={styles.inputEditarPerfil}
+                  placeholder="Bairro"
+                  value={bairro}
+                  editable={false}
+                />
+                <Text style={styles.label}>Cidade: </Text>
+                <TextInput
+                  style={styles.inputEditarPerfil}
+                  placeholder="Cidade"
+                  value={cidade}
+                  editable={false}
+                />
+                <Text style={styles.label}>Estado: </Text>
+                <TextInput
+                  style={styles.inputEditarPerfil}
+                  placeholder="Estado"
+                  value={estado}
+                  editable={false}
+                />
+
+                {/* Campo Número - preenchido manualmente */}
+                <Text style={styles.label}>Número: </Text>
+                <TextInput
+                  style={styles.inputEditarPerfil}
+                  placeholder="Número"
+                  value={numero}
+                  onChangeText={setNumero}
                 />
               </>
             )}
@@ -648,7 +830,7 @@ export default function EditarPerfilScreen() {
             </Pressable>
           </View>
         </ScrollView>
-      </View>
-    </View>
+      </View >
+    </View >
   );
 }

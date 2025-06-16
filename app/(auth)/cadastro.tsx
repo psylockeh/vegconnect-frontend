@@ -55,7 +55,7 @@ export default function CadastroScreen() {
   const [cidade, setCidade] = useState("");
   const [estado, setEstado] = useState("");
   const [numero, setNumero] = useState("");
-   const [showSenha, setShowSenha] = useState(false);
+  const [showSenha, setShowSenha] = useState(false);
   const [showConfirmarSenha, setShowConfirmarSenha] = useState(false);
   const [certificacaoSelecionada, setCertificacaoSelecionada] =
     useState<string>("");
@@ -282,11 +282,8 @@ export default function CadastroScreen() {
         {/* Campo de Logo */}
         <View style={styles.logoContainer}>
           <Image
-            source={{
-              uri: "https://res.cloudinary.com/dyhzz5baz/image/upload/v1747613147/Imagem_do_WhatsApp_de_2025-05-08_%C3%A0_s_13.08.26_a421e819_dkrthf.jpg",
-            }}
+            source={require("..//../assets/logo.png")}
             style={styles.logo}
-            resizeMode="contain"
           />
           <Text style={styles.title}>VegConnect</Text>
         </View>
@@ -328,10 +325,13 @@ export default function CadastroScreen() {
         <TextInput
           style={styles.input}
           placeholder="Telefone"
-          value={telefone}
-          onChangeText={setTelefone}
-          keyboardType="phone-pad"
+          value={formatarTelefone(telefone)}
           autoCapitalize="none"
+          onChangeText={(text) => {
+            const somenteNumeros = text.replace(/\D/g, "").slice(0, 11);
+            setTelefone(somenteNumeros);
+          }}
+          keyboardType="phone-pad"
         />
 
         {/* Campo de Data de Nascimento */}
@@ -429,11 +429,11 @@ export default function CadastroScreen() {
               ))}
             </Picker>
 
-            <Button
-              title="Anexar imagem da certificação"
-              onPress={selecionarImagem}
-              color="#2196F3"
-            />
+            <Pressable onPress={selecionarImagem} style={styles.botaoImagem}>
+              <Text style={styles.buttonText}>
+                Anexar imagem da certificação
+              </Text>
+            </Pressable>
 
             {imagemCertificacao && (
               <Image

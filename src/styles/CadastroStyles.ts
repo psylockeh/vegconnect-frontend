@@ -142,4 +142,13 @@ export const CadastroStyles = StyleSheet.create({
     width: 28,
     height: 28,
   },
+
+   botaoImagem: {
+    backgroundColor: "#3C6E43",
+    borderRadius: 10,
+    padding: 10,
+    alignItems: "center",
+    marginTop: -8,
+    marginBottom: 10,
+  },
 });
