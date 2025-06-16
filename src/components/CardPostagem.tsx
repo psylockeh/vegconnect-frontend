@@ -81,37 +81,43 @@ const CardPostagem = ({ postagem, onPostagemExcluida }: Props) => {
             </View>
           </Pressable>
 
-         <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
-            {/* Botão avaliar postagem */}
-            <AvaliacaoPostagem postagem={postagem} />
 
-            {/* Botão Favoritar */}
-            <FavoritoBotao postagemId={postagem.id} />
+          <View style={{ flexDirection: "column", alignItems: "flex-end", gap: 6 }}>
+            {/* Botões */}
+            <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+              {/* Botão avaliar postagem */}
+              <AvaliacaoPostagem postagem={postagem} />
+
+              {/* Botão Favoritar */}
+              <FavoritoBotao postagemId={postagem.id} />
+            </View>
+
+            {/* Tag + Selo */}
+            <View style={[styles.tagWrapper, { marginRight: 6 }]}>
+              {tp_post === "receita" && postagem.selo_confianca && (
+                <View style={styles.verificadoWrapper}>
+                  <Image
+                    source={{
+                      uri: "https://res.cloudinary.com/dyhzz5baz/image/upload/v1747699449/verified_30dp_314D1C_FILL0_wght400_GRAD0_opsz24_mvxkh2.png",
+                    }}
+                    style={styles.verificadoIcon}
+                  />
+                  <Text style={styles.verificadoTexto}>
+                    {postagem.verificado_por?.nickname
+                      ? `Verificada por @${postagem.verificado_por.nickname}`
+                      : postagem.autor?.tp_user === "Chef"
+                        ? `Receita criada por Chef verificado`
+                        : ""}
+                  </Text>
+                </View>
+              )}
+            </View>
           </View>
         </View>
 
-        {/* Tag + Selo */}
-        <View style={styles.tagWrapper}>
-          <View style={[styles.tagTipoPost, { backgroundColor: "#2E7D32" }]}>
-            <Text style={styles.tagTipoText}>{postagem.tp_post}</Text>
-          </View>
-          {tp_post === "receita" && postagem.selo_confianca && (
-            <View style={styles.verificadoWrapper}>
-              <Image
-                source={{
-                  uri: "https://res.cloudinary.com/dyhzz5baz/image/upload/v1747699449/verified_30dp_314D1C_FILL0_wght400_GRAD0_opsz24_mvxkh2.png",
-                }}
-                style={styles.verificadoIcon}
-              />
-              <Text style={styles.verificadoTexto}>
-                {postagem.verificado_por?.nickname
-                  ? `Verificada por @${postagem.verificado_por.nickname}`
-                  : postagem.autor?.tp_user === "Chef"
-                    ? `Receita criada por Chef verificado`
-                    : ""}
-              </Text>
-            </View>
-          )}
+        {/* Tipo  de Postagem  */}
+        <View style={[styles.tagTipoPost, { backgroundColor: "#2E7D32" }]}>
+          <Text style={styles.tagTipoText}>{postagem.tp_post}</Text>
         </View>
 
         {/* Título */}
