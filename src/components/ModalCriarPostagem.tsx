@@ -76,8 +76,8 @@ export default function ModalCriarPostagem({
     perfilUsuario?.foto_perfil?.startsWith("http") && !erroImagem
       ? { uri: perfilUsuario.foto_perfil }
       : {
-          uri: "https://res.cloudinary.com/dyhzz5baz/image/upload/v1746917561/default-avatar_jvqpsg.png",
-        };
+        uri: "https://res.cloudinary.com/dyhzz5baz/image/upload/v1746917561/default-avatar_jvqpsg.png",
+      };
 
   const selecionarImagens = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -90,6 +90,10 @@ export default function ModalCriarPostagem({
       const uris = result.assets.map((asset) => asset.uri);
       setMidiasSelecionadas((prev) => [...prev, ...uris]);
     }
+  };
+
+  const removerImagem = (uri: string) => {
+    setMidiasSelecionadas((prev) => prev.filter((m) => m !== uri));
   };
 
   const handleSubmitPostagem = async () => {
@@ -438,6 +442,40 @@ export default function ModalCriarPostagem({
             {renderHeaderUsuario()}
             {renderFormulario()}
           </ScrollView>
+
+          <View style={{marginTop: 15, marginBottom: -5}}>
+            {midiasSelecionadas.length > 0 && (
+              <ScrollView horizontal>
+                {midiasSelecionadas.map((uri, index) => (
+                  <View
+                    key={index}
+                    style={{ position: "relative", marginRight: 8 }}
+                  >
+                    <Image
+                      source={{ uri }}
+                      style={{ width: 70, height: 70, borderRadius: 8 }}
+                    />
+                    <Pressable
+                      onPress={() => removerImagem(uri)}
+                      style={{
+                        position: "absolute",
+                        top: -2,
+                        right: -2,
+                        backgroundColor: "#f32",
+                        width: 15,
+                        height: 15,
+                        borderRadius: 10,
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Text style={{ color: "#fff", fontSize: 12 }}>X</Text>
+                    </Pressable>
+                  </View>
+                ))}
+              </ScrollView>
+            )}
+          </View>
           <Pressable
             onPress={selecionarImagens}
             style={ModalStyles.botaoFechar}
