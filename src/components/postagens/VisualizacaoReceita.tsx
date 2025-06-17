@@ -44,12 +44,7 @@ export default function VisualizacaoReceita({
     <View>
       {/* Carrossel de mídias */}
       {postagem.midia_urls?.length > 0 && (
-        <CarrosselImagens
-          fotos={postagem.midia_urls}
-          altura={200}
-          bordaRadius={8}
-          styleContainer={{ marginBottom: 12 }}
-        />
+        <CarrosselImagens fotos={postagem.midia_urls} />
       )}
 
       {/* Tag + Selo */}

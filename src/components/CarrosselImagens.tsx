@@ -1,64 +1,65 @@
 import React from "react";
 import {
-  ScrollView,
+  FlatList,
   Image,
-  StyleSheet,
   View,
-  ViewStyle,
   Dimensions,
+  StyleSheet,
+  ViewStyle,
 } from "react-native";
 
 interface Props {
   fotos: string[];
-  altura?: number;
-  bordaRadius?: number;
   styleContainer?: ViewStyle;
 }
 
-const CarrosselImagens = ({
-  fotos,
-  altura = 180,
-  bordaRadius = 12,
-  styleContainer,
-}: Props) => {
+const screenWidth = Dimensions.get("window").width;
+const larguraCard = screenWidth * 0.85;
+
+const CarrosselImagens = ({ fotos, styleContainer }: Props) => {
   if (!fotos || fotos.length === 0) return null;
 
-  const screenWidth = Dimensions.get("window").width;
-  const largura = screenWidth - 80; // Reduz um pouco para encaixar melhor
-
   return (
-    <View
-      style={[
-        {
-          alignSelf: "center",
-          width: largura,
-          height: altura,
-          borderRadius: bordaRadius,
-          overflow: "hidden",
-          marginBottom: 12,
-        },
-        styleContainer,
-      ]}
-    >
-      <ScrollView
+    <View style={[styles.container, styleContainer]}>
+      <FlatList
+        data={fotos}
+        keyExtractor={(_, index) => index.toString()}
         horizontal
         pagingEnabled
         showsHorizontalScrollIndicator={false}
-      >
-        {fotos.map((url, index) => (
-          <Image
-            key={index}
-            source={{ uri: url }}
-            style={{
-              width: largura,
-              height: altura,
-              resizeMode: "cover",
-            }}
-          />
-        ))}
-      </ScrollView>
+        contentContainerStyle={{ paddingHorizontal: 16 }}
+        renderItem={({ item }) => (
+          <View style={styles.card}>
+            <Image
+              source={{ uri: item }}
+              style={styles.imagem}
+              resizeMode="contain"
+            />
+          </View>
+        )}
+      />
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    marginBottom: 16,
+  },
+  card: {
+    width: larguraCard,
+    aspectRatio: 4 / 3,
+    borderRadius: 12,
+    overflow: "hidden",
+    backgroundColor: "#f0f0f0",
+    marginRight: 16,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  imagem: {
+    width: "100%",
+    height: "100%",
+  },
+});
 
 export default CarrosselImagens;
