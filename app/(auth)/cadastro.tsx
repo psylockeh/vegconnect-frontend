@@ -24,6 +24,7 @@ import {
 import * as ImagePicker from "expo-image-picker";
 import { Button } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
+import { uploadImageToCloudinary } from "@/utils/cloudinary";
 
 export default function CadastroScreen() {
   const [erroCnpj, setErroCnpj] = useState(false);
@@ -44,7 +45,8 @@ export default function CadastroScreen() {
   const [tipoProduto, setTipoProduto] = useState("");
   const [tipoComercio, setTipoComercio] = useState("");
   const [nomeComercio, setNomeComercio] = useState("");
-  const [enderecoComercio, setEnderecoComercio] = useState("");
+  const [tpComida, setTpComida] = useState("");
+  const [tpServico, setTpServico] = useState("");
   const [cnpj, setCnpj] = useState("");
   const [cepComercio, setCepComercio] = useState("");
   const [telefoneComercio, setTelefoneComercio] = useState("");
@@ -59,17 +61,21 @@ export default function CadastroScreen() {
   const [showConfirmarSenha, setShowConfirmarSenha] = useState(false);
   const [certificacaoSelecionada, setCertificacaoSelecionada] =
     useState<string>("");
+  const { login } = useAuth();
 
   const selecionarImagem = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      aspect: [1, 1],
       quality: 0.8,
     });
 
     if (!result.canceled) {
-      setImagemCertificacao(result.assets[0].uri);
+      const uploadedUrl = await uploadImageToCloudinary(result.assets[0].uri);
+      if (uploadedUrl) {
+        setImagemCertificacao(uploadedUrl);
+        setCertificacoes(uploadedUrl);
+      }
     }
   };
 
@@ -81,6 +87,42 @@ export default function CadastroScreen() {
     "Le Cordon Bleu (Brasil)",
     "Instituto Gastronômico das Américas (IGA)",
     "Autodeclaração com Prova de Experiência",
+  ];
+
+  const tiposComercio = [
+    "Restaurante",
+    "Café",
+    "Loja",
+    "Mercado",
+    "Serviço",
+    "Feira",
+    "Padaria",
+    "Açougue Vegetariano",
+  ];
+
+  const opcoesComida = [
+    "Vegano",
+    "Vegetariano",
+    "Orgânico",
+    "Plant-based",
+    "Natural",
+  ];
+
+  const opcoesProduto = [
+    "Cosméticos",
+    "Higiene",
+    "Roupas",
+    "Alimentos",
+    "Limpeza",
+    "Suplementos",
+  ];
+
+  const opcoesServico = [
+    "Nutrição",
+    "Terapia",
+    "Delivery",
+    "Consultoria",
+    "Culinária",
   ];
 
   const [imagemCertificacao, setImagemCertificacao] = useState<string | null>(
@@ -137,6 +179,14 @@ export default function CadastroScreen() {
   const handleCadastro = async () => {
     setLoading(true);
     setError("");
+    console.log(
+      nomeComercio,
+      cnpj,
+      telefoneComercio,
+      tipoComercio,
+      tipoProduto,
+      cepComercio
+    );
 
     if (
       !nome ||
@@ -169,7 +219,6 @@ export default function CadastroScreen() {
         !telefoneComercio ||
         !tipoComercio ||
         !tipoProduto ||
-        !enderecoComercio ||
         !cepComercio)
     ) {
       setError("📌 Ops! Todos os campos são obrigatórios.");
@@ -204,20 +253,20 @@ export default function CadastroScreen() {
       nome,
       email,
       senha,
-      nickname,
-      telefone,
       tp_user: tipoUsuario.trim() === "" ? "Comum" : tipoUsuario,
       data_nascimento: dataFormatada,
       pref_alim: prefAlim,
-      especialidade: especialidade,
-      certificacoes: certificacoes,
+      nickname,
+      telefone,
+      especialidade,
+      certificacoes,
       tipo_prod: tipoProduto,
       tipo_com: tipoComercio,
-      nome_com: nomeComercio,
-      ender_com: enderecoComercio,
-      cnpj: cnpj,
-      cep_com: cepComercio,
-      tel_com: telefoneComercio,
+      nome_comercio: nomeComercio,
+      endereco_comercio: `${logradouro}, ${numero}`,
+      cnpj,
+      cep_comercio: cepComercio,
+      telefone_comercio: telefoneComercio,
     };
 
     try {
@@ -236,12 +285,14 @@ export default function CadastroScreen() {
         dadosCadastro.certificacoes,
         dadosCadastro.tipo_prod,
         dadosCadastro.tipo_com,
-        dadosCadastro.nome_com,
-        dadosCadastro.ender_com,
+        dadosCadastro.nome_comercio,
         dadosCadastro.cnpj,
-        dadosCadastro.cep_com,
-        dadosCadastro.tel_com
+        dadosCadastro.cep_comercio,
+        dadosCadastro.telefone_comercio
       );
+
+      await login(dadosCadastro.email, dadosCadastro.senha, false);
+      router.replace("/feed");
 
       const showToast = (message: string) => {
         if (Platform.OS === "android") {
@@ -353,9 +404,16 @@ export default function CadastroScreen() {
             onChangeText={setSenha}
             secureTextEntry={!showSenha}
           />
-          <Pressable onPress={() => setShowSenha(!showSenha)}
-            style={{ position: "absolute", right: 10, marginBottom: 15, padding: 5 }}
-            hitSlop={10}>
+          <Pressable
+            onPress={() => setShowSenha(!showSenha)}
+            style={{
+              position: "absolute",
+              right: 10,
+              marginBottom: 15,
+              padding: 5,
+            }}
+            hitSlop={10}
+          >
             <MaterialIcons
               name={showSenha ? "visibility" : "visibility-off"}
               size={24}
@@ -373,9 +431,16 @@ export default function CadastroScreen() {
             onChangeText={setConfirmarSenha}
             secureTextEntry={!showConfirmarSenha}
           />
-          <Pressable onPress={() => setShowConfirmarSenha(!showConfirmarSenha)}
-            style={{ position: "absolute", right: 10, marginBottom: 15, padding: 5 }}
-            hitSlop={10}>
+          <Pressable
+            onPress={() => setShowConfirmarSenha(!showConfirmarSenha)}
+            style={{
+              position: "absolute",
+              right: 10,
+              marginBottom: 15,
+              padding: 5,
+            }}
+            hitSlop={10}
+          >
             <MaterialIcons
               name={showConfirmarSenha ? "visibility" : "visibility-off"}
               size={24}
@@ -415,33 +480,35 @@ export default function CadastroScreen() {
             </Picker>
 
             {/* Campo de Certificação */}
-            <Text style={styles.label}>Certificação em Gastronomia</Text>
-            <Picker
-              selectedValue={certificacaoSelecionada}
-              onValueChange={(itemValue) =>
-                setCertificacaoSelecionada(itemValue)
-              }
-              style={styles.picker}
-            >
-              <Picker.Item label="Selecione uma certificação..." value="" />
-              {certificacoesDisponiveis.map((item: string) => (
-                <Picker.Item key={item} label={item} value={item} />
-              ))}
-            </Picker>
+            <View style={styles.blocoPadrao}>
+              <Text style={styles.tituloBloco}>Certificação</Text>
+              <Picker
+                selectedValue={certificacaoSelecionada}
+                onValueChange={(itemValue) =>
+                  setCertificacaoSelecionada(itemValue)
+                }
+                style={styles.picker}
+              >
+                <Picker.Item label="Selecione uma certificação..." value="" />
+                {certificacoesDisponiveis.map((item: string) => (
+                  <Picker.Item key={item} label={item} value={item} />
+                ))}
+              </Picker>
 
-            <Pressable onPress={selecionarImagem} style={styles.botaoImagem}>
-              <Text style={styles.buttonText}>
-                Anexar imagem da certificação
-              </Text>
-            </Pressable>
+              <Pressable onPress={selecionarImagem} style={styles.botaoImagem}>
+                <Text style={styles.buttonText}>
+                  Anexar imagem da certificação
+                </Text>
+              </Pressable>
 
-            {imagemCertificacao && (
-              <Image
-                source={{ uri: imagemCertificacao }}
-                style={{ width: 200, height: 200, marginTop: 10 }}
-                resizeMode="contain"
-              />
-            )}
+              {imagemCertificacao && (
+                <Image
+                  source={{ uri: imagemCertificacao }}
+                  style={{ width: 200, height: 200, marginTop: 10 }}
+                  resizeMode="contain"
+                />
+              )}
+            </View>
           </>
         )}
 
@@ -449,65 +516,104 @@ export default function CadastroScreen() {
         {tipoUsuario === "comerciante" && (
           <>
             {/* Campo de Nome de Comércio*/}
-            <TextInput
-              style={styles.input}
-              placeholder="Nome do Comércio"
-              value={nomeComercio}
-              onChangeText={setNomeComercio}
-            />
+            <View style={styles.blocoPadrao}>
+              <Text style={styles.tituloBloco}>🏪 Nome do Comércio</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Nome do Comércio"
+                value={nomeComercio}
+                onChangeText={setNomeComercio}
+              />
+            </View>
 
             {/* Campo de CNPJ */}
-            <TextInput
-              style={styles.input}
-              placeholder="CNPJ"
-              value={formatarCNPJ(cnpj)} // aqui aplicamos a máscara apenas na exibição
-              onChangeText={(text) => {
-                const somenteNumeros = text.replace(/\D/g, "");
-                setCnpj(somenteNumeros); // armazenamos apenas os números
-              }}
-              keyboardType="numeric"
-            />
+            <View style={styles.blocoPadrao}>
+              <Text style={styles.tituloBloco}>🏢 CNPJ do Comércio</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="CNPJ"
+                value={formatarCNPJ(cnpj)}
+                onChangeText={(text) => {
+                  const somenteNumeros = text.replace(/\D/g, "");
+                  setCnpj(somenteNumeros);
+                }}
+                keyboardType="numeric"
+              />
+            </View>
 
             {/* Campo Telefone do Comércio */}
-            <TextInput
-              style={styles.input}
-              placeholder="Telefone do Comércio"
-              value={formatarTelefone(telefoneComercio)}
-              onChangeText={(text) => {
-                const somenteNumeros = text.replace(/\D/g, "").slice(0, 11);
-                setTelefoneComercio(somenteNumeros);
-              }}
-              keyboardType="phone-pad"
-            />
+            <View style={styles.blocoPadrao}>
+              <Text style={styles.tituloBloco}>📞 Telefone do Comércio</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="(00) 00000-0000"
+                value={formatarTelefone(telefoneComercio)}
+                onChangeText={(text) => {
+                  const somenteNumeros = text.replace(/\D/g, "").slice(0, 11);
+                  setTelefoneComercio(somenteNumeros);
+                }}
+                keyboardType="phone-pad"
+              />
+            </View>
 
             {/* Campo de Tipo de Comércio*/}
-            <TextInput
-              style={styles.input}
-              placeholder="Tipo do Comércio"
-              value={tipoComercio}
-              onChangeText={setTipoComercio}
-            />
+            <View style={styles.blocoPadrao}>
+              <Text style={styles.tituloBloco}>🔖 Tipo de Comércio</Text>
+              <Picker
+                selectedValue={tipoComercio}
+                onValueChange={setTipoComercio}
+                style={styles.input}
+              >
+                <Picker.Item label="Selecione o tipo de comércio" value="" />
+                {tiposComercio.map((tipo) => (
+                  <Picker.Item key={tipo} label={tipo} value={tipo} />
+                ))}
+              </Picker>
 
-            {/* Campo de Tipo do Produto*/}
-            <Text style={styles.label}>Tipo de Produto</Text>
-            <Picker
-              selectedValue={tipoProduto}
-              onValueChange={(itemValue) => setTipoProduto(itemValue)}
-              style={styles.picker}
-            >
-              <Picker.Item label="Selecione o tipo de produto" value="" />
-              {tiposProduto.map((tipo) => (
-                <Picker.Item key={tipo} label={tipo} value={tipo} />
-              ))}
-            </Picker>
+              {[
+                "Restaurante",
+                "Café",
+                "Padaria",
+                "Açougue Vegetariano",
+              ].includes(tipoComercio) && (
+                <Picker
+                  selectedValue={tpComida}
+                  onValueChange={setTpComida}
+                  style={styles.inputPadrao}
+                >
+                  <Picker.Item label="Tipo de comida" value="" />
+                  {opcoesComida.map((opt) => (
+                    <Picker.Item key={opt} label={opt} value={opt} />
+                  ))}
+                </Picker>
+              )}
 
-            {/* Campo de Endereço de Comércio*/}
-            <TextInput
-              style={styles.input}
-              placeholder="Endereço do Comércio"
-              value={enderecoComercio}
-              onChangeText={setEnderecoComercio}
-            />
+              {["Loja", "Mercado", "Feira"].includes(tipoComercio) && (
+                <Picker
+                  selectedValue={tipoProduto}
+                  onValueChange={setTipoProduto}
+                  style={styles.inputPadrao}
+                >
+                  <Picker.Item label="Tipo de produto" value="" />
+                  {opcoesProduto.map((opt) => (
+                    <Picker.Item key={opt} label={opt} value={opt} />
+                  ))}
+                </Picker>
+              )}
+
+              {tipoComercio === "Serviço" && (
+                <Picker
+                  selectedValue={tpServico}
+                  onValueChange={setTpServico}
+                  style={styles.inputPadrao}
+                >
+                  <Picker.Item label="Tipo de serviço" value="" />
+                  {opcoesServico.map((opt) => (
+                    <Picker.Item key={opt} label={opt} value={opt} />
+                  ))}
+                </Picker>
+              )}
+            </View>
 
             {/* Campo de CEP do Comércio*/}
             {/* Campo de CEP */}
@@ -516,13 +622,13 @@ export default function CadastroScreen() {
               style={styles.input}
               placeholder="00000-000"
               keyboardType="numeric"
-              value={cep}
+              value={cepComercio}
               maxLength={9}
               onChangeText={(text) => {
                 const formatted = text
                   .replace(/\D/g, "")
                   .replace(/^(\d{5})(\d)/, "$1-$2");
-                setCep(formatted);
+                setCepComercio(formatted);
 
                 const onlyDigits = formatted.replace(/\D/g, "");
                 if (onlyDigits.length === 8) buscarEnderecoPorCep(onlyDigits);

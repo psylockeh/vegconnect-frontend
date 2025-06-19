@@ -45,6 +45,7 @@ export const CadastroStyles = StyleSheet.create({
   },
 
   input: {
+    backgroundColor: "#FAFDFB",
     width: "100%",
     padding: 12,
     marginBottom: 20,
@@ -143,12 +144,34 @@ export const CadastroStyles = StyleSheet.create({
     height: 28,
   },
 
-   botaoImagem: {
+  botaoImagem: {
     backgroundColor: "#3C6E43",
     borderRadius: 10,
     padding: 10,
     alignItems: "center",
     marginTop: -8,
     marginBottom: 10,
+  },
+  inputPadrao: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    backgroundColor: "#f8f8f8",
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 12,
+    fontSize: 14,
+    color: "#023D2E",
+  },
+  tituloBloco: {
+    fontWeight: "bold",
+    fontSize: 15,
+    marginBottom: 6,
+    color: "#023D2E",
+  },
+  blocoPadrao: {
+    backgroundColor: "#f1f5f2",
+    padding: 12,
+    borderRadius: 10,
+    marginBottom: 16,
   },
 });

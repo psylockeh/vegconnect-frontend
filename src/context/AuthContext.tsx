@@ -34,6 +34,9 @@ export interface AuthContextProps {
     nome?: string;
     pref_alim?: string;
     senha?: string;
+    tp_user?: string;
+    telefone?: string;
+    nickname?: string;
   }) => Promise<void>;
   isLoading: boolean;
   register: (
@@ -50,7 +53,6 @@ export interface AuthContextProps {
     tipo_prod: string,
     tipo_com: string,
     nome_comercio: string,
-    endereco_comercio: string,
     cnpj: string,
     cep_comercio: string,
     telefone_comercio: string
@@ -107,7 +109,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setPerfilUsuario(usuario);
 
       if (manterConectado) {
-        await AsyncStorage.setItem("@token", token); // já garantido
+        await AsyncStorage.setItem("@token", token);
       }
 
       setTimeout(() => {
@@ -202,7 +204,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     tipo_prod: string,
     tipo_com: string,
     nome_comercio: string,
-    endereco_comercio: string,
     cnpj: string,
     cep_comercio: string,
     telefone_comercio: string
@@ -222,7 +223,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         tipo_prod,
         tipo_com,
         nome_comercio,
-        endereco_comercio,
         cnpj,
         cep_comercio,
         telefone_comercio,
