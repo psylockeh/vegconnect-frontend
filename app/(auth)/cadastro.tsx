@@ -344,58 +344,71 @@ export default function CadastroScreen() {
         </Text>
 
         {/* Campo de Nome */}
-        <TextInput
-          style={styles.input}
-          placeholder="Nome"
-          value={nome}
-          onChangeText={setNome}
-          autoCapitalize="words"
-        />
+        <View style={styles.blocoPadrao}>
+          <TextInput
+            style={styles.input}
+            placeholder="Nome"
+            value={nome}
+            onChangeText={setNome}
+            autoCapitalize="words"
+          />
+        </View>
 
         {/* Campo de Nikename */}
-        <TextInput
-          style={styles.input}
-          placeholder="Apelido"
-          value={nickname}
-          onChangeText={setNickname}
-          keyboardType="default"
-          autoCapitalize="none"
-        />
+        <View style={styles.blocoPadrao}>
+          <TextInput
+            style={styles.input}
+            placeholder="Apelido"
+            value={nickname}
+            onChangeText={setNickname}
+            keyboardType="default"
+            autoCapitalize="none"
+          />
+        </View>
 
         {/* Campo de E-mail */}
-        <TextInput
-          style={styles.input}
-          placeholder="E-mail"
-          value={email}
-          onChangeText={setEmail}
-          keyboardType="email-address"
-          autoCapitalize="none"
-        />
+        <View style={styles.blocoPadrao}>
+          <TextInput
+            style={styles.input}
+            placeholder="E-mail"
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
+          />
+        </View>
 
         {/* Campo de Telefone */}
-        <TextInput
-          style={styles.input}
-          placeholder="Telefone"
-          value={formatarTelefone(telefone)}
-          autoCapitalize="none"
-          onChangeText={(text) => {
-            const somenteNumeros = text.replace(/\D/g, "").slice(0, 11);
-            setTelefone(somenteNumeros);
-          }}
-          keyboardType="phone-pad"
-        />
+        <View style={styles.blocoPadrao}>
+          <TextInput
+            style={styles.input}
+            placeholder="Telefone"
+            value={formatarTelefone(telefone)}
+            autoCapitalize="none"
+            onChangeText={(text) => {
+              const somenteNumeros = text.replace(/\D/g, "").slice(0, 11);
+              setTelefone(somenteNumeros);
+            }}
+            keyboardType="phone-pad"
+          />
+        </View>
 
         {/* Campo de Data de Nascimento */}
-        <MaskedTextInput
-          mask="99/99/9999"
-          keyboardType="numeric"
-          onChangeText={(text) => setDataNascimento(text)}
-          value={dataNascimento}
-          placeholder="DD/MM/AAAA"
-          style={styles.input}
-        />
+        <View style={styles.blocoPadrao}>
+          <MaskedTextInput
+            mask="99/99/9999"
+            keyboardType="numeric"
+            onChangeText={(text) => setDataNascimento(text)}
+            value={dataNascimento}
+            placeholder="DD/MM/AAAA"
+            style={styles.input}
+          />
+        </View>
+
+        {/* Campo de Senha */}
 
         {/* Senha com ícone */}
+
         <View style={[{ flexDirection: "row", alignItems: "center" }]}>
           <TextInput
             style={styles.input}
@@ -423,6 +436,7 @@ export default function CadastroScreen() {
         </View>
 
         {/* Confirmar Senha com ícone */}
+
         <View style={[{ flexDirection: "row", alignItems: "center" }]}>
           <TextInput
             style={styles.input}
@@ -450,20 +464,23 @@ export default function CadastroScreen() {
         </View>
 
         {/* Campo de Tipo de Usuario*/}
-        <Text style={styles.label}>
-          Você é um comerciante ou Chef ? Não obrigatório
-        </Text>
-        <Picker
-          selectedValue={tipoUsuario}
-          onValueChange={(itemValue) => setTipoUsuario(itemValue)}
-          style={styles.picker}
-        >
-          <Picker.Item label="Selecione um tipo de usuário" value="" />
-          <Picker.Item label="Comerciante" value="comerciante" />
-          <Picker.Item label="Chef" value="chef" />
-        </Picker>
+        <View style={styles.blocoPadrao}>
+          <Text style={styles.label}>
+            Você é um comerciante ou Chef ? Não obrigatório
+          </Text>
+          <Picker
+            selectedValue={tipoUsuario}
+            onValueChange={(itemValue) => setTipoUsuario(itemValue)}
+            style={styles.picker}
+          >
+            <Picker.Item label="Selecione um tipo de usuário" value="" />
+            <Picker.Item label="Comerciante" value="comerciante" />
+            <Picker.Item label="Chef" value="chef" />
+          </Picker>
+        </View>
 
         {/* Campo de Usuario Chef*/}
+
         {tipoUsuario === "chef" && (
           <>
             {/* Campo de Especialidade */}

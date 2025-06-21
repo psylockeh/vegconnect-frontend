@@ -86,17 +86,26 @@ const feedStyles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   botaoPublicar: {
-    marginTop: 16,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
     backgroundColor: "#3C6E47",
-    paddingVertical: 12,
-    borderRadius: 10,
-    alignItems: "center",
+    alignSelf: "flex-end",
+    marginTop: 12,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 2,
   },
+
   textoBotaoPublicar: {
     color: "#fff",
-    fontSize: 15,
-    fontWeight: "bold",
+    fontWeight: "600",
+    fontSize: 14,
+    textAlign: "center",
   },
+
   cardPost: {
     backgroundColor: "#fff",
     borderRadius: 12,
@@ -143,8 +152,20 @@ const feedStyles = StyleSheet.create({
   cardLinhaPostagem: {
     flexDirection: "row",
     flexWrap: "wrap",
-    gap:8,
-  }
+    gap: 8,
+  },
+  input: {
+    color: "#333",
+    width: "100%",
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    padding: 12,
+    fontSize: 16,
+    backgroundColor: "#fff",
+    minHeight: 100,
+    textAlignVertical: "top",
+  },
 });
 
 export default feedStyles;

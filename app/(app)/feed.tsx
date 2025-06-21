@@ -8,7 +8,7 @@ import {
   Image,
 } from "react-native";
 import { useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import axios from "axios";
 import feedStyles from "@/styles/FeedStyles";
 import Sidebar from "@/components/Sidebar";
@@ -25,6 +25,8 @@ import CardPostagem from "@/components/CardPostagem";
 import { useContext } from "react";
 import { AuthContext } from "@/context/AuthContext";
 import { AuthContextProps } from "@/context/AuthContext";
+import { useRef } from "react";
+import InputRecado from "@/components/postagens/InputRecado";
 
 type Postagem = {
   id: number;
@@ -54,6 +56,8 @@ export default function Feed() {
   const [recadoTexto, setRecadoTexto] = useState("");
   const [midiasSelecionadas, setMidiasSelecionadas] = useState<string[]>([]);
   const { perfilUsuario } = useAuth();
+  const recadoTextoRef = useRef("");
+  const [contador, setContador] = useState(0);
 
   const carregarPostagens = async () => {
     try {
@@ -87,6 +91,12 @@ export default function Feed() {
     setMostrarModal(true);
   };
 
+  const getContadorColor = (qtd: number) => {
+    if (qtd >= 500) return "#E74C3C";
+    if (qtd >= 400) return "#F39C12";
+    return "#888";
+  };
+
   const selecionarImagem = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -104,8 +114,8 @@ export default function Feed() {
     setMidiasSelecionadas((prev) => prev.filter((m) => m !== uri));
   };
 
-  const publicarRecado = async () => {
-    if (!recadoTexto.trim()) return;
+  const publicarRecado = async (texto: string) => {
+    if (!texto.trim()) return;
 
     try {
       const midia_urls: string[] = [];
@@ -116,12 +126,13 @@ export default function Feed() {
 
       await enviarPostagem({
         tp_post: "recado",
-        conteudo: recadoTexto.trim(),
+        conteudo: texto.trim(),
         midia_urls,
       });
 
       Toast.show({ type: "success", text1: "Recado publicado!" });
-      setRecadoTexto("");
+      recadoTextoRef.current = "";
+      setContador(0);
       setMidiasSelecionadas([]);
       carregarPostagens();
     } catch (err: any) {
@@ -132,162 +143,141 @@ export default function Feed() {
       });
     }
   };
+
   console.log("📷 URL da foto:", perfilUsuario?.foto_perfil);
 
   return (
     <View style={feedStyles.container}>
-      <Sidebar onPostPress={() => { }} />
+      <Sidebar onPostPress={() => {}} />
 
       <View style={feedStyles.mainContent}>
-        <ScrollView showsVerticalScrollIndicator={false}>
-          {/* Card de criação de recado */}
-          <View style={feedStyles.cardCriarPost}>
-            <View style={feedStyles.headerUsuario}>
-              {perfilUsuario?.foto_perfil ? (
-                <Image
-                  source={{ uri: perfilUsuario.foto_perfil }}
-                  style={feedStyles.avatar}
-                />
-              ) : (
-                <View style={feedStyles.avatar}>
-                  <Text
-                    style={{
-                      color: "#black",
-                      fontSize: 10,
-                      textAlign: "auto",
-                      marginTop: 15,
-                      paddingLeft: 5,
-                    }}
-                  >
-                    Sem foto
+        <FlatList
+          data={postagens}
+          keyExtractor={(item) => item.id.toString()}
+          ListHeaderComponent={
+            <View style={feedStyles.cardCriarPost}>
+              {/* Header do usuário */}
+              <View style={feedStyles.headerUsuario}>
+                {perfilUsuario?.foto_perfil ? (
+                  <Image
+                    source={{ uri: perfilUsuario.foto_perfil }}
+                    style={feedStyles.avatar}
+                  />
+                ) : (
+                  <View style={feedStyles.avatar}>
+                    <Text
+                      style={{ color: "#000", fontSize: 10, marginTop: 15 }}
+                    >
+                      Sem foto
+                    </Text>
+                  </View>
+                )}
+
+                <View>
+                  <Text style={feedStyles.nomeUsuario}>
+                    {perfilUsuario?.nome || "Usuário"}
+                  </Text>
+                  <Text style={feedStyles.tipoUsuario}>
+                    <FontAwesome
+                      name="leaf"
+                      style={{
+                        color: "#67b26f",
+                        fontSize: 20,
+                        marginRight: 8,
+                      }}
+                    />
+                    {perfilUsuario?.tp_user || "Público"}
                   </Text>
                 </View>
+              </View>
+
+              {/* Campo e botão de recado */}
+              <InputRecado onSubmit={publicarRecado} />
+
+              {/* Imagens selecionadas */}
+              {midiasSelecionadas.length > 0 && (
+                <ScrollView horizontal style={{ marginTop: 10 }}>
+                  {midiasSelecionadas.map((uri, index) => (
+                    <View
+                      key={index}
+                      style={{ position: "relative", marginRight: 8 }}
+                    >
+                      <Image
+                        source={{ uri }}
+                        style={{ width: 90, height: 90, borderRadius: 8 }}
+                      />
+                      <Pressable
+                        onPress={() => removerImagem(uri)}
+                        style={{
+                          position: "absolute",
+                          top: -6,
+                          right: -6,
+                          backgroundColor: "#f32",
+                          width: 20,
+                          height: 20,
+                          borderRadius: 10,
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Text style={{ color: "#fff", fontSize: 12 }}>X</Text>
+                      </Pressable>
+                    </View>
+                  ))}
+                </ScrollView>
               )}
 
-              <View>
-                <Text style={feedStyles.nomeUsuario}>
-                  {perfilUsuario?.nome || "Usuário"}
-                </Text>
-                <Text style={feedStyles.tipoUsuario}>
-                  <FontAwesome
-                    name="leaf"
-                    style={{ color: "#67b26f", fontSize: 20, marginRight: 8 }}
-                  />
-                  {perfilUsuario?.tp_user || "Público"}
-                </Text>
+              <Text style={feedStyles.ouLabel}>ou</Text>
+
+              {/* Botões de tipo de postagem */}
+              <View style={feedStyles.cardLinhaPostagem}>
+                <View style={feedStyles.botoesTipoPostagem}>
+                  {["Receita", "Evento", "Estabelecimento", "Promoção"]
+                    .filter((tipo) => {
+                      const tipoMin = tipo.toLowerCase();
+                      const permissoes =
+                        permissoesPorTipoUsuario[
+                          usuario?.tp_user as keyof typeof permissoesPorTipoUsuario
+                        ] || [];
+                      return permissoes.includes(tipoMin);
+                    })
+                    .map((tipo: string) => (
+                      <Pressable
+                        key={tipo}
+                        style={feedStyles.botaoTipo}
+                        onPress={() => abrirModal(tipo)}
+                      >
+                        <Text style={feedStyles.textoBotaoTipo}>{tipo}</Text>
+                      </Pressable>
+                    ))}
+                </View>
+
+                <View style={feedStyles.iconesAcoes}>
+                  <Pressable onPress={selecionarImagem}>
+                    <MaterialIcons name="image" size={22} color="#3C6E47" />
+                  </Pressable>
+                  <Pressable>
+                    <MaterialIcons name="group" size={22} color="#3C6E47" />
+                  </Pressable>
+                </View>
               </View>
             </View>
-
-            <TextInput
-              placeholder="Sobre o que você quer falar?"
-              placeholderTextColor="#888"
-              style={feedStyles.inputPost}
-              value={recadoTexto}
-              onChangeText={setRecadoTexto}
-              multiline
-            />
-
-            {midiasSelecionadas.length > 0 && (
-              <ScrollView horizontal style={{ marginTop: 10 }}>
-                {midiasSelecionadas.map((uri, index) => (
-                  <View
-                    key={index}
-                    style={{ position: "relative", marginRight: 8 }}
-                  >
-                    <Image
-                      source={{ uri }}
-                      style={{ width: 90, height: 90, borderRadius: 8 }}
-                    />
-                    <Pressable
-                      onPress={() => removerImagem(uri)}
-                      style={{
-                        position: "absolute",
-                        top: -6,
-                        right: -6,
-                        backgroundColor: "#f32",
-                        width: 20,
-                        height: 20,
-                        borderRadius: 10,
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                    >
-                      <Text style={{ color: "#fff", fontSize: 12 }}>X</Text>
-                    </Pressable>
-                  </View>
-                ))}
-              </ScrollView>
-            )}
-
-            <Text style={feedStyles.ouLabel}>ou</Text>
-
-            <View style={feedStyles.cardLinhaPostagem}>
-              <Text style={feedStyles.ouLabel}> </Text>
-
-              <View style={feedStyles.botoesTipoPostagem}>
-                {["Receita", "Evento", "Estabelecimento", "Promoção"]
-                  .filter((tipo) => {
-                    const tipoMin = tipo.toLowerCase();
-                    const permissoes =
-                      permissoesPorTipoUsuario[
-                      usuario?.tp_user as keyof typeof permissoesPorTipoUsuario
-                      ] || [];
-
-                    return permissoes.includes(tipoMin);
-                  })
-                  .map((tipo: string) => (
-                    <Pressable
-                      key={tipo}
-                      style={feedStyles.botaoTipo}
-                      onPress={() => abrirModal(tipo)}
-                    >
-                      <Text style={feedStyles.textoBotaoTipo}>{tipo}</Text>
-                    </Pressable>
-                  ))}
-              </View>
-
-              <View style={feedStyles.iconesAcoes}>
-                <Pressable onPress={selecionarImagem}>
-                  <MaterialIcons name="image" size={22} color="#3C6E47" />
-                </Pressable>
-                <Pressable>
-                  <MaterialIcons name="group" size={22} color="#3C6E47" />
-                </Pressable>
-              </View>
-            </View>
-
-            <Pressable
-              onPress={publicarRecado}
-              disabled={!recadoTexto.trim()}
-              style={[
-                feedStyles.botaoPublicar,
-                { backgroundColor: recadoTexto.trim() ? "#3C6E47" : "#ccc" },
-              ]}
-            >
-              <Text style={feedStyles.textoBotaoPublicar}>Publicar</Text>
+          }
+          renderItem={({ item }) => (
+            <Pressable onPress={() => router.push(`/postagem/${item.id}`)}>
+              <CardPostagem postagem={item} />
             </Pressable>
-          </View>
-
-          {/* Lista de postagens */}
-          <FlatList
-            data={postagens}
-            keyExtractor={(item) => item.id.toString()}
-            scrollEnabled={true}
-            renderItem={({ item }) => (
-              <Pressable onPress={() => router.push(`/postagem/${item.id}`)}>
-                <CardPostagem postagem={item} />
-              </Pressable>
-            )}
-          />
-        </ScrollView>
+          )}
+          onEndReachedThreshold={0.2}
+          onEndReached={carregarPostagens}
+        />
       </View>
 
-      {/* Modal para outras postagens */}
       <ModalCriarPostagem
         visivel={mostrarModal}
         fechar={() => setMostrarModal(false)}
         tp_post={tpPost}
-        onPostagemCriada={carregarPostagens} // ou () => carregarPostagens()
+        onPostagemCriada={carregarPostagens}
       />
     </View>
   );
