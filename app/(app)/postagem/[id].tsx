@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, ScrollView, Image, ActivityIndicator, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  Image,
+  ActivityIndicator,
+  Pressable,
+} from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -17,6 +24,7 @@ import AvaliacaoPostagem from "@/components/acoesPostagem/AvaliacaoPostagem";
 import { useRouter } from "expo-router";
 import Sidebar from "@/components/Sidebar";
 import OpcoesPostagem from "@/components/acoesPostagem/OpcoesPostagem";
+import VisualizacaoRecado from "@/components/postagens/VisualizacaoRecado";
 
 const { perfilUsuario } = useAuth();
 
@@ -84,6 +92,9 @@ export default function DetalhesPostagem() {
         return <VisualizacaoPromocao postagem={postagem} />;
       case "estabelecimento":
         return <VisualizacaoEstabelecimento postagem={postagem} />;
+      case "recado":
+        return <VisualizacaoRecado postagem={postagem} />;
+
       default:
         return <Text>Tipo de postagem não reconhecido.</Text>;
     }
@@ -91,32 +102,43 @@ export default function DetalhesPostagem() {
 
   return (
     <View style={styles.container}>
-      <Sidebar onPostPress={() => { }} />
+      <Sidebar onPostPress={() => {}} />
       <ScrollView contentContainerStyle={{ padding: 16 }}>
         <View style={[styles.card, { borderColor: "#ccc" }]}>
           {/* Header do usuário */}
-          <View style={[styles.headerUsuario, { justifyContent: "space-between" }]}>
-              <Pressable onPress={() => router.push(`/perfil/${usuario?.id_user}`)}>
-                <View style={{ flexDirection: "row", alignItems: "center" }}>
-                  <Image
-                    source={{
-                      uri: usuario?.foto_perfil?.startsWith("http")
-                        ? usuario.foto_perfil
-                        : "https://res.cloudinary.com/dyhzz5baz/image/upload/v1746917561/default-avatar_jvqpsg.png",
-                    }}
-                    style={ModalCriarPostagemStyles.avatar}
-                    onError={() => console.log("❌ Erro ao carregar imagem de perfil")}
-                  />
-                  <View>
-                    <Text style={styles.nomeUsuario}>{usuario?.nome}</Text>
-                    <Text style={styles.nickname}>@{usuario?.nickname}</Text>
-                  </View>
+          <View
+            style={[styles.headerUsuario, { justifyContent: "space-between" }]}
+          >
+            <Pressable
+              onPress={() => router.push(`/perfil/${usuario?.id_user}`)}
+            >
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <Image
+                  source={{
+                    uri: usuario?.foto_perfil?.startsWith("http")
+                      ? usuario.foto_perfil
+                      : "https://res.cloudinary.com/dyhzz5baz/image/upload/v1746917561/default-avatar_jvqpsg.png",
+                  }}
+                  style={ModalCriarPostagemStyles.avatar}
+                  onError={() =>
+                    console.log("❌ Erro ao carregar imagem de perfil")
+                  }
+                />
+                <View>
+                  <Text style={styles.nomeUsuario}>{usuario?.nome}</Text>
+                  <Text style={styles.nickname}>@{usuario?.nickname}</Text>
                 </View>
-              </Pressable>
-
+              </View>
+            </Pressable>
 
             {/* Botões alinhados à direita, um abaixo do outro */}
-            <View style={{ flexDirection: "column", alignItems: "flex-end", gap: 6 }}>
+            <View
+              style={{
+                flexDirection: "column",
+                alignItems: "flex-end",
+                gap: 6,
+              }}
+            >
               <View style={{ marginBottom: -15 }}>
                 <AvaliacaoPostagem postagem={postagem} />
               </View>
@@ -127,20 +149,24 @@ export default function DetalhesPostagem() {
                 <OpcoesPostagem
                   postagemId={postagem.id}
                   onEditar={() => router.push(`/editar/${postagem.id}`)}
-                  onPostagemExcluida={() =>router.push(`/perfil/${usuario?.id_user}`)}
+                  onPostagemExcluida={() =>
+                    router.push(`/perfil/${usuario?.id_user}`)
+                  }
                 />
               )}
             </View>
           </View>
 
           {/* Título e conteúdo */}
-            {postagem.titulo && (
-              <Text style={styles.titulo}>{postagem.titulo}</Text>
-            )}
-            {postagem.tp_post !== "receita" && postagem.conteudo && (
+          {postagem.titulo && (
+            <Text style={styles.titulo}>{postagem.titulo}</Text>
+          )}
+          {postagem.tp_post !== "receita" && postagem.conteudo && (
+            <View style={styles.cardRecado}>
               <Text style={styles.conteudo}>{postagem.conteudo}</Text>
-            )}
-          
+            </View>
+          )}
+
           {/* Visualização do tipo de postagem */}
           {renderVisualizacaoTipo()}
 

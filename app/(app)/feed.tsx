@@ -98,6 +98,11 @@ export default function Feed() {
   };
 
   const selecionarImagem = async () => {
+    if (midiasSelecionadas.length >= 4) {
+      alert("Você só pode adicionar até 4 imagens.");
+      return;
+    }
+
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsMultipleSelection: true,
@@ -105,8 +110,16 @@ export default function Feed() {
     });
 
     if (!result.canceled) {
-      const uris = result.assets.map((a) => a.uri);
-      setMidiasSelecionadas((prev) => [...prev, ...uris]);
+      const novas = result.assets.map((a) => a.uri);
+      const total = midiasSelecionadas.length + novas.length;
+
+      if (total > 4) {
+        alert("Limite de 4 imagens atingido.");
+        const permitidas = novas.slice(0, 4 - midiasSelecionadas.length);
+        setMidiasSelecionadas((prev) => [...prev, ...permitidas]);
+      } else {
+        setMidiasSelecionadas((prev) => [...prev, ...novas]);
+      }
     }
   };
 

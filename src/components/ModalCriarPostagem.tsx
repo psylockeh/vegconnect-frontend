@@ -76,19 +76,30 @@ export default function ModalCriarPostagem({
     perfilUsuario?.foto_perfil?.startsWith("http") && !erroImagem
       ? { uri: perfilUsuario.foto_perfil }
       : {
-        uri: "https://res.cloudinary.com/dyhzz5baz/image/upload/v1746917561/default-avatar_jvqpsg.png",
-      };
+          uri: "https://res.cloudinary.com/dyhzz5baz/image/upload/v1746917561/default-avatar_jvqpsg.png",
+        };
 
   const selecionarImagens = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images as any,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsMultipleSelection: true,
       quality: 0.7,
     });
 
     if (!result.canceled) {
-      const uris = result.assets.map((asset) => asset.uri);
-      setMidiasSelecionadas((prev) => [...prev, ...uris]);
+      const novas = result.assets.map((a) => a.uri);
+      const total = midiasSelecionadas.length + novas.length;
+
+      if (total > 4) {
+        Toast.show({
+          type: "error",
+          text1: "Limite de imagens atingido",
+          text2: "Você só pode enviar até 4 imagens por publicação.",
+        });
+        return;
+      }
+
+      setMidiasSelecionadas((prev) => [...prev, ...novas]);
     }
   };
 
@@ -443,7 +454,7 @@ export default function ModalCriarPostagem({
             {renderFormulario()}
           </ScrollView>
 
-          <View style={{marginTop: 15, marginBottom: -5}}>
+          <View style={{ marginTop: 15, marginBottom: -5 }}>
             {midiasSelecionadas.length > 0 && (
               <ScrollView horizontal>
                 {midiasSelecionadas.map((uri, index) => (

@@ -66,18 +66,33 @@ export default function CadastroScreen() {
   const selecionarImagem = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      quality: 0.8,
+      allowsMultipleSelection: true,
+      quality: 0.7,
     });
 
     if (!result.canceled) {
-      const uploadedUrl = await uploadImageToCloudinary(result.assets[0].uri);
-      if (uploadedUrl) {
-        setImagemCertificacao(uploadedUrl);
-        setCertificacoes(uploadedUrl);
+      const novas = result.assets.map((a) => a.uri);
+      const total = midiasSelecionadas.length + novas.length;
+
+      if (total > 4) {
+        if (Platform.OS === "android") {
+          ToastAndroid.show(
+            "Limite de imagens atingido. Você só pode enviar até 4 imagens por publicação.",
+            ToastAndroid.SHORT
+          );
+        } else {
+          Alert.alert(
+            "Limite de imagens atingido",
+            "Você só pode enviar até 4 imagens por publicação."
+          );
+        }
+        return;
       }
+
+      setMidiasSelecionadas((prev) => [...prev, ...novas]);
     }
   };
+  const [midiasSelecionadas, setMidiasSelecionadas] = useState<string[]>([]);
 
   const certificacoesDisponiveis = [
     "SENAC – Cozinha Profissional",

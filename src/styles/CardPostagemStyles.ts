@@ -166,4 +166,15 @@ export const styles = StyleSheet.create({
     borderTopColor: "#eee",
     paddingTop: 10,
   },
+  cardRecado: {
+    backgroundColor: "#F5FAF6",
+    borderRadius: 12,
+    padding: 16,
+    marginTop: 16,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2, // para Android
+  },
 });
