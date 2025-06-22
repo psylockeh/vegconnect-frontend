@@ -81,107 +81,117 @@ export default function PerfilUsuario() {
 
   return (
     <View style={styles.container}>
-      <Sidebar onPostPress={() => { }} />
+      <Sidebar onPostPress={() => {}} />
       <View style={styles.mainContent}>
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.cardPerfil}>
+            {/* Seção: Cabeçalho do perfil */}
             <View style={styles.headerUsuario}>
-              {fotoPerfilUrl && !erroImagem ? (
-                <Image
-                  source={{ uri: fotoPerfilUrl }}
-                  style={styles.avatar}
-                  onError={() => setErroImagem(true)}
-                />
-              ) : (
-                <Image
-                  source={{
-                    uri: usuario.foto_perfil?.startsWith("http")
-                      ? usuario.foto_perfil
+              <Image
+                source={{
+                  uri:
+                    fotoPerfilUrl && !erroImagem
+                      ? fotoPerfilUrl
                       : "https://res.cloudinary.com/dyhzz5baz/image/upload/v1746917561/default-avatar_jvqpsg.png",
-                  }}
-                  style={styles.avatar}
-                />
-              )}
-
+                }}
+                style={styles.avatar}
+                onError={() => setErroImagem(true)}
+              />
               <View>
                 <Text style={styles.nomeUsuario}>
                   {usuario?.nome || "Usuário"}
                 </Text>
-                <Text style={styles.nickname}>
-                  @{usuario?.nickname || "usuário"}
-                </Text>
+                <Text style={styles.nickname}>@{usuario?.nickname}</Text>
                 <Text style={styles.tpUser}>
-                  <FontAwesome
-                    name="leaf"
-                    style={{ color: "#67b26f", fontSize: 20, marginRight: 8 }}
-                  />
+                  <FontAwesome name="leaf" style={styles.iconeUser} />
                   {usuario?.tp_user || "Público"}
                 </Text>
-
-                {usuario?.tp_user === "Comerciante" && (
-                  <Pressable onPress={toggleInfo}>
-                    <View style={styles.infoContainer}>
-                      <MaterialIcons
-                        name={
-                          showInfo ? "keyboard-arrow-up" : "keyboard-arrow-down"
-                        }
-                        style={styles.iconInfoCom}
-                      />
-                      <Text style={styles.info}>
-                        Exibir Informações do Comércio
-                      </Text>
-                    </View>
-                  </Pressable>
-                )}
-
-                {usuario?.tp_user === "Chef" && (
-                  <>
-                    <Text style={styles.info}>
-                      Especialidade: {usuario?.especialidade}
-                    </Text>
-                    <Text style={styles.info}>
-                      Certificações: {usuario?.certificacoes}
-                    </Text>
-                  </>
-                )}
-
-                {usuario?.tp_user === "Comum" && (
-                  <Text style={styles.info}>
-                    Preferência alimentar: {usuario?.pref_alim}
-                  </Text>
-                )}
               </View>
             </View>
 
-            {/* Informações Comerciante */}
-            {showInfo && usuario?.tp_user === "Comerciante" && (
-              <View style={styles.contInfoComercio}>
-                <Text style={styles.infoComer}>
-                  Nome do Comércio: {usuario?.nome_com}
-                </Text>
-                <Text style={styles.infoComer}>
-                  Tipo do Comércio: {usuario?.tipo_com}
-                </Text>
-                <Text style={styles.infoComer}>
-                  Telefone: {usuario?.tel_com}
-                </Text>
-                <Text style={styles.infoComer}>
-                  Tipo de Produto: {usuario?.tipo_prod}
-                </Text>
-                <Text style={styles.infoComer}>
-                  Endereço do Comércio: {usuario?.ender_com}
-                </Text>
-                <Text style={styles.infoComer}>CEP: {usuario?.cep_com}</Text>
-                <Text style={styles.infoComer}>CNPJ: {usuario?.cnpj}</Text>
-              </View>
-            )}
+            {/* Seção: Detalhes do perfil */}
+            <View style={styles.secao}>
+              <Text style={styles.tituloSecao}>Informações</Text>
 
-            {typeof usuario?.bio === "string" &&
-              usuario.bio.trim().length > 0 && (
-                <Text style={styles.bio}>{usuario.bio}</Text>
+              {usuario?.tp_user === "Chef" && (
+                <>
+                  <Text style={styles.itemInfo}>
+                    <Text style={styles.labelInfo}>Especialidade: </Text>
+                    {usuario?.especialidade}
+                  </Text>
+                  <Text style={styles.itemInfo}>
+                    <Text style={styles.labelInfo}>Certificações: </Text>
+                    {usuario?.certificacoes}
+                  </Text>
+                </>
               )}
 
-            {/* Botão de editar perfil */}
+              {usuario?.tp_user === "Comum" && (
+                <Text style={styles.itemInfo}>
+                  <Text style={styles.labelInfo}>Preferência alimentar: </Text>
+                  {usuario?.pref_alim}
+                </Text>
+              )}
+
+              {usuario?.tp_user === "Comerciante" && (
+                <>
+                  <Pressable
+                    onPress={toggleInfo}
+                    style={styles.botaoToggleInfo}
+                  >
+                    <MaterialIcons
+                      name={showInfo ? "expand-less" : "expand-more"}
+                      size={20}
+                      color="#3C6E47"
+                    />
+                    <Text style={styles.textoToggleInfo}>
+                      Informações do Comércio
+                    </Text>
+                  </Pressable>
+                  {showInfo && (
+                    <View style={styles.cardInfoComercio}>
+                      <Text style={styles.itemInfo}>
+                        <Text style={styles.labelInfo}>Nome do Comércio: </Text>
+                        {usuario?.nome_com}
+                      </Text>
+                      <Text style={styles.itemInfo}>
+                        <Text style={styles.labelInfo}>Tipo: </Text>
+                        {usuario?.tipo_com}
+                      </Text>
+                      <Text style={styles.itemInfo}>
+                        <Text style={styles.labelInfo}>Telefone: </Text>
+                        {usuario?.tel_com}
+                      </Text>
+                      <Text style={styles.itemInfo}>
+                        <Text style={styles.labelInfo}>Endereço: </Text>
+                        {usuario?.ender_com}
+                      </Text>
+                      <Text style={styles.itemInfo}>
+                        <Text style={styles.labelInfo}>CEP: </Text>
+                        {usuario?.cep_com}
+                      </Text>
+                      <Text style={styles.itemInfo}>
+                        <Text style={styles.labelInfo}>CNPJ: </Text>
+                        {usuario?.cnpj}
+                      </Text>
+                    </View>
+                  )}
+                </>
+              )}
+            </View>
+
+            {/* Seção: Biografia */}
+            {typeof usuario?.bio === "string" &&
+              usuario.bio.trim().length > 0 && (
+                <View style={styles.secao}>
+                  <Text style={styles.tituloSecao}>Biografia</Text>
+                  <View style={styles.caixaBio}>
+                    <Text style={styles.textoBio}>{usuario.bio.trim()}</Text>
+                  </View>
+                </View>
+              )}
+
+            {/* Botões de ação */}
             {usuarioLogado?.id_user === Number(id) && (
               <View style={styles.containerBotoes}>
                 <Pressable
@@ -194,25 +204,29 @@ export default function PerfilUsuario() {
                   <Text style={styles.textoBotaoAlterar}>Editar Perfil</Text>
                 </Pressable>
 
-                {/* Botão de Gerenciar Favoritos */}
                 <Pressable
                   onPress={() => router.push("/favoritos")}
                   style={({ pressed }) => [
                     styles.botaoGerenciarFavoritos,
-                    pressed && styles.botaoPressionado
+                    pressed && styles.botaoPressionado,
                   ]}
                 >
-                  <Text style={styles.textoBotaoAlterar}>Gerenciar Favoritos</Text>
+                  <Text style={styles.textoBotaoAlterar}>
+                    Gerenciar Favoritos
+                  </Text>
                 </Pressable>
               </View>
             )}
 
-            {/* Mural gerenciamento de postagens */}
+            {/* Mural de postagens */}
             <GerenciamentoMural
               idUser={Number(id)}
               tipoUsuario={
                 usuario?.tp_user
-                  ? usuario.tp_user.toLowerCase() as "comum" | "chef" | "comerciante"
+                  ? (usuario.tp_user.toLowerCase() as
+                      | "comum"
+                      | "chef"
+                      | "comerciante")
                   : "comum"
               }
             />

@@ -6,6 +6,12 @@ export const styles = StyleSheet.create({
     backgroundColor: "#F5FAF6",
     flexDirection: "row",
   },
+  textoToggleInfo: {
+    fontSize: 14,
+    color: "#3C6E47",
+    fontWeight: "500",
+    marginLeft: 4,
+  },
   mainContent: {
     flex: 1,
     padding: 16,
@@ -18,19 +24,20 @@ export const styles = StyleSheet.create({
     borderRadius: 16,
     marginBottom: 20,
     shadowColor: "#000",
-    shadowOpacity: 0.05,
-    shadowOffset: { width: 0, height: 3 },
-    shadowRadius: 5,
-    elevation: 3,
+    shadowOpacity: 0.04,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+    elevation: 2,
+    gap: 12,
   },
   headerUsuario: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 12,
+    marginBottom: 10,
   },
   containerBotoes: {
-    flexDirection: 'row',
-    width: '100%',
+    flexDirection: "row",
+    width: "100%",
     marginTop: 15,
   },
   botaoAlterarPerfil: {
@@ -41,7 +48,7 @@ export const styles = StyleSheet.create({
     borderRadius: 10,
     marginRight: 10,
     borderWidth: 3,
-    borderColor: '#3C6E47',
+    borderColor: "#3C6E47",
   },
   botaoGerenciarFavoritos: {
     flex: 1,
@@ -50,10 +57,10 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 10,
     borderWidth: 3,
-    borderColor: '#3C6E47',
+    borderColor: "#3C6E47",
   },
   botaoPressionado: {
-    backgroundColor: '#94cca0',
+    backgroundColor: "#94cca0",
     opacity: 0.9,
   },
   textoBotaoAlterar: {
@@ -81,7 +88,7 @@ export const styles = StyleSheet.create({
   },
   tpUser: {
     fontSize: 14,
-    color: '#333',
+    color: "#333",
     marginTop: 5,
   },
 
@@ -111,24 +118,23 @@ export const styles = StyleSheet.create({
     marginBottom: 15,
     paddingLeft: 20,
   },
-
   infoComer: {
     backgroundColor: "#F5FAF6",
     padding: 10,
     borderRadius: 10,
-    fontSize: 16,
-    marginRight: "5%",
-    margin: 1,
-    marginLeft: 10,
+    fontSize: 15,
+    marginVertical: 4,
+    marginHorizontal: 10,
     borderWidth: 1,
     borderColor: "#D7E2DA",
-    color: "#666",
-    fontWeight: "bold",
+    color: "#444",
+    fontWeight: "500",
   },
 
   infoContainer: {
     flexDirection: "row",
     alignItems: "center",
+    marginTop: 12,
   },
 
   iconInfoCom: {
@@ -142,5 +148,80 @@ export const styles = StyleSheet.create({
     borderBottomWidth: 2,
     borderBottomColor: "#3C6E47",
     color: "#3C6E47",
+  },
+  botoesToggleInfo: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    marginTop: 8,
+    marginBottom: 12,
+  },
+
+  cardInfoComercio: {
+    backgroundColor: "#f1f8f4",
+    padding: 16,
+    borderRadius: 12,
+    marginTop: 12,
+    marginBottom: 12,
+    gap: 10,
+    borderWidth: 1,
+    borderColor: "#d1e7d4",
+  },
+  iconeUser: {
+    color: "#67b26f",
+    fontSize: 20,
+    marginRight: 6,
+  },
+  toggleInfoTexto: {
+    fontSize: 14,
+    color: "#3C6E47",
+    fontWeight: "500",
+    marginLeft: 4,
+  },
+
+  botaoToggleInfo: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    marginTop: 12,
+    marginBottom: 10,
+  },
+
+  itemInfo: {
+    fontSize: 14,
+    color: "#333",
+  },
+
+  labelInfo: {
+    fontWeight: "bold",
+    color: "#2E7D32",
+  },
+  secao: {
+    marginTop: 20,
+    marginBottom: 6,
+    borderBottomWidth: 1,
+    borderBottomColor: "#dcdcdc",
+    paddingBottom: 4,
+  },
+
+  tituloSecao: {
+    fontSize: 15,
+    fontWeight: "bold",
+    color: "#2E7D32",
+  },
+  caixaBio: {
+    backgroundColor: "#fdfdfd",
+    padding: 10,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "#eee",
+    marginTop: 12,
+    marginBottom: 10,
+  },
+
+  textoBio: {
+    fontSize: 14,
+    color: "#333",
+    lineHeight: 18,
   },
 });
