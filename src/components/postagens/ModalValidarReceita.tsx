@@ -16,6 +16,7 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_URL } from "@/config/api";
 import { useAuth } from "@/context/AuthContext";
+import { Alert } from "react-native";
 
 export default function ModalValidarReceita({
   visible,
@@ -89,42 +90,72 @@ export default function ModalValidarReceita({
   };
 
   const handleSubmit = async () => {
+    const estaReprovando = aprovado === false;
+
+    const justificativasVazias =
+      !houveIncoerencia && !faltaInstrucao && !faltaIngrediente;
+
+    // 🔍 Log de verificação dos dados antes de enviar
+    console.log("📤 Dados a enviar:", {
+      descricao,
+      imagens,
+      aprovado,
+      houveIncoerencia,
+      ingredientesSelecionados,
+      justificativas,
+      faltaInstrucao,
+      faltaIngrediente,
+      postagemId,
+      userToken,
+    });
+
+    // ❌ Validação geral
     if (!descricao || imagens.length === 0 || aprovado === null) {
-      return Toast.show({
-        type: "error",
-        text1: "Preencha todos os campos obrigatórios.",
-      });
+      return Alert.alert(
+        "Atenção",
+        "Preencha a descrição, adicione pelo menos uma imagem e selecione se a receita foi aprovada ou reprovada."
+      );
+    }
+
+    // ❌ Validação extra para reprovação
+    if (estaReprovando && justificativasVazias) {
+      return Alert.alert(
+        "Reprovação incompleta",
+        "Para reprovar a receita, selecione ao menos uma justificativa: incoerência, falta de instrução ou falta de ingrediente."
+      );
     }
 
     try {
+      const payload = {
+        descricao_teste: descricao,
+        evidencias_urls: imagens,
+        aprovado,
+        houve_incoerencia: houveIncoerencia,
+        ingredientes_incoerentes: ingredientesSelecionados,
+        justificativas,
+        falta_instrucao: faltaInstrucao,
+        falta_ingrediente: faltaIngrediente,
+      };
+
+      console.log("✅ Enviando payload para API:", payload);
+
       await axios.post(
         `${API_URL}/usuario/receitas/${postagemId}/selo-confianca`,
-        {
-          descricao_teste: descricao,
-          evidencias_urls: imagens,
-          aprovado,
-          houve_incoerencia: houveIncoerencia,
-          ingredientes_incoerentes: ingredientesSelecionados,
-          justificativas,
-          falta_instrucao: faltaInstrucao,
-          falta_ingrediente: faltaIngrediente,
-        },
+        payload,
         {
           headers: { Authorization: `Bearer ${userToken}` },
         }
       );
 
-      Toast.show({
-        type: "success",
-        text1: "Selo enviado com sucesso!",
-      });
+      Alert.alert("Sucesso", "Validação enviada com sucesso!");
       onClose();
     } catch (err: any) {
-      Toast.show({
-        type: "error",
-        text1: "Erro ao enviar selo",
-        text2: err.response?.data?.msg || "Tente novamente",
-      });
+      console.error("❌ Erro ao enviar selo:", err.response || err);
+
+      Alert.alert(
+        "Erro ao enviar",
+        err.response?.data?.msg || "Tente novamente mais tarde."
+      );
     }
   };
 
@@ -357,22 +388,18 @@ export default function ModalValidarReceita({
             </View>
 
             <Pressable
+              disabled={aprovado === null}
               onPress={handleSubmit}
-              onHoverIn={() => setHovered(true)}
-              onHoverOut={() => setHovered(false)}
               style={[
                 styles.enviar,
                 hovered && {
                   backgroundColor: "#28B463",
                   transform: [{ scale: 1.02 }],
                 },
+                aprovado === null && { opacity: 0.5 },
               ]}
             >
               <Text style={styles.enviarTexto}>🚀 Enviar Validação</Text>
-            </Pressable>
-
-            <Pressable onPress={onClose}>
-              <Text style={styles.fechar}>Fechar</Text>
             </Pressable>
           </ScrollView>
         </View>

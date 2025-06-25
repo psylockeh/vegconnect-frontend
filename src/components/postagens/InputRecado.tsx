@@ -2,6 +2,9 @@ import { View, TextInput, Pressable, Text } from "react-native";
 import { useRef, useState } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import feedStyles from "@/styles/FeedStyles";
+import { FontAwesome } from "@expo/vector-icons";
+import { useContext } from "react";
+import { AuthContext, AuthContextProps } from "@/context/AuthContext";
 
 interface Props {
   onSubmit: (texto: string) => void;
@@ -54,20 +57,30 @@ export default function InputRecado({ onSubmit }: Props) {
         </Pressable>
       </View>
 
-      <Pressable
-        onPress={() => onSubmit(recadoTextoRef.current)}
-        disabled={!recadoTexto.trim()}
-        style={[
-          feedStyles.botaoPublicar,
-          {
-            backgroundColor: recadoTexto.trim() ? "#3C6E47" : "#ccc",
-            alignSelf: "flex-end",
-            marginTop: 10,
-          },
-        ]}
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+          flexWrap: "wrap",
+          gap: 8,
+          marginTop: 12,
+        }}
       >
-        <Text style={feedStyles.textoBotaoPublicar}>Publicar</Text>
-      </Pressable>
+        {/* Botão Publicar */}
+        <Pressable
+          onPress={() => onSubmit(recadoTextoRef.current)}
+          disabled={!recadoTexto.trim()}
+          style={[
+            feedStyles.botaoPublicar,
+            {
+              backgroundColor: recadoTexto.trim() ? "#3C6E47" : "#ccc",
+            },
+          ]}
+        >
+          <Text style={feedStyles.textoBotaoPublicar}>Publicar</Text>
+        </Pressable>
+      </View>
     </>
   );
 }

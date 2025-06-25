@@ -7,7 +7,6 @@ import {
   ActivityIndicator,
   Image,
   ScrollView,
-
 } from "react-native";
 import {
   formatarCNPJ,
@@ -171,7 +170,6 @@ export default function EditarPerfilScreen() {
     "Outros",
   ];
 
-
   useEffect(() => {
     carregarPerfil();
   }, []);
@@ -218,7 +216,6 @@ export default function EditarPerfilScreen() {
         setEnderCom(perfilUsuario.ender_com || "");
         setCnpj(perfilUsuario.cnpj || "");
         setCepCom(perfilUsuario.cep_com || "");
-
       }
 
       if (tipo === "Chef") {
@@ -295,8 +292,7 @@ export default function EditarPerfilScreen() {
         return "📞 Telefone do comércio inválido.";
       if (cepCom.replace(/\D/g, "").length !== 8)
         return "📍 CEP deve conter 8 dígitos.";
-      if (cnpj.replace(/\D/g, "").length !== 14)
-        return "📄 CNPJ deve conter 14 dígitos numéricos.";
+      if (cnpj.replace(/\D/g, "").length !== 14) return "📄 CNPJ inválido.";
     }
 
     return null;
@@ -343,8 +339,8 @@ export default function EditarPerfilScreen() {
         bio,
         foto_perfil:
           foto_perfil &&
-            typeof foto_perfil === "string" &&
-            foto_perfil.startsWith("http")
+          typeof foto_perfil === "string" &&
+          foto_perfil.startsWith("http")
             ? foto_perfil
             : null,
       };
@@ -447,7 +443,7 @@ export default function EditarPerfilScreen() {
 
   return (
     <View style={styles.container}>
-      <Sidebar onPostPress={() => { }} />
+      <Sidebar onPostPress={() => {}} />
       <View style={styles.mainContent}>
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.cardEditarPerfil}>
@@ -459,8 +455,8 @@ export default function EditarPerfilScreen() {
               >
                 <View style={styles.avatarContainer}>
                   {foto_perfil &&
-                    typeof foto_perfil === "string" &&
-                    foto_perfil.startsWith("http") ? (
+                  typeof foto_perfil === "string" &&
+                  foto_perfil.startsWith("http") ? (
                     <Image
                       source={{ uri: foto_perfil }}
                       style={styles.avatar}
@@ -555,9 +551,16 @@ export default function EditarPerfilScreen() {
                     secureTextEntry={!showSenha}
                     autoCapitalize="none"
                   />
-                  <Pressable onPress={() => setShowSenha(!showSenha)}
-                    style={{ position: "absolute", right: 10, marginBottom: 10, padding: 5 }}
-                    hitSlop={10}>
+                  <Pressable
+                    onPress={() => setShowSenha(!showSenha)}
+                    style={{
+                      position: "absolute",
+                      right: 10,
+                      marginBottom: 10,
+                      padding: 5,
+                    }}
+                    hitSlop={10}
+                  >
                     <MaterialIcons
                       name={showSenha ? "visibility" : "visibility-off"}
                       size={24}
@@ -580,11 +583,20 @@ export default function EditarPerfilScreen() {
                     secureTextEntry={!showConfirmarSenha}
                     autoCapitalize="none"
                   />
-                  <Pressable onPress={() => setShowConfirmarSenha(!showConfirmarSenha)}
-                    style={{ position: "absolute", right: 10, marginBottom: 10, padding: 5 }}
-                    hitSlop={10}>
+                  <Pressable
+                    onPress={() => setShowConfirmarSenha(!showConfirmarSenha)}
+                    style={{
+                      position: "absolute",
+                      right: 10,
+                      marginBottom: 10,
+                      padding: 5,
+                    }}
+                    hitSlop={10}
+                  >
                     <MaterialIcons
-                      name={showConfirmarSenha ? "visibility" : "visibility-off"}
+                      name={
+                        showConfirmarSenha ? "visibility" : "visibility-off"
+                      }
                       size={24}
                       color="gray"
                     />
@@ -602,7 +614,10 @@ export default function EditarPerfilScreen() {
                   onValueChange={(itemValue) => setEspecialidade(itemValue)}
                   style={styles.picker}
                 >
-                  <Picker.Item label="Selecione uma especialidade..." value="" />
+                  <Picker.Item
+                    label="Selecione uma especialidade..."
+                    value=""
+                  />
                   {especialidades.map((item: string) => (
                     <Picker.Item key={item} label={item} value={item} />
                   ))}
@@ -611,9 +626,7 @@ export default function EditarPerfilScreen() {
                 <Text style={styles.label}>Certificações:</Text>
                 <Picker
                   selectedValue={certificacoes}
-                  onValueChange={(itemValue) =>
-                    setCertificacoes(itemValue)
-                  }
+                  onValueChange={(itemValue) => setCertificacoes(itemValue)}
                   style={styles.picker}
                 >
                   <Picker.Item label="Selecione uma certificação..." value="" />
@@ -622,7 +635,10 @@ export default function EditarPerfilScreen() {
                   ))}
                 </Picker>
 
-                <Pressable onPress={selecionarImagem} style={styles.botaoImagem}>
+                <Pressable
+                  onPress={selecionarImagem}
+                  style={styles.botaoImagem}
+                >
                   <Text style={styles.textoBotao}>
                     Anexar imagem da certificação
                   </Text>
@@ -660,7 +676,6 @@ export default function EditarPerfilScreen() {
                   keyboardType="phone-pad"
                 />
 
-
                 <View style={styles.inputColuna}>
                   <Text style={styles.label}>CNPJ:</Text>
                   <TextInput
@@ -676,12 +691,17 @@ export default function EditarPerfilScreen() {
                 </View>
 
                 <Text style={styles.label}>Tipo do Comércio:</Text>
-                <TextInput
-                  style={styles.inputEditarPerfil}
-                  placeholder="Tipo do Comércio"
-                  value={tipoCom}
-                  onChangeText={setTipoCom}
-                />
+                <Picker
+                  selectedValue={tipoCom}
+                  onValueChange={(itemValue) => setTipoCom(itemValue)}
+                  style={styles.picker}
+                >
+                  <Picker.Item label="Selecione o tipo de comércio" value="" />
+                  <Picker.Item label="Restaurante" value="restaurante" />
+                  <Picker.Item label="Loja" value="loja" />
+                  <Picker.Item label="Feira" value="feira" />
+                  <Picker.Item label="Serviço" value="servico" />
+                </Picker>
 
                 <Text style={styles.label}>Tipo do Produto:</Text>
                 <Picker
@@ -700,7 +720,7 @@ export default function EditarPerfilScreen() {
                   style={styles.inputEditarPerfil}
                   placeholder="Endereço do Comércio"
                   value={enderCom}
-                  onChangeText={setEnderCom}
+                  editable={false}
                 />
 
                 {/* Campo de CEP do Comércio*/}
@@ -712,14 +732,24 @@ export default function EditarPerfilScreen() {
                   keyboardType="numeric"
                   value={cepCom}
                   maxLength={9}
-                  onChangeText={(text) => {
+                  onChangeText={async (text) => {
                     const formatted = text
                       .replace(/\D/g, "")
                       .replace(/^(\d{5})(\d)/, "$1-$2");
                     setCepCom(formatted);
 
                     const onlyDigits = formatted.replace(/\D/g, "");
-                    if (onlyDigits.length === 8) buscarEnderecoPorCep(onlyDigits);
+                    if (onlyDigits.length === 8)
+                      buscarEnderecoPorCep(onlyDigits);
+                    if (cepCom.replace(/\D/g, "").length === 8) {
+                      const response = await fetch(
+                        `https://viacep.com.br/ws/${cepCom}/json/`
+                      );
+                      const data = await response.json();
+                      setEnderCom(
+                        `${data.logradouro}, ${data.bairro}, ${data.localidade} - ${data.uf}`
+                      );
+                    }
                   }}
                 />
 
@@ -804,8 +834,8 @@ export default function EditarPerfilScreen() {
               style={[
                 styles.botaoSalvarPerfil,
                 !houveMudanca &&
-                !senha &&
-                !confirmarSenha && { backgroundColor: "#ccc" },
+                  !senha &&
+                  !confirmarSenha && { backgroundColor: "#ccc" },
               ]}
               onPress={salvarPerfil}
               disabled={loading || (!houveMudanca && !senha && !confirmarSenha)}
@@ -830,7 +860,7 @@ export default function EditarPerfilScreen() {
             </Pressable>
           </View>
         </ScrollView>
-      </View >
-    </View >
+      </View>
+    </View>
   );
 }

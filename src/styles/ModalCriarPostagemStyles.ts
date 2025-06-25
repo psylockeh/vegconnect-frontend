@@ -3,26 +3,26 @@ import { StyleSheet } from "react-native";
 const ModalCriarPostagemStyles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.35)", // fundo levemente escurecido
+    backgroundColor: "rgba(0,0,0,0.35)",
     justifyContent: "center",
     alignItems: "center",
   },
   modal: {
     width: "92%",
     maxHeight: "92%",
-    backgroundColor: "#FAFDFB", // tom claro vegetal
+    backgroundColor: "#FAFDFB",
     borderRadius: 20,
     padding: 22,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
     shadowRadius: 6,
-    elevation: 8, // Android shadow
+    elevation: 8,
   },
   titulo: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "#2E4F36", // verde escuro elegante
+    color: "#2E4F36",
     marginBottom: 14,
     textAlign: "center",
   },
@@ -82,6 +82,21 @@ const ModalCriarPostagemStyles = StyleSheet.create({
   tipoUsuario: {
     fontSize: 13,
     color: "#666",
+  },
+  rodape: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    alignItems: "center",
+    gap: 12,
+    marginTop: 16,
+    paddingHorizontal: 16,
+    paddingBottom: 20,
+  },
+
+  botaoAcao: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 8,
   },
 });
 

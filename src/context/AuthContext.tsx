@@ -52,10 +52,11 @@ export interface AuthContextProps {
     certificacoes: string,
     tipo_prod: string,
     tipo_com: string,
-    nome_comercio: string,
+    nome_com: string,
     cnpj: string,
-    cep_comercio: string,
-    telefone_comercio: string
+    cep_com: string,
+    tel_com: string,
+    ender_com: string
   ) => Promise<void>;
   forgotPassword: (email: string) => Promise<void>;
   resetPassword: (token: string, novaSenha: string) => Promise<void>;

@@ -69,15 +69,14 @@ const feedStyles = StyleSheet.create({
     marginVertical: 8,
   },
   botaoTipo: {
-    backgroundColor: "#E6F1EB",
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 8,
+    backgroundColor: "#E8F5E9",
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 6,
   },
   textoBotaoTipo: {
-    fontSize: 14,
+    color: "#2E7D32",
     fontWeight: "500",
-    color: "#2E4F36",
   },
   iconesAcoes: {
     flexDirection: "row",
@@ -86,9 +85,9 @@ const feedStyles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   botaoPublicar: {
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 20,
+    paddingVertical: 6,
+    paddingHorizontal: 26,
+    borderRadius: 6,
     backgroundColor: "#3C6E47",
     alignSelf: "flex-end",
     marginTop: 12,
@@ -165,6 +164,17 @@ const feedStyles = StyleSheet.create({
     backgroundColor: "#fff",
     minHeight: 100,
     textAlignVertical: "top",
+  },
+  inputRecado: {
+    borderColor: "#ccc",
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 10,
+    fontSize: 14,
+    minHeight: 100,
+    textAlignVertical: "top",
+    backgroundColor: "#fff",
+    marginTop: 12,
   },
 });
 

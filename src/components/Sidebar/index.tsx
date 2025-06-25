@@ -12,6 +12,8 @@ type Props = {
 export default function Sidebar({ onPostPress }: Props) {
   const [open, setOpen] = useState(true);
   const { logout, perfilUsuario } = useAuth();
+  if (!perfilUsuario) return null;
+
   const router = useRouter();
 
   const slideAnim = useRef(new Animated.Value(0)).current;
@@ -47,7 +49,7 @@ export default function Sidebar({ onPostPress }: Props) {
 
             <Pressable
               style={styles.menuItem}
-            // onPress={() => router.push("/menu")}
+              // onPress={() => router.push("/menu")}
             >
               <FontAwesome name="bars" size={20} color="#023D2E" />
               <Text style={styles.labelMenu}>Menu</Text>
@@ -104,10 +106,24 @@ export default function Sidebar({ onPostPress }: Props) {
               <Text style={styles.labelPerson}>Perfil</Text>
             </Pressable>
 
-            <Pressable style={styles.menuItem}>
-              <FontAwesome name="leaf" size={20} color="#67b26f" />
-              <Text style={styles.label}>{perfilUsuario.tp_user}</Text>
-            </Pressable>
+            {perfilUsuario ? (
+              <>
+                <Pressable
+                  style={styles.menuItem}
+                  onPress={() =>
+                    router.push(`/perfil/${perfilUsuario.id_user}`)
+                  }
+                >
+                  <MaterialIcons name="person" size={25} color="#FFF" />
+                  <Text style={styles.labelPerson}>Perfil</Text>
+                </Pressable>
+
+                <Pressable style={styles.menuItem}>
+                  <FontAwesome name="leaf" size={20} color="#67b26f" />
+                  <Text style={styles.label}>{perfilUsuario.tp_user}</Text>
+                </Pressable>
+              </>
+            ) : null}
 
             {/* Botão Sair */}
             <View
@@ -122,7 +138,7 @@ export default function Sidebar({ onPostPress }: Props) {
                 onPress={logout}
                 style={({ pressed }) => [
                   {
-                    backgroundColor: pressed ? "#D33" : "#ff4d4d", // vermelho mais claro
+                    backgroundColor: pressed ? "#D33" : "#ff4d4d",
                     paddingHorizontal: 8,
                     paddingVertical: 4,
                     borderRadius: 6,
@@ -134,7 +150,9 @@ export default function Sidebar({ onPostPress }: Props) {
                   },
                 ]}
               >
-                <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 12 }}>
+                <Text
+                  style={{ color: "#fff", fontWeight: "bold", fontSize: 12 }}
+                >
                   Sair
                 </Text>
               </Pressable>

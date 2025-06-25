@@ -200,7 +200,14 @@ export default function CadastroScreen() {
       telefoneComercio,
       tipoComercio,
       tipoProduto,
-      cepComercio
+      cepComercio,
+      email,
+      senha,
+      confirmarSenha,
+      dataNascimento,
+      prefAlim,
+      nickname,
+      telefone
     );
 
     if (
@@ -277,11 +284,11 @@ export default function CadastroScreen() {
       certificacoes,
       tipo_prod: tipoProduto,
       tipo_com: tipoComercio,
-      nome_comercio: nomeComercio,
-      endereco_comercio: `${logradouro}, ${numero}`,
+      nome_com: nomeComercio,
+      ender_com: `${logradouro}, ${numero}`,
       cnpj,
-      cep_comercio: cepComercio,
-      telefone_comercio: telefoneComercio,
+      cep_com: cepComercio,
+      tel_com: telefoneComercio,
     };
 
     try {
@@ -300,10 +307,11 @@ export default function CadastroScreen() {
         dadosCadastro.certificacoes,
         dadosCadastro.tipo_prod,
         dadosCadastro.tipo_com,
-        dadosCadastro.nome_comercio,
+        dadosCadastro.nome_com,
         dadosCadastro.cnpj,
-        dadosCadastro.cep_comercio,
-        dadosCadastro.telefone_comercio
+        dadosCadastro.cep_com,
+        dadosCadastro.tel_com,
+        dadosCadastro.ender_com
       );
 
       await login(dadosCadastro.email, dadosCadastro.senha, false);

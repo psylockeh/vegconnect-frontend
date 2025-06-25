@@ -204,7 +204,7 @@ export default function ModalCriarPostagem({
     // ESTABELECIMENTO
     if (tp_post === "estabelecimento") {
       const conteudoEstabelecimento = descricaoComercio?.trim();
-      conteudoFormatado = descricaoComercio; // garante que conteudo não venha vazio
+      conteudoFormatado = descricaoComercio;
 
       Object.assign(novaPostagem, {
         conteudo: conteudoEstabelecimento,
@@ -487,21 +487,57 @@ export default function ModalCriarPostagem({
               </ScrollView>
             )}
           </View>
-          <Pressable
-            onPress={selecionarImagens}
-            style={ModalStyles.botaoFechar}
-          >
-            <Text style={ModalStyles.textoBotao}>Selecionar Imagem</Text>
-          </Pressable>
-          <Pressable
-            onPress={handleSubmitPostagem}
-            style={ModalStyles.botaoPublicar}
-          >
-            <Text style={ModalStyles.textoBotaoPublicar}>Publicar</Text>
-          </Pressable>
-          <Pressable onPress={fecharModal} style={ModalStyles.botaoFechar}>
-            <Text style={ModalStyles.textoBotao}>Fechar</Text>
-          </Pressable>
+          {/* Miniaturas das imagens */}
+          <View style={{ marginTop: 15 }}>
+            {midiasSelecionadas.length > 0 && (
+              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                {midiasSelecionadas.map((uri, index) => (
+                  <View
+                    key={index}
+                    style={{ position: "relative", marginRight: 8 }}
+                  >
+                    <Image
+                      source={{ uri }}
+                      style={{ width: 70, height: 70, borderRadius: 8 }}
+                    />
+                    <Pressable
+                      onPress={() => removerImagem(uri)}
+                      style={{
+                        position: "absolute",
+                        top: -4,
+                        right: -4,
+                        backgroundColor: "#f32",
+                        width: 18,
+                        height: 18,
+                        borderRadius: 9,
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Text style={{ color: "#fff", fontSize: 10 }}>X</Text>
+                    </Pressable>
+                  </View>
+                ))}
+              </ScrollView>
+            )}
+          </View>
+
+          {/* Botões de ação (Fechar e Publicar) */}
+          <View style={ModalStyles.rodape}>
+            <Pressable
+              onPress={fecharModal}
+              style={[ModalStyles.botaoAcao, { backgroundColor: "#ccc" }]}
+            >
+              <Text style={ModalStyles.textoBotao}>Fechar</Text>
+            </Pressable>
+
+            <Pressable
+              onPress={handleSubmitPostagem}
+              style={[ModalStyles.botaoAcao, { backgroundColor: "#3C6E47" }]}
+            >
+              <Text style={ModalStyles.textoBotao}>Publicar</Text>
+            </Pressable>
+          </View>
         </View>
       </View>
     </Modal>

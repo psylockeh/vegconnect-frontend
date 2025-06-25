@@ -50,6 +50,29 @@ export default function PerfilUsuario() {
   };
 
   useEffect(() => {
+    const carregarPerfil = async () => {
+      try {
+        const token = await AsyncStorage.getItem("@token");
+
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+        const response = await axios.get(
+          `${API_URL}/usuario/perfil/${id}`,
+          config
+        );
+
+        console.log("👀 Dados do perfil:", response.data);
+        setUsuario(response.data);
+      } catch (error) {
+        console.error("Erro ao carregar perfil do usuário:", error);
+      } finally {
+        setCarregando(false);
+      }
+    };
+
     carregarPerfil();
   }, []);
 
@@ -151,28 +174,25 @@ export default function PerfilUsuario() {
                   {showInfo && (
                     <View style={styles.cardInfoComercio}>
                       <Text style={styles.itemInfo}>
-                        <Text style={styles.labelInfo}>Nome do Comércio: </Text>
-                        {usuario?.nome_com}
-                      </Text>
-                      <Text style={styles.itemInfo}>
-                        <Text style={styles.labelInfo}>Tipo: </Text>
-                        {usuario?.tipo_com}
-                      </Text>
-                      <Text style={styles.itemInfo}>
-                        <Text style={styles.labelInfo}>Telefone: </Text>
-                        {usuario?.tel_com}
-                      </Text>
-                      <Text style={styles.itemInfo}>
-                        <Text style={styles.labelInfo}>Endereço: </Text>
-                        {usuario?.ender_com}
-                      </Text>
-                      <Text style={styles.itemInfo}>
-                        <Text style={styles.labelInfo}>CEP: </Text>
-                        {usuario?.cep_com}
-                      </Text>
-                      <Text style={styles.itemInfo}>
-                        <Text style={styles.labelInfo}>CNPJ: </Text>
-                        {usuario?.cnpj}
+                        <Text style={styles.infoComer}>
+                          Nome do Comércio:{" "}
+                          {usuario?.nome_com || "Não informado"}
+                        </Text>
+                        <Text style={styles.infoComer}>
+                          Tipo: {usuario?.tipo_com || "Não informado"}
+                        </Text>
+                        <Text style={styles.infoComer}>
+                          Telefone: {usuario?.tel_com || "Não informado"}
+                        </Text>
+                        <Text style={styles.infoComer}>
+                          Endereço: {usuario?.ender_com || "Não informado"}
+                        </Text>
+                        <Text style={styles.infoComer}>
+                          CEP: {usuario?.cep_com || "Não informado"}
+                        </Text>
+                        <Text style={styles.infoComer}>
+                          CNPJ: {usuario?.cnpj || "Não informado"}
+                        </Text>
                       </Text>
                     </View>
                   )}

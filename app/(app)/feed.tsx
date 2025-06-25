@@ -185,7 +185,6 @@ export default function Feed() {
                     </Text>
                   </View>
                 )}
-
                 <View>
                   <Text style={feedStyles.nomeUsuario}>
                     {perfilUsuario?.nome || "Usuário"}
@@ -193,19 +192,32 @@ export default function Feed() {
                   <Text style={feedStyles.tipoUsuario}>
                     <FontAwesome
                       name="leaf"
-                      style={{
-                        color: "#67b26f",
-                        fontSize: 20,
-                        marginRight: 8,
-                      }}
+                      style={{ color: "#67b26f", fontSize: 20, marginRight: 8 }}
                     />
                     {perfilUsuario?.tp_user || "Público"}
                   </Text>
                 </View>
               </View>
 
-              {/* Campo e botão de recado */}
-              <InputRecado onSubmit={publicarRecado} />
+              {/* Campo de recado */}
+              <TextInput
+                placeholder="Sobre o que você quer falar?"
+                placeholderTextColor="#999"
+                value={recadoTexto}
+                onChangeText={(t) => {
+                  setRecadoTexto(t);
+                  recadoTextoRef.current = t;
+                  setContador(t.length);
+                }}
+                multiline
+                maxLength={500}
+                style={feedStyles.inputRecado}
+              />
+              <Text
+                style={{ alignSelf: "flex-end", color: "#999", marginTop: 4 }}
+              >
+                {recadoTexto.length}/500
+              </Text>
 
               {/* Imagens selecionadas */}
               {midiasSelecionadas.length > 0 && (
@@ -240,11 +252,21 @@ export default function Feed() {
                 </ScrollView>
               )}
 
-              <Text style={feedStyles.ouLabel}>ou</Text>
-
-              {/* Botões de tipo de postagem */}
-              <View style={feedStyles.cardLinhaPostagem}>
-                <View style={feedStyles.botoesTipoPostagem}>
+              {/* Linha com botões, ícones, separador e botão de publicar */}
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  gap: 8,
+                  marginTop: 12,
+                  flexWrap: "wrap",
+                }}
+              >
+                {/* Esquerda - Tipos + Ícones */}
+                <View
+                  style={{ flexDirection: "row", gap: 8, flexWrap: "wrap" }}
+                >
                   {["Receita", "Evento", "Estabelecimento", "Promoção"]
                     .filter((tipo) => {
                       const tipoMin = tipo.toLowerCase();
@@ -263,16 +285,31 @@ export default function Feed() {
                         <Text style={feedStyles.textoBotaoTipo}>{tipo}</Text>
                       </Pressable>
                     ))}
-                </View>
 
-                <View style={feedStyles.iconesAcoes}>
                   <Pressable onPress={selecionarImagem}>
-                    <MaterialIcons name="image" size={22} color="#3C6E47" />
+                    <FontAwesome name="image" size={18} color="#3C6E47" />
                   </Pressable>
                   <Pressable>
                     <MaterialIcons name="group" size={22} color="#3C6E47" />
                   </Pressable>
                 </View>
+
+                {/* Meio - Separador */}
+                <Text style={{ color: "#888", fontSize: 13 }}>ou</Text>
+
+                {/* Direita - Botão Publicar */}
+                <Pressable
+                  onPress={() => publicarRecado(recadoTextoRef.current)}
+                  disabled={!recadoTexto.trim()}
+                  style={[
+                    feedStyles.botaoPublicar,
+                    {
+                      backgroundColor: recadoTexto.trim() ? "#3C6E47" : "#ccc",
+                    },
+                  ]}
+                >
+                  <Text style={feedStyles.textoBotaoPublicar}>Publicar</Text>
+                </Pressable>
               </View>
             </View>
           }
