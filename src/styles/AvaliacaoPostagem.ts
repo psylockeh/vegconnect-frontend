@@ -23,6 +23,14 @@ const styles = StyleSheet.create({
     color: "#3C6E47",
     textAlign: "center",
   },
+   avaliacaoRealizada: {
+    fontSize: 22,
+    fontWeight: "bold",
+    marginBottom: 12,
+    color: "#3C6E47",
+    textAlign: "center",
+    marginTop: 15,
+  },
   containerEstrela: {
     flexDirection: "row",
     justifyContent: "flex-start",

@@ -37,7 +37,7 @@ interface Avaliacao {
 }
 
 const AvaliacaoPostagem: React.FC<Props> = ({ postagem, avaliacaoAtual = 0 }) => {
-  const { userToken } = useAuth();
+  const { userToken, usuario } = useAuth();
   const [modalAberta, setModalAberta] = useState(false);
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [avaliacao, setAvaliacao] = useState(0);
@@ -49,6 +49,7 @@ const AvaliacaoPostagem: React.FC<Props> = ({ postagem, avaliacaoAtual = 0 }) =>
   const [avaliacoes, setAvaliacoes] = useState<Avaliacao[]>([]);
   const [loading, setLoading] = useState(false);
   const [erroImagem, setErroImagem] = useState(false);
+  const [avaliacaoEnviada, setAvaliacaoEnviada] = useState(false);
 
   // Função para buscar média
   const fetchMediaAvaliacoes = async () => {
@@ -104,7 +105,7 @@ const AvaliacaoPostagem: React.FC<Props> = ({ postagem, avaliacaoAtual = 0 }) =>
       const response = await axios.get(`${API_URL}/usuario/listaravaliacoes/${postagem.id}`, {
         headers: { Authorization: `Bearer ${userToken}` },
       });
-       console.log("Avaliações recebidas:", response.data); // <- verifique se tem Usuario dentro
+      console.log("Avaliações recebidas:", response.data); // <- verifique se tem Usuario dentro
       setAvaliacoes(response.data.avaliacoes || []);
     } catch (error) {
       console.error("Erro ao buscar avaliações:", error);
@@ -267,11 +268,13 @@ const AvaliacaoPostagem: React.FC<Props> = ({ postagem, avaliacaoAtual = 0 }) =>
                       </View>
                     )}
 
-                    <TouchableOpacity
-                      style={styles.botaoAvaliacao}
-                      onPress={buscarStatusAvaliacao}>
-                      <Text style={styles.textoBotao}>Escreva uma avaliação</Text>
-                    </TouchableOpacity>
+                    {usuario?.id_user !== postagem.autor?.id_user && (
+                      <TouchableOpacity
+                        style={styles.botaoAvaliacao}
+                        onPress={buscarStatusAvaliacao}>
+                        <Text style={styles.textoBotao}>Escreva uma avaliação</Text>
+                      </TouchableOpacity>
+                    )}
 
                     <TouchableOpacity
                       onPress={() => {
@@ -325,13 +328,17 @@ const AvaliacaoPostagem: React.FC<Props> = ({ postagem, avaliacaoAtual = 0 }) =>
                       />
                     </View>
 
-                    <TouchableOpacity
-                      style={styles.botaoAvaliacao}
-                      onPress={enviarAvaliacao}
-                      disabled={avaliacao === 0 || jaAvaliou}
-                    >
-                      <Text style={styles.textoBotao}>Enviar Avaliação</Text>
-                    </TouchableOpacity>
+                    {jaAvaliou ? (
+                      <Text style={styles.avaliacaoRealizada}>Avaliação realizada com sucesso!</Text>
+                    ) : (
+                      <TouchableOpacity
+                        style={styles.botaoAvaliacao}
+                        onPress={enviarAvaliacao}
+                        disabled={avaliacao === 0 || jaAvaliou}
+                      >
+                        <Text style={styles.textoBotao}>Enviar Avaliação</Text>
+                      </TouchableOpacity>
+                    )}
 
                     <TouchableOpacity
                       style={styles.botaoCancelar}
