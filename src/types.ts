@@ -6,6 +6,13 @@ export interface BasePost {
   conteudo?: string;
   midia_urls?: string[];
   createdAt?: string;
+
+  autor: {
+    id_user: number;
+    nome: string;
+    foto_perfil?: string;
+    nickname: string;
+  };
 }
 
 // ---------- RECEITA ----------
@@ -71,8 +78,8 @@ export interface EstabelecimentoPost extends BasePost {
 // ---------- RECADO ----------
 export interface RecadoPost extends BasePost {
   tp_post: "recado";
-  
- 
+
+
 }
 
 // ---------- Tipo união de todas as postagens ----------
