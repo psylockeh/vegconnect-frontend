@@ -5,15 +5,17 @@ import { styles } from "@/styles/OpcoesPostagem";
 import axios from "axios";
 import { API_URL } from "@/config/api";
 import { useAuth } from "@/context/AuthContext";
+import ModalEditarControle from "@/components/EditarPostagens/ModalEditarControle";
 
 interface OpcoesPostagemProps {
   postagemId: number;
-  onEditar: () => void;
   onPostagemExcluida?: () => void;
+  onPostagemAtualizada?: () => void;
 }
 
-const OpcoesPostagem = ({ postagemId, onEditar, onPostagemExcluida }: OpcoesPostagemProps) => {
+const OpcoesPostagem = ({ postagemId, onPostagemExcluida, onPostagemAtualizada  }: OpcoesPostagemProps) => {
   const [mostrarOpcoes, setMostrarOpcoes] = useState(false);
+  const [modalEditarVisivel, setModalEditarVisivel] = useState(false);
   const { userToken } = useAuth();
 
   const excluirPostagem = async () => {
@@ -26,11 +28,11 @@ const OpcoesPostagem = ({ postagemId, onEditar, onPostagemExcluida }: OpcoesPost
 
       await axios.delete(`${API_URL}/usuario/deletarPostagem/${postagemId}`, config);
 
-      // Aguarda 10 segundos e chama o callback
+      // Pode chamar callback para atualizar lista depois
       if (onPostagemExcluida) {
         setTimeout(() => {
           onPostagemExcluida();
-        }, 1000); // 10 segundos
+        }, 1000);
       }
     } catch (error) {
       console.error("Erro ao excluir postagem:", error);
@@ -58,7 +60,7 @@ const OpcoesPostagem = ({ postagemId, onEditar, onPostagemExcluida }: OpcoesPost
             style={styles.exibirOpcoes}
             onPress={() => {
               setMostrarOpcoes(false);
-              onEditar();
+              setModalEditarVisivel(true); // Abre modal aqui
             }}
           >
             <MaterialIcons name="edit" size={18} color="#555" />
@@ -78,6 +80,18 @@ const OpcoesPostagem = ({ postagemId, onEditar, onPostagemExcluida }: OpcoesPost
           </Pressable>
         </View>
       )}
+
+      {/* Modal Interno */}
+      <ModalEditarControle
+        postagemId={postagemId.toString()}
+        visible={modalEditarVisivel}
+        onClose={() => setModalEditarVisivel(false)}
+        onAtualizado={() => {
+          setModalEditarVisivel(false);
+          // Opcional: Atualizar lista no pai, se quiser
+           if (onPostagemAtualizada) onPostagemAtualizada();
+        }}
+      />
     </View>
   );
 };

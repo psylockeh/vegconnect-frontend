@@ -24,13 +24,16 @@ interface Props {
   postagem: any;
   avaliacaoAtual?: number;
   onPostagemExcluida?: () => void;
+  onPostagemAtualizada?: () => void;
 }
 
-const CardPostagem = ({ postagem, onPostagemExcluida }: Props) => {
+const CardPostagem = ({ postagem, onPostagemExcluida, onPostagemAtualizada }: Props) => {
   const { tp_post, autor: usuario, createdAt, descricao_resumida } = postagem;
   const router = useRouter();
   const { id } = postagem;
   const postagemId = Number(postagem?.id);
+  const [foiExcluida, setFoiExcluida] = useState(false);
+  const [mensagemFeedback, setMensagemFeedback] = useState("");
 
   const [erroImagem, setErroImagem] = useState(false);
   const { usuario: usuarioLogado } = useAuth();
@@ -43,8 +46,8 @@ const CardPostagem = ({ postagem, onPostagemExcluida }: Props) => {
     usuario?.foto_perfil?.startsWith("http") && !erroImagem
       ? { uri: usuario.foto_perfil }
       : {
-          uri: "https://res.cloudinary.com/dyhzz5baz/image/upload/v1746917561/default-avatar_jvqpsg.png",
-        };
+        uri: "https://res.cloudinary.com/dyhzz5baz/image/upload/v1746917561/default-avatar_jvqpsg.png",
+      };
 
   const definirCorBorda = () => {
     switch (tp_post) {
@@ -92,6 +95,13 @@ const CardPostagem = ({ postagem, onPostagemExcluida }: Props) => {
     } catch (error) {
       console.error("Erro ao curtir:", error);
     }
+  };
+
+  const mostrarMensagemTemporaria = (msg: string, duracao = 3000) => {
+    setMensagemFeedback(msg);
+    setTimeout(() => {
+      setMensagemFeedback("");
+    }, duracao);
   };
 
   const ehAutorDaPostagem = usuarioLogado?.id_user === usuario?.id_user;
@@ -278,18 +288,22 @@ const CardPostagem = ({ postagem, onPostagemExcluida }: Props) => {
           {ehAutorDaPostagem && (
             <OpcoesPostagem
               postagemId={id}
-              onEditar={() => {}}
               onPostagemExcluida={() => {
+                setFoiExcluida(true);
                 onPostagemExcluida?.();
-                setMensagemExclusao("Postagem excluída com sucesso!");
+                mostrarMensagemTemporaria("Postagem excluída com sucesso!");
+              }}
+              onPostagemAtualizada={() => {
+                onPostagemAtualizada?.();
+                mostrarMensagemTemporaria("Postagem atualizada com sucesso!");
               }}
             />
           )}
         </View>
       </View>
 
-      {mensagemExclusao !== "" && (
-        <Text style={styles.mensagemExclusao}>{mensagemExclusao}</Text>
+      {mensagemFeedback !== "" && (
+        <Text style={styles.mensagemExclusao}>{mensagemFeedback}</Text>
       )}
     </View>
   );

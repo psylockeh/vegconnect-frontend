@@ -49,7 +49,7 @@ export default function Sidebar({ onPostPress }: Props) {
 
             <Pressable
               style={styles.menuItem}
-              // onPress={() => router.push("/menu")}
+            // onPress={() => router.push("/menu")}
             >
               <FontAwesome name="bars" size={20} color="#023D2E" />
               <Text style={styles.labelMenu}>Menu</Text>
@@ -87,25 +87,6 @@ export default function Sidebar({ onPostPress }: Props) {
               <Text style={styles.label}>IA</Text>
             </Pressable>
 
-            <Pressable
-              style={styles.menuItem}
-              onPress={() => router.push(`/perfil/${perfilUsuario.id_user}`)}
-            >
-              <MaterialIcons
-                name="person"
-                size={25}
-                color="#FFF"
-                style={{
-                  textAlign: "center",
-                  borderTopWidth: 2,
-                  width: 65,
-                  borderTopColor: "#ccc",
-                  paddingTop: 5,
-                }}
-              />
-              <Text style={styles.labelPerson}>Perfil</Text>
-            </Pressable>
-
             {perfilUsuario ? (
               <>
                 <Pressable
@@ -114,7 +95,13 @@ export default function Sidebar({ onPostPress }: Props) {
                     router.push(`/perfil/${perfilUsuario.id_user}`)
                   }
                 >
-                  <MaterialIcons name="person" size={25} color="#FFF" />
+                  <MaterialIcons name="person" size={25} color="#FFF" style={{
+                    textAlign: "center",
+                    borderTopWidth: 2,
+                    width: 65,
+                    borderTopColor: "#ccc",
+                    paddingTop: 5,
+                  }} />
                   <Text style={styles.labelPerson}>Perfil</Text>
                 </Pressable>
 
