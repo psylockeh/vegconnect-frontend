@@ -28,9 +28,10 @@ interface Props {
   postagem: any;
   avaliacaoAtual?: number;
   onPostagemExcluida?: () => void;
+  onPostagemAtualizada?: () => void;
 }
 
-const CardPostagem = ({ postagem, onPostagemExcluida }: Props) => {
+const CardPostagem = ({ postagem, onPostagemExcluida, onPostagemAtualizada }: Props) => {
   const { tp_post, autor: usuario, createdAt, descricao_resumida } = postagem;
   const router = useRouter();
 
@@ -78,6 +79,16 @@ const CardPostagem = ({ postagem, onPostagemExcluida }: Props) => {
     : {
       uri: "https://res.cloudinary.com/dyhzz5baz/image/upload/v1746917561/default-avatar_jvqpsg.png",
     };
+
+  const [foiExcluida, setFoiExcluida] = useState(false);
+  const [mensagemFeedback, setMensagemFeedback] = useState("");
+
+  const mostrarMensagemTemporaria = (msg: string, duracao = 3000) => {
+    setMensagemFeedback(msg);
+    setTimeout(() => {
+      setMensagemFeedback("");
+    }, duracao);
+  };
 
   const fotoPerfilFinal =
     usuario?.foto_perfil?.startsWith("http") && !erroImagem
@@ -440,10 +451,14 @@ const CardPostagem = ({ postagem, onPostagemExcluida }: Props) => {
                 postagemId={id}
                 createdAt={createdAt}
                 usuarioId={usuario?.id_user}
-                onEditar={() => { }}
                 onPostagemExcluida={() => {
+                  setFoiExcluida(true);
                   onPostagemExcluida?.();
-                  setMensagemExclusao("Postagem excluída com sucesso!");
+                  mostrarMensagemTemporaria("Postagem excluída com sucesso!");
+                }}
+                onPostagemAtualizada={() => {
+                  onPostagemAtualizada?.();
+                  mostrarMensagemTemporaria("Postagem atualizada com sucesso!");
                 }}
               />
 
@@ -580,8 +595,8 @@ const CardPostagem = ({ postagem, onPostagemExcluida }: Props) => {
             </Pressable>
           </View>
         )}
-        {mensagemExclusao !== "" && (
-          <Text style={styles.mensagemExclusao}>{mensagemExclusao}</Text>
+        {mensagemFeedback !== "" && (
+          <Text style={styles.mensagemExclusao}>{mensagemFeedback}</Text>
         )}
       </View>
     </>

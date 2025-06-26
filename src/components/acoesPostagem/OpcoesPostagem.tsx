@@ -5,12 +5,14 @@ import { styles } from "@/styles/OpcoesPostagem";
 import axios from "axios";
 import { API_URL } from "@/config/api";
 import { useAuth } from "@/context/AuthContext";
+import ModalEditarControle from "@/components/EditarPostagens/ModalEditarControle";
+
 
 interface OpcoesPostagemProps {
   postagemId: number;
   createdAt: string;
   usuarioId: number;
-  onEditar: () => void;
+  onPostagemAtualizada?: () => void;
   onPostagemExcluida?: () => void;
 }
 
@@ -18,11 +20,12 @@ const OpcoesPostagem = ({
   postagemId,
   createdAt,
   usuarioId,
-  onEditar,
+  onPostagemAtualizada,
   onPostagemExcluida,
 }: OpcoesPostagemProps) => {
   const [mostrarOpcoes, setMostrarOpcoes] = useState(false);
   const { userToken, perfilUsuario } = useAuth();
+  const [modalEditarVisivel, setModalEditarVisivel] = useState(false);
 
   const excluirPostagem = async () => {
     try {
@@ -69,7 +72,7 @@ const OpcoesPostagem = ({
                 style={styles.exibirOpcoes}
                 onPress={() => {
                   setMostrarOpcoes(false);
-                  onEditar();
+                  setModalEditarVisivel(true);
                 }}
               >
                 <MaterialIcons name="edit" size={18} color="#555" />
@@ -90,6 +93,18 @@ const OpcoesPostagem = ({
           )}
         </>
       )}
+
+      {/* Modal Interno */}
+      <ModalEditarControle
+        postagemId={postagemId.toString()}
+        visible={modalEditarVisivel}
+        onClose={() => setModalEditarVisivel(false)}
+        onAtualizado={() => {
+          setModalEditarVisivel(false);
+          // Opcional: Atualizar lista no pai, se quiser
+          if (onPostagemAtualizada) onPostagemAtualizada();
+        }}
+      />
     </View>
   );
 };

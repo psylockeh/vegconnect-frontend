@@ -119,7 +119,7 @@ export default function DetalhesPostagem() {
 
   return (
     <View style={styles.container}>
-      <Sidebar onPostPress={() => {}} />
+      <Sidebar onPostPress={() => { }} />
       <ScrollView contentContainerStyle={{ padding: 16 }}>
         <View style={[styles.card, { borderColor: "#ccc" }]}>
           {/* Header do usuário */}
@@ -160,7 +160,7 @@ export default function DetalhesPostagem() {
                   postagemId={postagem.id}
                   createdAt={postagem.createdAt}
                   usuarioId={postagem.usuario_id}
-                  onEditar={() => router.push(`/editar/${postagem.id}`)}
+                  onPostagemAtualizada={() => { }}
                   onPostagemExcluida={() => router.push("/feed")}
                 />
               )}
