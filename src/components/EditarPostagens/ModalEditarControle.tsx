@@ -7,7 +7,7 @@ import {
   Text,
   Pressable,
   ScrollView,
-  StyleSheet, Keyboard, TouchableWithoutFeedback 
+  StyleSheet, Keyboard, TouchableWithoutFeedback
 } from "react-native";
 import axios from "axios";
 import { API_URL } from "@/config/api";
@@ -218,46 +218,46 @@ export default function ModalEditarControle({
           conteudo,
           categoria,
           tag,
-          midiaUrls,
-          descricaoResumida,
+          midia_urls: midiaUrls,
+          descricao_resumida: descricaoResumida,
           tp_post: tipoPostagem,
 
           // Receita
-          nomeReceita,
+          nome_receita: nomeReceita,
           ingredientes,
           instrucoes,
-          tempPrep,
+          temp_prep: tempPrep,
           calorias,
           dificuldade,
-          rendimentoQuantidade,
-          tipoRendimento,
+          rendimento_quantidade: rendimentoQuantidade,
+          tipo_rendimento: tipoRendimento,
 
           // Evento
           data,
           localizacao,
           valor,
           links,
-          tpEvento,
-          categoriaEvento,
-          modalidadeEvento,
+          tp_evento: tpEvento,
+          categoria_evento: categoriaEvento,
+          modalidade_evento: modalidadeEvento,
 
           // Comércio
-          nomeComercio,
-          descricaoComercio,
-          tpComida,
-          horaAbertura,
-          horaFechamento,
+          nome_comercio: nomeComercio,
+          descricao_comercio: descricaoComercio,
+          tp_comida: tpComida,
+          hora_abertura: horaAbertura,
+          hora_fechamento: horaFechamento,
           cep,
           endereco,
-          tipoComercio,
-          tipoProduto,
-          tipoServico,
+          tipo_comercio: tipoComercio,
+          tipo_produto: tipoProduto,
+          tipo_servico: tipoServico,
 
           // Promoção
-          dataInicio,
-          dataFim,
-          valorDesconto,
-          codigoPromocional,
+          data_inicio: dataInicio,
+          data_fim: dataFim,
+          valor_desconto: valorDesconto,
+          codigo_promocional: codigoPromocional,
         },
         {
           headers: {
@@ -280,126 +280,126 @@ export default function ModalEditarControle({
 
   return (
     <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
-       <TouchableWithoutFeedback onPress={() => {}}>
-      <View style={styles.overlay}>
-        <View style={styles.modal}>
-          <Text style={styles.titulo}>
-            Editar{" "}
-            {tipoPostagem ? tipoPostagem[0].toUpperCase() + tipoPostagem.slice(1) : "Postagem"}
-          </Text>
-          {carregandoDados ? (
-            <ActivityIndicator size="large" color="#025E3D" />
-          ) : erro ? (
-            <View style={styles.erroContainer}>
-              <Text style={styles.erro}>{erro}</Text>
-              <Pressable onPress={onClose} style={styles.botaoAcao}>
-                <Text style={styles.textoBotao}>Fechar</Text>
-              </Pressable>
-            </View>
-          ) : (
-            <>
-              <FormularioPostagem
-                // Campos comuns
-                titulo={titulo}
-                setTitulo={setTitulo}
-                conteudo={conteudo}
-                setConteudo={setConteudo}
-                categoria={categoria}
-                setCategoria={setCategoria}
-                tag={tag}
-                setTag={setTag}
-                midiaUrls={midiaUrls}
-                setMidiaUrls={setMidiaUrls}
-                descricao_resumida={descricaoResumida}
-                setDescricaoResumida={setDescricaoResumida}
-                tipoPostagem={tipoPostagem}
+      <TouchableWithoutFeedback onPress={() => { }}>
+        <View style={styles.overlay}>
+          <View style={styles.modal}>
+            <Text style={styles.titulo}>
+              Editar{" "}
+              {tipoPostagem ? tipoPostagem[0].toUpperCase() + tipoPostagem.slice(1) : "Postagem"}
+            </Text>
+            {carregandoDados ? (
+              <ActivityIndicator size="large" color="#025E3D" />
+            ) : erro ? (
+              <View style={styles.erroContainer}>
+                <Text style={styles.erro}>{erro}</Text>
+                <Pressable onPress={onClose} style={styles.botaoAcao}>
+                  <Text style={styles.textoBotao}>Fechar</Text>
+                </Pressable>
+              </View>
+            ) : (
+              <>
+                <FormularioPostagem
+                  // Campos comuns
+                  titulo={titulo}
+                  setTitulo={setTitulo}
+                  conteudo={conteudo}
+                  setConteudo={setConteudo}
+                  categoria={categoria}
+                  setCategoria={setCategoria}
+                  tag={tag}
+                  setTag={setTag}
+                  midiaUrls={midiaUrls}
+                  setMidiaUrls={setMidiaUrls}
+                  descricao_resumida={descricaoResumida}
+                  setDescricaoResumida={setDescricaoResumida}
+                  tipoPostagem={tipoPostagem}
 
-                // Receita
-                nomeReceita={nomeReceita}
-                setNomeReceita={setNomeReceita}
-                ingredientes={ingredientes}
-                setIngredientes={setIngredientes}
-                instrucoes={instrucoes}
-                setInstrucoes={setInstrucoes}
-                tempPrep={tempPrep}
-                setTempPrep={setTempPrep}
-                calorias={calorias}
-                setCalorias={setCalorias}
-                dificuldade={dificuldade}
-                setDificuldade={setDificuldade}
-                rendimentoQuantidade={rendimentoQuantidade}
-                setRendimentoQuantidade={setRendimentoQuantidade}
-                tipoRendimento={tipoRendimento}
-                setTipoRendimento={setTipoRendimento}
+                  // Receita
+                  nomeReceita={nomeReceita}
+                  setNomeReceita={setNomeReceita}
+                  ingredientes={ingredientes}
+                  setIngredientes={setIngredientes}
+                  instrucoes={instrucoes}
+                  setInstrucoes={setInstrucoes}
+                  tempPrep={tempPrep}
+                  setTempPrep={setTempPrep}
+                  calorias={calorias}
+                  setCalorias={setCalorias}
+                  dificuldade={dificuldade}
+                  setDificuldade={setDificuldade}
+                  rendimentoQuantidade={rendimentoQuantidade}
+                  setRendimentoQuantidade={setRendimentoQuantidade}
+                  tipoRendimento={tipoRendimento}
+                  setTipoRendimento={setTipoRendimento}
 
-                // Evento
-                data={data}
-                setData={setData}
-                localizacao={localizacao}
-                setLocalizacao={setLocalizacao}
-                valor={valor}
-                setValor={setValor}
-                links={links}
-                setLinks={setLinks}
-                tpEvento={tpEvento}
-                setTpEvento={setTpEvento}
-                categoriaEvento={categoriaEvento}
-                setCategoriaEvento={setCategoriaEvento}
-                modalidadeEvento={modalidadeEvento}
-                setModalidadeEvento={setModalidadeEvento}
+                  // Evento
+                  data={data}
+                  setData={setData}
+                  localizacao={localizacao}
+                  setLocalizacao={setLocalizacao}
+                  valor={valor}
+                  setValor={setValor}
+                  links={links}
+                  setLinks={setLinks}
+                  tpEvento={tpEvento}
+                  setTpEvento={setTpEvento}
+                  categoriaEvento={categoriaEvento}
+                  setCategoriaEvento={setCategoriaEvento}
+                  modalidadeEvento={modalidadeEvento}
+                  setModalidadeEvento={setModalidadeEvento}
 
-                // Comércio
-                nomeComercio={nomeComercio}
-                setNomeComercio={setNomeComercio}
-                descricaoComercio={descricaoComercio}
-                setDescricaoComercio={setDescricaoComercio}
-                tpComida={tpComida}
-                setTpComida={setTpComida}
-                horarioAbertura={horaAbertura}
-                setHorarioAbertura={setHoraAbertura}
-                horarioFechamento={horaFechamento}
-                setHorarioFechamento={setHoraFechamento}
-                cep={cep}
-                setCep={setCep}
-                endereco={endereco}
-                setEndereco={setEndereco}
-                tipoComercio={tipoComercio}
-                setTipoComercio={setTipoComercio}
-                tpProduto={tipoProduto}
-                setTpProduto={setTipoProduto}
-                tpServico={tipoServico}
-                setTpServico={setTipoServico}
+                  // Comércio
+                  nomeComercio={nomeComercio}
+                  setNomeComercio={setNomeComercio}
+                  descricaoComercio={descricaoComercio}
+                  setDescricaoComercio={setDescricaoComercio}
+                  tpComida={tpComida}
+                  setTpComida={setTpComida}
+                  horarioAbertura={horaAbertura}
+                  setHorarioAbertura={setHoraAbertura}
+                  horarioFechamento={horaFechamento}
+                  setHorarioFechamento={setHoraFechamento}
+                  cep={cep}
+                  setCep={setCep}
+                  endereco={endereco}
+                  setEndereco={setEndereco}
+                  tipoComercio={tipoComercio}
+                  setTipoComercio={setTipoComercio}
+                  tpProduto={tipoProduto}
+                  setTpProduto={setTipoProduto}
+                  tpServico={tipoServico}
+                  setTpServico={setTipoServico}
 
-                // Promoção
-                dataInicio={dataInicio}
-                setDataInicio={setDataInicio}
-                dataFim={dataFim}
-                setDataFim={setDataFim}
-                valorDesconto={valorDesconto}
-                setValorDesconto={setValorDesconto}
-                codigoPromocional={codigoPromocional}
-                setCodigoPromocional={setCodigoPromocional}
-              />
+                  // Promoção
+                  dataInicio={dataInicio}
+                  setDataInicio={setDataInicio}
+                  dataFim={dataFim}
+                  setDataFim={setDataFim}
+                  valorDesconto={valorDesconto}
+                  setValorDesconto={setValorDesconto}
+                  codigoPromocional={codigoPromocional}
+                  setCodigoPromocional={setCodigoPromocional}
+                />
 
-              <Pressable
-                onPress={atualizarPostagem}
-                style={[styles.botaoAtualizar, loading && { opacity: 0.7 }]}
-                disabled={loading}
-              >
-                {loading ? (
-                  <ActivityIndicator color="#fff" />
-                ) : (
-                  <Text style={styles.atualizarBotaoTexto}>Atualizar Postagem</Text>
-                )}
-              </Pressable>
+                <Pressable
+                  onPress={atualizarPostagem}
+                  style={[styles.botaoAtualizar, loading && { opacity: 0.7 }]}
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <ActivityIndicator color="#fff" />
+                  ) : (
+                    <Text style={styles.atualizarBotaoTexto}>Atualizar Postagem</Text>
+                  )}
+                </Pressable>
 
-              <Pressable onPress={onClose} style={[styles.botaoCancelar]}>
-                <Text style={styles.cancelarTexto}>Cancelar</Text>
-              </Pressable>
-            </>
-          )}
+                <Pressable onPress={onClose} style={[styles.botaoCancelar]}>
+                  <Text style={styles.cancelarTexto}>Cancelar</Text>
+                </Pressable>
+              </>
+            )}
+          </View>
         </View>
-      </View>
       </TouchableWithoutFeedback>
     </Modal>
   );

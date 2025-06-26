@@ -70,8 +70,9 @@ export default function Feed() {
 
       const permissoes = permissoesPorTipoUsuario[usuario.tp_user] || [];
 
-      const postagensFiltradas = response.data.filter((post: any) =>
-        permissoes.includes(post.tp_post)
+      const postagensFiltradas = response.data.filter(
+        (post: any) =>
+          post.tp_post === "repost" || permissoes.includes(post.tp_post)
       );
 
       setPostagens(postagensFiltradas);
@@ -144,6 +145,9 @@ export default function Feed() {
       });
 
       Toast.show({ type: "success", text1: "Recado publicado!" });
+      setRecadoTexto("");
+      recadoTextoRef.current = "";
+      setContador(0);
       recadoTextoRef.current = "";
       setContador(0);
       setMidiasSelecionadas([]);
@@ -156,8 +160,6 @@ export default function Feed() {
       });
     }
   };
-
-  console.log("📷 URL da foto:", perfilUsuario?.foto_perfil);
 
   return (
     <View style={feedStyles.container}>
@@ -314,12 +316,18 @@ export default function Feed() {
             </View>
           }
           renderItem={({ item }) => (
-            <Pressable onPress={() => router.push(`/postagem/${item.id}`)}>
-              <CardPostagem postagem={item} />
-            </Pressable>
+            <CardPostagem
+              postagem={item}
+              onPostagemExcluida={() => {
+                const idParaExcluir = item?.id;
+                if (!idParaExcluir) return;
+
+                setPostagens((prev: any[]) =>
+                  prev.filter((post: any) => post.id !== idParaExcluir)
+                );
+              }}
+            />
           )}
-          onEndReachedThreshold={0.2}
-          onEndReached={carregarPostagens}
         />
       </View>
 

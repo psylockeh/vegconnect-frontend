@@ -7,7 +7,7 @@ import {
   ActivityIndicator,
   Pressable,
 } from "react-native";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_URL } from "@/config/api";
@@ -17,16 +17,13 @@ import VisualizacaoReceita from "@/components/postagens/VisualizacaoReceita";
 import VisualizacaoEstabelecimento from "@/components/postagens/VisualizacaoEstabelecimento";
 import VisualizacaoPromocao from "@/components/postagens/VisualizacaoPromocao";
 import VisualizacaoEvento from "@/components/postagens/VisualizacaoEvento";
+import VisualizacaoRecado from "@/components/postagens/VisualizacaoRecado";
 import ModalValidarReceita from "@/components/postagens/ModalValidarReceita";
 import { useAuth } from "@/context/AuthContext";
 import FavoritarBotao from "@/components/acoesPostagem/FavoritoBotao";
 import AvaliacaoPostagem from "@/components/acoesPostagem/AvaliacaoPostagem";
-import { useRouter } from "expo-router";
 import Sidebar from "@/components/Sidebar";
 import OpcoesPostagem from "@/components/acoesPostagem/OpcoesPostagem";
-import VisualizacaoRecado from "@/components/postagens/VisualizacaoRecado";
-
-const { perfilUsuario } = useAuth();
 
 export default function DetalhesPostagem() {
   const { id } = useLocalSearchParams();
@@ -36,65 +33,85 @@ export default function DetalhesPostagem() {
   const { perfilUsuario } = useAuth();
   const router = useRouter();
 
-  const carregarPostagem = async () => {
-    try {
-      const token = await AsyncStorage.getItem("@token");
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-      const response = await axios.get(
-        `${API_URL}/usuario/postagens/${id}`,
-        config
-      );
-      setPostagem(response.data);
-    } catch (error) {
-      console.error("Erro ao buscar detalhes da postagem:", error);
-    } finally {
-      setCarregando(false);
-    }
-  };
-
   useEffect(() => {
+    const carregarPostagem = async () => {
+      try {
+        if (!id) return;
+
+        const token = await AsyncStorage.getItem("@token");
+        const res = await axios.get(`${API_URL}/usuario/postagens/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (!res.data || !res.data.tp_post) {
+          console.warn("⚠️ Postagem inválida:", res.data);
+          setPostagem(null);
+        } else {
+          setPostagem(res.data);
+        }
+      } catch (err: any) {
+        console.error(
+          "❌ Erro ao buscar detalhes da postagem:",
+          err.response?.data || err.message
+        );
+        setPostagem(null);
+      } finally {
+        setCarregando(false);
+      }
+    };
+
     carregarPostagem();
-  }, []);
+  }, [id]);
 
   if (carregando) {
-    return <ActivityIndicator size="large" style={{ marginTop: 100 }} />;
-  }
-
-  if (!postagem) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <Text>Carregando postagem...</Text>
+        <ActivityIndicator size="large" color="#2E7D32" />
+        <Text style={{ marginTop: 10 }}>Carregando postagem...</Text>
       </View>
     );
   }
 
+  if (!postagem) {
+    return (
+      <View style={{ padding: 20 }}>
+        <Text style={{ color: "red" }}>Erro ao carregar a postagem.</Text>
+      </View>
+    );
+  }
+
+  const tipoVisualizacao =
+    postagem.tp_post === "repost" && postagem.postagemOriginal
+      ? postagem.postagemOriginal.tp_post
+      : postagem.tp_post;
+
+  const dadosParaVisualizacao =
+    postagem.tp_post === "repost" && postagem.postagemOriginal
+      ? postagem.postagemOriginal
+      : postagem;
+
   const usuario = postagem.autor;
 
   const renderVisualizacaoTipo = () => {
-    switch (postagem.tp_post) {
+    switch (tipoVisualizacao) {
       case "receita":
         return (
           <VisualizacaoReceita
-            postagem={postagem}
+            postagem={dadosParaVisualizacao}
             perfilUsuario={perfilUsuario}
             setModalVisivel={setModalVisivel}
-            autor={postagem.autor}
-            verificadoPor={postagem.verificado_por}
+            autor={dadosParaVisualizacao.autor}
+            verificadoPor={dadosParaVisualizacao.verificado_por}
           />
         );
       case "evento":
-        return <VisualizacaoEvento postagem={postagem} />;
+        return <VisualizacaoEvento postagem={dadosParaVisualizacao} />;
       case "promocao":
-        return <VisualizacaoPromocao postagem={postagem} />;
+        return <VisualizacaoPromocao postagem={dadosParaVisualizacao} />;
       case "estabelecimento":
-        return <VisualizacaoEstabelecimento postagem={postagem} />;
+        return <VisualizacaoEstabelecimento postagem={dadosParaVisualizacao} />;
       case "recado":
-        return <VisualizacaoRecado postagem={postagem} />;
-
+        return <VisualizacaoRecado postagem={dadosParaVisualizacao} />;
       default:
         return <Text>Tipo de postagem não reconhecido.</Text>;
     }
@@ -120,9 +137,6 @@ export default function DetalhesPostagem() {
                       : "https://res.cloudinary.com/dyhzz5baz/image/upload/v1746917561/default-avatar_jvqpsg.png",
                   }}
                   style={ModalCriarPostagemStyles.avatar}
-                  onError={() =>
-                    console.log("❌ Erro ao carregar imagem de perfil")
-                  }
                 />
                 <View>
                   <Text style={styles.nomeUsuario}>{usuario?.nome}</Text>
@@ -131,7 +145,7 @@ export default function DetalhesPostagem() {
               </View>
             </Pressable>
 
-            {/* Botões alinhados à direita, um abaixo do outro */}
+            {/* Botões alinhados à direita */}
             <View
               style={{
                 flexDirection: "column",
@@ -139,19 +153,15 @@ export default function DetalhesPostagem() {
                 gap: 6,
               }}
             >
-              <View style={{ marginBottom: -15 }}>
-                <AvaliacaoPostagem postagem={postagem} />
-              </View>
+              <AvaliacaoPostagem postagem={postagem} />
               <FavoritarBotao postagemId={postagem.id} />
-
-              {/* Botão opçõesPostagens */}
               {perfilUsuario?.id_user === usuario?.id_user && (
                 <OpcoesPostagem
                   postagemId={postagem.id}
+                  createdAt={postagem.createdAt}
+                  usuarioId={postagem.usuario_id}
                   onEditar={() => router.push(`/editar/${postagem.id}`)}
-                  onPostagemExcluida={() =>
-                    router.push(`/perfil/${usuario?.id_user}`)
-                  }
+                  onPostagemExcluida={() => router.push("/feed")}
                 />
               )}
             </View>
@@ -167,17 +177,15 @@ export default function DetalhesPostagem() {
             </View>
           )}
 
-          {/* Visualização do tipo de postagem */}
+          {/* Visualização tipo */}
           {renderVisualizacaoTipo()}
 
-          {/* Data */}
           <Text style={styles.data}>
             Publicado em:{" "}
             {new Date(postagem.createdAt).toLocaleDateString("pt-BR")}
           </Text>
         </View>
 
-        {/* Modal para validação */}
         {modalVisivel && (
           <ModalValidarReceita
             visible={modalVisivel}

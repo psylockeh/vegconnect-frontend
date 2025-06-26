@@ -306,16 +306,6 @@ export default function FormularioPostagem({
               style={[styles.inputPadrao, { height: 120, textAlignVertical: "top" }]}
             />
           </View>
-
-          {/* <View style={styles.blocoPadrao}>
-            <Text style={styles.tituloBloco}>🏷️ Tags (opcional)</Text>
-            <TextInput
-              placeholder="Ex: #reflexão #diaadia"
-              value={tag}
-              onChangeText={setTag}
-              style={styles.inputPadrao}
-            />
-          </View> */}
         </>
       )}
 

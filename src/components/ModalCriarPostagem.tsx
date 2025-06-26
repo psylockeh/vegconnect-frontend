@@ -233,6 +233,14 @@ export default function ModalCriarPostagem({
         if (uploadedUrl) midia_urls.push(uploadedUrl);
       }
 
+      // RECADO
+      if (tp_post === "recado") {
+        Object.assign(novaPostagem, {
+          conteudo: conteudoFormatado,
+          midia_urls,
+        });
+      }
+
       novaPostagem.ingredientes = JSON.stringify(ingredientes);
       novaPostagem.instrucoes = instrucoes;
       novaPostagem.categoria = JSON.stringify(categoria);
