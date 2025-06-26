@@ -106,51 +106,49 @@ export default function ModalEditarControle({
       // Campos comuns
       setTitulo(p.titulo || "");
       setConteudo(p.conteudo || "");
-      setCategoria(p.categoria || "");
-      setTag(p.tag || "");
-      setMidiaUrls(p.midiaUrls || "");
-      setDescricaoResumida(p.descricaoResumida || "");
+      setCategoria(p.categoria || ""); setTag(p.tag || "");
+      setMidiaUrls(p.midia_urls || ""); // observação: no backend pode ser midia_urls
+      setDescricaoResumida(p.descricao_resumida || "");
 
-      // Corrigido aqui: pegar tipo da postagem pelo campo tp_post do backend
+      // Tipo postagem
       setTipoPostagem(p.tp_post || "recado");
 
       // Receita
-      setNomeReceita(p.nomeReceita || "");
-      setTempPrep(p.tempPrep || "");
+      setNomeReceita(p.nome_receita || "");
+      setIngredientes(Array.isArray(p.ingredientes) ? p.ingredientes : []);
+      setInstrucoes(Array.isArray(p.instrucoes) ? p.instrucoes : []);
+      setTempPrep(p.temp_prep || "");
       setCalorias(p.calorias || "");
       setDificuldade(p.dificuldade || "");
-      setRendimentoQuantidade(p.rendimentoQuantidade || "");
-      setTipoRendimento(p.tipoRendimento || "");
-      setIngredientes(
-        Array.isArray(p.ingredientes) ? p.ingredientes : []
-      ); setInstrucoes(p.instrucoes || []);
+      setRendimentoQuantidade(p.rendimento_quantidade || "");
+      setTipoRendimento(p.tipo_rendimento || "");
 
       // Evento
       setData(p.data || "");
       setLocalizacao(p.localizacao || "");
       setValor(p.valor || "");
       setLinks(p.links || "");
-      setTpEvento(p.tpEvento || "");
-      setCategoriaEvento(p.categoriaEvento || "");
-      setModalidadeEvento(p.modalidadeEvento || []);
+      setTpEvento(p.tp_evento || ""); // cuidado com nome exato do backend
+      setCategoriaEvento(p.categoria_evento || "");
+      setModalidadeEvento(Array.isArray(p.modalidade_evento) ? p.modalidade_evento : []);
 
       // Comércio
-      setNomeComercio(p.nomeComercio || "");
-      setDescricaoComercio(p.descricaoComercio || "");
-      setTpComida(p.tpComida || "");
-      setHoraAbertura(p.horaAbertura || "");
-      setHoraFechamento(p.horaFechamento || "");
+      setNomeComercio(p.nome_comercio || "");
+      setDescricaoComercio(p.descricao_comercio || "");
+      setTpComida(p.tp_comida || "");
+      setHoraAbertura(p.hora_abertura || "");
+      setHoraFechamento(p.hora_fechamento || "");
       setCep(p.cep || "");
       setEndereco(p.endereco || "");
-      setTipoComercio(p.tipoComercio || "");
-      setTipoProduto(p.tipoProduto || "");
-      setTipoServico(p.tipoServico || "");
+      setTipoComercio(p.tipo_comercio || "");
+      setTipoProduto(p.tipo_produto || "");
+      setTipoServico(p.tipo_servico || "");
 
       // Promoção
-      setDataInicio(p.dataInicio || "");
-      setDataFim(p.dataFim || "");
-      setValorDesconto(p.valorDesconto || "");
-      setCodigoPromocional(p.codigoPromocional || "");
+      setDataInicio(p.data_inicio || "");
+      setDataFim(p.data_fim || "");
+      setValorDesconto(p.valor_desconto || "");
+      setCodigoPromocional(p.codigo_promocional || "");
     } catch (error) {
       setErro("Falha ao carregar dados da postagem.");
     } finally {
